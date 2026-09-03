@@ -1,0 +1,11 @@
+node_modules/
+.npm-cache/
+dist/
+build/
+.remotion/
+outputs/*.mp4
+work/
+*.log
+.env
+.env.*
+!.env.example

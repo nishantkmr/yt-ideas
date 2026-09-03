@@ -1,0 +1,27 @@
+{
+  "name": "kids-trivia-studio",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Remotion-powered production system for a kids GK and trivia channel.",
+  "scripts": {
+    "dev": "remotion studio src/index.ts",
+    "build": "remotion bundle src/index.ts",
+    "render:short": "remotion render src/index.ts TriviaShort outputs/animal-guess-zebra-short.mp4",
+    "render:episode": "remotion render src/index.ts TriviaEpisode outputs/animal-quiz-10-questions.mp4",
+    "typecheck": "tsc --noEmit"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "dependencies": {
+    "@remotion/cli": "^4.0.520",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "remotion": "^4.0.520"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.5",
+    "typescript": "^7.0.2"
+  }
+}

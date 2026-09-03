@@ -1,0 +1,15 @@
+{
+  "id": "short_animal_001",
+  "type": "guess-animal",
+  "answer": "Zebra",
+  "difficulty": 1,
+  "clues": [
+    "I have black and white stripes.",
+    "I look a little like a horse."
+  ],
+  "funFact": "Every zebra has its own unique stripe pattern.",
+  "visual": {
+    "type": "silhouette",
+    "asset": "zebra.png"
+  }
+}
