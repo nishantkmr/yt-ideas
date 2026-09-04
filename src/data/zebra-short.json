@@ -10,6 +10,7 @@
   "funFact": "Every zebra has its own unique stripe pattern.",
   "visual": {
     "type": "silhouette",
-    "asset": "zebra.png"
+    "asset": "assets/zebra.png",
+    "alt": "A zebra"
   }
 }

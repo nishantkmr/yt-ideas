@@ -17,6 +17,11 @@ export type QuizQuestion = {
   clues?: string[];
   answer: string;
   explanation: string;
+  visual?: {
+    type: 'picture' | 'silhouette';
+    asset: string;
+    alt: string;
+  };
 };
 
 export type TriviaShortData = {
@@ -29,6 +34,7 @@ export type TriviaShortData = {
   visual: {
     type: 'silhouette';
     asset: string;
+    alt: string;
   };
 };
 

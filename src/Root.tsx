@@ -13,7 +13,7 @@ export const RemotionRoot: React.FC = () => (
     <Composition
       id="TriviaShort"
       component={TriviaShort}
-      durationInFrames={24 * 30}
+      durationInFrames={28 * 30}
       fps={30}
       width={1080}
       height={1920}
@@ -22,7 +22,7 @@ export const RemotionRoot: React.FC = () => (
     <Composition
       id="TriviaEpisode"
       component={TriviaEpisode}
-      durationInFrames={125 * 30}
+      durationInFrames={183 * 30}
       fps={30}
       width={1920}
       height={1080}
