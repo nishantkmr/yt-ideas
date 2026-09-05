@@ -8,6 +8,18 @@
     "build": "remotion bundle src/index.ts",
     "render:short": "remotion render src/index.ts TriviaShort outputs/animal-guess-zebra-short.mp4",
     "render:episode": "remotion render src/index.ts TriviaEpisode outputs/animal-quiz-10-questions.mp4",
+    "render:content": "node scripts/render-content.mjs",
+    "setup:voiceover": "python -m pip install -r requirements-tts.txt --target .tools/edge-tts",
+    "generate:voiceover": "python scripts/generate-sarvam-voiceover.py",
+    "generate:voiceover:force": "python scripts/generate-sarvam-voiceover.py --force",
+    "generate:voiceover:edge": "python scripts/generate-neural-voiceover.py",
+    "generate:sfx": "node scripts/generate-sfx.mjs",
+    "setup:kokoro": "python -m pip install -r requirements-kokoro.txt --target .tools/kokoro-onnx && python scripts/download-kokoro-model.py",
+    "sample:kokoro": "python scripts/generate-kokoro-sample.py",
+    "sample:sarvam": "python scripts/generate-sarvam-samples.py",
+    "validate:content": "node scripts/validate-content.mjs && node scripts/audit-catalog.mjs",
+    "audit:catalog": "node scripts/audit-catalog.mjs",
+    "prepare:content": "node scripts/prepare-content.mjs",
     "typecheck": "tsc --noEmit"
   },
   "engines": {

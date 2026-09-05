@@ -1,8 +1,34 @@
 {
   "id": "short_animal_001",
   "type": "guess-animal",
+  "title": "Guess the animal!",
+  "category": "animals",
   "answer": "Zebra",
   "difficulty": 1,
+  "creative": {
+    "visualTheme": "atlas",
+    "presentationFormat": "mystery",
+    "targetAge": "5-9",
+    "hook": "Two visual-free clues invite children to identify a striped mystery animal.",
+    "learningGoal": "Use descriptive clues to identify a zebra and learn that stripe patterns are individual.",
+    "signatureMoment": "The hidden zebra appears only after the answer is locked in."
+  },
+  "researchSources": [
+    {
+      "title": "San Diego Zoo Wildlife Explorers - Zebra",
+      "url": "https://sdzwildlifeexplorers.org/animals/zebra",
+      "accessedOn": "2026-09-05"
+    }
+  ],
+  "review": {
+    "status": "approved",
+    "reviewedBy": "Nishant",
+    "reviewedAt": "2026-09-05",
+    "factsChecked": true,
+    "rightsChecked": true,
+    "editorialChecked": true
+  },
+  "narration": {"enabled":true,"provider":"sarvam-bulbul-v3","voice":"suhani","audioBase":"audio/short_animal_001","format":"wav"},
   "clues": [
     "I have black and white stripes.",
     "I look a little like a horse."

@@ -1,0 +1,46 @@
+{
+  "id": "short_category_yyyymm_topic_01",
+  "type": "two-clue",
+  "title": "Solve the mystery!",
+  "category": "space",
+  "answer": "Specific answer",
+  "difficulty": 2,
+  "creative": {
+    "visualTheme": "cosmic",
+    "presentationFormat": "mystery",
+    "targetAge": "6-9",
+    "hook": "Explain the curiosity gap created by these two clues.",
+    "learningGoal": "State the one idea a child should remember.",
+    "signatureMoment": "Describe a reveal or animation unique to this Short."
+  },
+  "researchSources": [
+    {
+      "title": "Authoritative source title",
+      "url": "https://example.org/source",
+      "accessedOn": "YYYY-MM-DD"
+    }
+  ],
+  "review": {
+    "status": "draft",
+    "factsChecked": false,
+    "rightsChecked": false,
+    "editorialChecked": false
+  },
+  "narration": {
+    "enabled": false,
+    "provider": "sarvam-bulbul-v3",
+    "voice": "suhani",
+    "audioBase": "audio/short_category_yyyymm_topic_01",
+    "format": "wav"
+  },
+  "clues": [
+    "Write a useful first clue.",
+    "Write a second clue that narrows the answer without repeating the first."
+  ],
+  "funFact": "Add one researched fact that rewards the viewer after the reveal.",
+  "visual": {
+    "type": "silhouette",
+    "asset": "assets/replace-me.png",
+    "alt": "Describe the answer image"
+  }
+}

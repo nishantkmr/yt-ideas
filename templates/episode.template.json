@@ -1,0 +1,50 @@
+{
+  "id": "category_yyyymm_topic_01",
+  "title": "A Specific, Honest Quiz Title",
+  "category": "science",
+  "theme": "specific editorial theme",
+  "creative": {
+    "visualTheme": "cosmic",
+    "presentationFormat": "lab",
+    "targetAge": "7-10",
+    "hook": "Describe why this episode is worth watching and how it differs from earlier episodes.",
+    "learningGoal": "State what a child should understand after finishing.",
+    "signatureMoment": "Describe one scene, reveal, mini-story, or interaction unique to this episode."
+  },
+  "researchSources": [
+    {
+      "title": "Authoritative source title",
+      "url": "https://example.org/source",
+      "accessedOn": "YYYY-MM-DD"
+    }
+  ],
+  "review": {
+    "status": "draft",
+    "factsChecked": false,
+    "rightsChecked": false,
+    "editorialChecked": false
+  },
+  "narration": {
+    "enabled": false,
+    "provider": "sarvam-bulbul-v3",
+    "voice": "suhani",
+    "audioBase": "audio/category_yyyymm_topic_01",
+    "format": "wav"
+  },
+  "questions": [
+    {
+      "id": "topic_001",
+      "type": "multiple-choice",
+      "difficulty": 1,
+      "question": "Write an original, age-appropriate question.",
+      "options": ["Correct answer", "Plausible choice", "Plausible choice", "Plausible choice"],
+      "answer": "Correct answer",
+      "explanation": "Explain why in one useful, memorable sentence.",
+      "visual": {
+        "type": "picture",
+        "asset": "assets/replace-me.png",
+        "alt": "Describe the answer image"
+      }
+    }
+  ]
+}

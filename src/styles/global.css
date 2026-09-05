@@ -15,6 +15,84 @@
   --shadow-strong: rgba(20, 43, 82, 0.28);
   --radius-card: 48px;
   --radius-control: 28px;
+  --background-start: var(--aqua);
+  --background-middle: var(--mint);
+  --background-end: var(--sky);
+  --background-glow: rgba(255, 242, 148, 0.9);
+  --pattern-color: rgba(255, 255, 255, 0.22);
+}
+
+.layout[data-theme="cosmic"] {
+  --ink: #16224d;
+  --ink-soft: #53608c;
+  --paper-blue: #f3f1ff;
+  --sky: #7057d9;
+  --aqua: #6249c7;
+  --mint: #9b7bea;
+  --sun: #ffe070;
+  --coral: #ff6fae;
+  --violet: #40329b;
+  --green: #1f8c83;
+  --background-start: #1c2258;
+  --background-middle: #5942a9;
+  --background-end: #a263d5;
+  --background-glow: rgba(255, 224, 112, 0.46);
+  --pattern-color: rgba(255, 255, 255, 0.48);
+}
+
+.layout[data-theme="ocean"] {
+  --ink: #073b5b;
+  --ink-soft: #356986;
+  --paper-blue: #ecfcff;
+  --sky: #28a9d2;
+  --aqua: #19b8c5;
+  --mint: #83e8d2;
+  --sun: #ffe174;
+  --coral: #ff6f74;
+  --violet: #426ac7;
+  --green: #087f70;
+  --background-start: #0d81ad;
+  --background-middle: #31c4cc;
+  --background-end: #a0ead9;
+  --background-glow: rgba(216, 255, 246, 0.68);
+  --pattern-color: rgba(255, 255, 255, 0.3);
+}
+
+.layout[data-theme="atlas"] {
+  --ink: #49311d;
+  --ink-soft: #735c44;
+  --paper: #fffaf0;
+  --paper-blue: #f8eed7;
+  --sky: #e7a55e;
+  --aqua: #e6b96f;
+  --mint: #c8d894;
+  --sun: #ffd25f;
+  --coral: #d8654a;
+  --violet: #7658a6;
+  --green: #438264;
+  --background-start: #dca967;
+  --background-middle: #efd08d;
+  --background-end: #9cc99b;
+  --background-glow: rgba(255, 248, 205, 0.74);
+  --pattern-color: rgba(73, 49, 29, 0.12);
+}
+
+.layout[data-theme="workshop"] {
+  --ink: #28364c;
+  --ink-soft: #5d6a7e;
+  --paper-blue: #f4f8ff;
+  --sky: #58acd5;
+  --aqua: #70c5d2;
+  --mint: #aed9bd;
+  --sun: #ffc849;
+  --coral: #ed6452;
+  --violet: #5870bd;
+  --green: #338164;
+  --background-start: #f4a65e;
+  --background-middle: #f3cf73;
+  --background-end: #70bdd0;
+  --background-glow: rgba(255, 246, 198, 0.72);
+  --pattern-color: rgba(40, 54, 76, 0.15);
 }
 
 * {
@@ -55,8 +133,50 @@ body {
   z-index: 0;
   overflow: hidden;
   background:
-    radial-gradient(circle at 50% 46%, rgba(255, 242, 148, 0.9) 0 16%, transparent 42%),
-    linear-gradient(145deg, var(--aqua) 0%, var(--mint) 46%, var(--sky) 100%);
+    radial-gradient(circle at 50% 46%, var(--background-glow) 0 16%, transparent 42%),
+    linear-gradient(145deg, var(--background-start) 0%, var(--background-middle) 46%, var(--background-end) 100%);
+}
+
+.background-pattern {
+  position: absolute;
+  inset: 0;
+  opacity: 0.7;
+}
+
+.layout[data-theme="jungle"] .background-pattern {
+  background-image:
+    radial-gradient(ellipse at 15% 20%, transparent 0 42px, var(--pattern-color) 44px 50px, transparent 52px),
+    radial-gradient(ellipse at 82% 72%, transparent 0 62px, var(--pattern-color) 64px 71px, transparent 73px);
+  background-size: 330px 280px, 460px 390px;
+  transform: rotate(-9deg) scale(1.15);
+}
+
+.layout[data-theme="cosmic"] .background-pattern {
+  background-image:
+    radial-gradient(circle, var(--pattern-color) 0 4px, transparent 5px),
+    radial-gradient(circle, rgba(255, 224, 112, 0.55) 0 7px, transparent 8px);
+  background-position: 0 0, 90px 75px;
+  background-size: 150px 150px, 260px 240px;
+}
+
+.layout[data-theme="ocean"] .background-pattern {
+  background-image: radial-gradient(ellipse at 50% 100%, transparent 0 42px, var(--pattern-color) 44px 51px, transparent 53px);
+  background-size: 180px 90px;
+  transform: translateY(-24px);
+}
+
+.layout[data-theme="atlas"] .background-pattern {
+  background-image:
+    linear-gradient(25deg, transparent 47%, var(--pattern-color) 48% 50%, transparent 51%),
+    linear-gradient(-25deg, transparent 47%, var(--pattern-color) 48% 50%, transparent 51%);
+  background-size: 190px 150px;
+}
+
+.layout[data-theme="workshop"] .background-pattern {
+  background-image:
+    linear-gradient(var(--pattern-color) 2px, transparent 2px),
+    linear-gradient(90deg, var(--pattern-color) 2px, transparent 2px);
+  background-size: 72px 72px;
 }
 
 .background::before,

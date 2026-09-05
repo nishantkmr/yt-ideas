@@ -9,6 +9,7 @@ export const Background: React.FC = () => {
 
   return (
     <AbsoluteFill className="background">
+      <div className="background-pattern" />
       <div className="background-orbit background-orbit--one" style={{transform: `translate(${drift}px, ${drift * -0.45}px)`}} />
       <div className="background-orbit background-orbit--two" style={{transform: `translate(${drift * -0.7}px, ${drift * 0.35}px)`}} />
     </AbsoluteFill>

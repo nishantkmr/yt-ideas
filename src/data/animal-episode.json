@@ -3,6 +3,40 @@
   "title": "Ultimate Animal Challenge",
   "category": "animals",
   "theme": "jungle",
+  "creative": {
+    "visualTheme": "jungle",
+    "presentationFormat": "expedition",
+    "targetAge": "6-10",
+    "hook": "Travel through ten animal habitats and finish with a three-heart boss question.",
+    "learningGoal": "Recognize animal traits and connect them to habitat, movement, and classification.",
+    "signatureMoment": "The final octopus question becomes the expedition boss challenge."
+  },
+  "researchSources": [
+    {
+      "title": "Smithsonian's National Zoo animal fact sheets",
+      "url": "https://nationalzoo.si.edu/animals/list",
+      "accessedOn": "2026-09-05"
+    },
+    {
+      "title": "NOAA Fisheries - Common Bottlenose Dolphin",
+      "url": "https://www.fisheries.noaa.gov/species/common-bottlenose-dolphin",
+      "accessedOn": "2026-09-05"
+    },
+    {
+      "title": "San Diego Zoo Wildlife Explorers animal facts",
+      "url": "https://sdzwildlifeexplorers.org/animals",
+      "accessedOn": "2026-09-05"
+    }
+  ],
+  "review": {
+    "status": "approved",
+    "reviewedBy": "Nishant",
+    "reviewedAt": "2026-09-05",
+    "factsChecked": true,
+    "rightsChecked": true,
+    "editorialChecked": true
+  },
+  "narration": {"enabled":true,"provider":"sarvam-bulbul-v3","voice":"suhani","audioBase":"audio/animals_001","format":"wav"},
   "questions": [
     {"id":"animal_001","type":"multiple-choice","difficulty":1,"question":"Which animal says meow?","options":["Cat","Cow","Duck","Horse"],"answer":"Cat","explanation":"Cats meow to communicate with people and other cats.","visual":{"type":"picture","asset":"assets/cat.png","alt":"A cat"}},
     {"id":"animal_002","type":"guess-picture","difficulty":1,"question":"Which animal has a very long neck?","options":["Giraffe","Bear","Rabbit","Tiger"],"answer":"Giraffe","explanation":"A giraffe's long neck helps it reach leaves high in trees.","visual":{"type":"picture","asset":"assets/giraffe.png","alt":"A giraffe"}},

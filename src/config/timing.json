@@ -1,0 +1,18 @@
+{
+  "fps": 30,
+  "short": {
+    "intro": 5,
+    "clue": 4,
+    "countdown": 4,
+    "answer": 6,
+    "fact": 7,
+    "outro": 7
+  },
+  "episode": {
+    "intro": 8,
+    "question": 6,
+    "countdown": 4,
+    "answer": 8,
+    "outro": 9
+  }
+}

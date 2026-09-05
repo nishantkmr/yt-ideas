@@ -1,0 +1,11 @@
+{
+  "cues": {
+    "answer": "c4f5e72462cbc76785fab8bc13812b893bcddd421cc1c62cf8a27ed7e0027327",
+    "clue-1": "1c08e233e561549445aac8db45cabe9a7ab4d806e882e0846f92d8181c2db1ee",
+    "clue-2": "deaccfa467f6052e1a613426a9a666dda6faf39ea16d132469efdcdebc02c05c",
+    "fact": "9533d11120e1ffa9b2cb6e35df89c0edec48d6935cb0afb6daf360e5edc1d496",
+    "intro": "f51f6aee8098816d7a3207401911ce40157770f3ac4415199e1739c8bd533806",
+    "outro": "0c14151f11eb240d847feb10c2dd4236bf29c5827c88552f15fb4c64616776ca"
+  },
+  "version": 1
+}

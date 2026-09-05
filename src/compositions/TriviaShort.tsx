@@ -1,63 +1,96 @@
 import {Sequence, useCurrentFrame, useVideoConfig} from 'remotion';
 import {AnimatedScene} from '../components/AnimatedScene';
+import {shortNarrationAsset} from '../audio/narration';
+import {Voiceover} from '../audio/Voiceover';
+import {CountdownTicks} from '../audio/CountdownTicks';
 import {AnswerReveal} from '../components/AnswerReveal';
 import {Background} from '../components/Background';
 import {Countdown} from '../components/Countdown';
 import {Mascot} from '../components/Mascot';
 import {QuestionCard} from '../components/QuestionCard';
 import {ScoreScreen} from '../components/ScoreScreen';
+import {SHORT_TIMING} from '../config/timing';
+import {PRESENTATION_COPY} from '../config/creative';
 import {ShortLayout} from '../layouts/ShortLayout';
 import {GuessPicture} from '../questions/GuessPicture';
 import type {TriviaShortData} from '../types/content';
 
-export const TriviaShort: React.FC<TriviaShortData> = ({answer, clues, funFact, visual}) => {
+export const TriviaShort: React.FC<TriviaShortData> = ({
+  answer,
+  clues,
+  creative,
+  funFact,
+  narration,
+  title,
+  visual,
+}) => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
-  const countdown = Math.max(1, 3 - Math.floor((frame - 10 * fps) / fps));
+  const clueOneStart = SHORT_TIMING.intro;
+  const clueTwoStart = clueOneStart + SHORT_TIMING.clue;
+  const countdownStart = clueTwoStart + SHORT_TIMING.clue;
+  const answerStart = countdownStart + SHORT_TIMING.countdown;
+  const factStart = answerStart + SHORT_TIMING.answer;
+  const outroStart = factStart + SHORT_TIMING.fact;
+  const countdown = Math.max(
+    1,
+    SHORT_TIMING.countdown - Math.floor((frame - countdownStart * fps) / fps),
+  );
+  const presentation = PRESENTATION_COPY[creative.presentationFormat];
 
   return (
-    <ShortLayout>
+    <ShortLayout presentationFormat={creative.presentationFormat} visualTheme={creative.visualTheme}>
       <Background />
-      <Sequence durationInFrames={2 * fps}>
-        <AnimatedScene className="short-intro" durationInFrames={2 * fps}>
+      <Sequence durationInFrames={SHORT_TIMING.intro * fps}>
+        <Voiceover asset={shortNarrationAsset(narration, 'intro')} name="Short intro" />
+        <AnimatedScene className="short-intro" durationInFrames={SHORT_TIMING.intro * fps}>
           <Mascot compact />
-          <QuestionCard eyebrow="Animal challenge" text="Guess the animal!" layout="short" />
+          <QuestionCard eyebrow={presentation.challengeLabel} text={title ?? 'Solve the clues!'} layout="short" />
         </AnimatedScene>
       </Sequence>
-      <Sequence from={2 * fps} durationInFrames={4 * fps}>
-        <AnimatedScene className="short-clue" durationInFrames={4 * fps}>
+      <Sequence from={clueOneStart * fps} durationInFrames={SHORT_TIMING.clue * fps}>
+        <Voiceover asset={shortNarrationAsset(narration, 'clue-1')} name="Clue one" />
+        <AnimatedScene className="short-clue" durationInFrames={SHORT_TIMING.clue * fps}>
           <QuestionCard eyebrow="Clue 1" text={clues[0]} layout="short" />
         </AnimatedScene>
       </Sequence>
-      <Sequence from={6 * fps} durationInFrames={4 * fps}>
-        <AnimatedScene className="short-clue" durationInFrames={4 * fps}>
+      <Sequence from={clueTwoStart * fps} durationInFrames={SHORT_TIMING.clue * fps}>
+        <Voiceover asset={shortNarrationAsset(narration, 'clue-2')} name="Clue two" />
+        <AnimatedScene className="short-clue" durationInFrames={SHORT_TIMING.clue * fps}>
           <QuestionCard eyebrow="Clue 2" text={clues[1]} layout="short" />
         </AnimatedScene>
       </Sequence>
-      <Sequence from={10 * fps} durationInFrames={3 * fps}>
-        <AnimatedScene className="countdown-scene" durationInFrames={3 * fps}>
+      <Sequence from={countdownStart * fps} durationInFrames={SHORT_TIMING.countdown * fps}>
+        <CountdownTicks seconds={SHORT_TIMING.countdown} />
+        <AnimatedScene
+          className="countdown-scene"
+          durationInFrames={SHORT_TIMING.countdown * fps}
+        >
           <div className="think-prompt">
-            <span>Think fast</span>
-            <strong>Lock it in!</strong>
+            <span>{presentation.countdownPrompt}</span>
+            <strong>{presentation.countdownAction}</strong>
           </div>
           <Countdown value={countdown} />
         </AnimatedScene>
       </Sequence>
-      <Sequence from={13 * fps} durationInFrames={5 * fps}>
-        <AnimatedScene className="short-answer" durationInFrames={5 * fps}>
+      <Sequence from={answerStart * fps} durationInFrames={SHORT_TIMING.answer * fps}>
+        <Voiceover asset={shortNarrationAsset(narration, 'answer')} name="Answer" />
+        <AnimatedScene className="short-answer" durationInFrames={SHORT_TIMING.answer * fps}>
           <GuessPicture alt={visual.alt} asset={visual.asset} />
           <AnswerReveal answer={answer} explanation="You got it!" streak={1} />
         </AnimatedScene>
       </Sequence>
-      <Sequence from={18 * fps} durationInFrames={6 * fps}>
-        <AnimatedScene className="short-fact" durationInFrames={6 * fps}>
+      <Sequence from={factStart * fps} durationInFrames={SHORT_TIMING.fact * fps}>
+        <Voiceover asset={shortNarrationAsset(narration, 'fact')} name="Fun fact" />
+        <AnimatedScene className="short-fact" durationInFrames={SHORT_TIMING.fact * fps}>
           <Mascot compact message="Did you know?" />
           <QuestionCard eyebrow="Fun fact" text={funFact} layout="short" />
         </AnimatedScene>
       </Sequence>
-      <Sequence from={24 * fps} durationInFrames={4 * fps}>
-        <AnimatedScene durationInFrames={4 * fps}>
-          <ScoreScreen total={1} />
+      <Sequence from={outroStart * fps} durationInFrames={SHORT_TIMING.outro * fps}>
+        <Voiceover asset={shortNarrationAsset(narration, 'outro')} name="Short outro" />
+        <AnimatedScene durationInFrames={SHORT_TIMING.outro * fps}>
+          <ScoreScreen total={1} completionLabel={presentation.completionLabel} />
         </AnimatedScene>
       </Sequence>
     </ShortLayout>

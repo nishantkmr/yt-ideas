@@ -1,11 +1,17 @@
 node_modules/
 .npm-cache/
+.tools/
 dist/
 build/
 .remotion/
 outputs/*.mp4
+outputs/*.json
+outputs/qa-*.png
+public/audio-comparisons/
 work/
 *.log
+__pycache__/
+*.pyc
 .env
 .env.*
 !.env.example

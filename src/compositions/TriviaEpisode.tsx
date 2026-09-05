@@ -1,4 +1,7 @@
 import {Sequence, useCurrentFrame, useVideoConfig} from 'remotion';
+import {episodeNarrationAsset} from '../audio/narration';
+import {CountdownTicks} from '../audio/CountdownTicks';
+import {Voiceover} from '../audio/Voiceover';
 import {AnimatedScene} from '../components/AnimatedScene';
 import {AnswerReveal} from '../components/AnswerReveal';
 import {Background} from '../components/Background';
@@ -9,29 +12,33 @@ import {OptionGrid} from '../components/OptionGrid';
 import {ProgressBar} from '../components/ProgressBar';
 import {QuestionCard} from '../components/QuestionCard';
 import {ScoreScreen} from '../components/ScoreScreen';
+import {EPISODE_TIMING} from '../config/timing';
+import {PRESENTATION_COPY} from '../config/creative';
 import {LandscapeLayout} from '../layouts/LandscapeLayout';
 import {TrueFalse} from '../questions/TrueFalse';
 import {WhoAmI} from '../questions/WhoAmI';
 import type {Episode} from '../types/content';
 
-const INTRO_SECONDS = 5;
-const QUESTION_SECONDS = 8;
-const TIMER_SECONDS = 3;
-const ANSWER_SECONDS = 6;
+const INTRO_SECONDS = EPISODE_TIMING.intro;
+const QUESTION_SECONDS = EPISODE_TIMING.question;
+const TIMER_SECONDS = EPISODE_TIMING.countdown;
+const ANSWER_SECONDS = EPISODE_TIMING.answer;
 const ROUND_SECONDS = QUESTION_SECONDS + TIMER_SECONDS + ANSWER_SECONDS;
-const OUTRO_SECONDS = 8;
+const OUTRO_SECONDS = EPISODE_TIMING.outro;
 
-export const TriviaEpisode: React.FC<Episode> = ({title, questions}) => {
+export const TriviaEpisode: React.FC<Episode> = ({creative, narration, title, questions}) => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
+  const presentation = PRESENTATION_COPY[creative.presentationFormat];
 
   return (
-    <LandscapeLayout>
+    <LandscapeLayout presentationFormat={creative.presentationFormat} visualTheme={creative.visualTheme}>
       <Background />
       <Sequence durationInFrames={INTRO_SECONDS * fps}>
+        <Voiceover asset={episodeNarrationAsset(narration, 'intro')} name="Episode intro" />
         <AnimatedScene className="episode-intro" durationInFrames={INTRO_SECONDS * fps}>
           <Mascot message="Ready to play?" />
-          <QuestionCard eyebrow="10-question challenge" text={title} layout="landscape" />
+          <QuestionCard eyebrow={presentation.challengeLabel} text={title} layout="landscape" />
         </AnimatedScene>
       </Sequence>
       {questions.map((question, index) => {
@@ -57,7 +64,7 @@ export const TriviaEpisode: React.FC<Episode> = ({title, questions}) => {
         const questionStage = (
           <div className="question-stage">
             <QuestionCard
-              eyebrow={isBoss ? 'Level 4' : `Level ${question.difficulty}`}
+              eyebrow={isBoss ? 'Final challenge' : `${presentation.roundLabel} ${index + 1}`}
               text={question.question}
               layout="landscape"
             />
@@ -70,15 +77,20 @@ export const TriviaEpisode: React.FC<Episode> = ({title, questions}) => {
           <Sequence key={question.id} from={start} durationInFrames={ROUND_SECONDS * fps}>
             <ProgressBar current={index + 1} total={questions.length} />
             <Sequence durationInFrames={QUESTION_SECONDS * fps}>
+              <Voiceover
+                asset={episodeNarrationAsset(narration, `${question.id}-question`)}
+                name={`Question ${index + 1}`}
+              />
               <AnimatedScene durationInFrames={QUESTION_SECONDS * fps}>
                 {isBoss ? <BossQuestion>{questionStage}</BossQuestion> : questionStage}
               </AnimatedScene>
             </Sequence>
             <Sequence from={QUESTION_SECONDS * fps} durationInFrames={TIMER_SECONDS * fps}>
+              <CountdownTicks seconds={TIMER_SECONDS} />
               <AnimatedScene className="episode-countdown" durationInFrames={TIMER_SECONDS * fps}>
                 <div className="think-prompt">
-                  <span>Final answer?</span>
-                  <strong>Make your choice!</strong>
+                  <span>{presentation.countdownPrompt}</span>
+                  <strong>{presentation.countdownAction}</strong>
                 </div>
                 <Countdown value={countdown} />
               </AnimatedScene>
@@ -87,6 +99,10 @@ export const TriviaEpisode: React.FC<Episode> = ({title, questions}) => {
               from={(QUESTION_SECONDS + TIMER_SECONDS) * fps}
               durationInFrames={ANSWER_SECONDS * fps}
             >
+              <Voiceover
+                asset={episodeNarrationAsset(narration, `${question.id}-answer`)}
+                name={`Question ${index + 1} answer`}
+              />
               <AnimatedScene durationInFrames={ANSWER_SECONDS * fps}>
                 <AnswerReveal
                   answer={question.answer}
@@ -103,8 +119,9 @@ export const TriviaEpisode: React.FC<Episode> = ({title, questions}) => {
         from={(INTRO_SECONDS + questions.length * ROUND_SECONDS) * fps}
         durationInFrames={OUTRO_SECONDS * fps}
       >
+        <Voiceover asset={episodeNarrationAsset(narration, 'outro')} name="Episode outro" />
         <AnimatedScene durationInFrames={OUTRO_SECONDS * fps}>
-          <ScoreScreen total={questions.length} />
+          <ScoreScreen total={questions.length} completionLabel={presentation.completionLabel} />
         </AnimatedScene>
       </Sequence>
     </LandscapeLayout>
