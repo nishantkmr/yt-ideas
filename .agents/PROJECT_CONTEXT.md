@@ -52,7 +52,8 @@ kids" unless the user deliberately changes the audience strategy.
 - The API key belongs only in the ignored `.env` file as `SARVAM_API_KEY`.
   Never print, expose or commit it.
 - `npm run generate:voiceover` uses content fingerprints and reuses unchanged
-  WAV files. It must not spend API credits on unchanged text.
+  WAV files. It must not spend API credits on unchanged text and removes stale
+  MP3/WAV cues from content-specific narration folders after a successful run.
 - `npm run generate:voiceover:force` intentionally regenerates every cue and
   should be used only when explicitly needed.
 - `npm run generate:sfx` recreates the local countdown tick without an API.
@@ -104,6 +105,9 @@ kids" unless the user deliberately changes the audience strategy.
 - `npm run validate:content` includes a cross-catalog originality/diversity
   audit. Use `templates/` for new drafts and `npm run render:content -- <json>`
   for a validated, approved, immutable-props render.
+- `npm run render:short` and `npm run render:episode` are convenience aliases
+  for the same validated `render:content` production path; they must not bypass
+  content approval.
 - The full operating plan and current policy links are in
   `SCALING_AND_MONETIZATION.md`.
 

@@ -6,8 +6,8 @@
   "scripts": {
     "dev": "remotion studio src/index.ts",
     "build": "remotion bundle src/index.ts",
-    "render:short": "remotion render src/index.ts TriviaShort outputs/animal-guess-zebra-short.mp4",
-    "render:episode": "remotion render src/index.ts TriviaEpisode outputs/animal-quiz-10-questions.mp4",
+    "render:short": "node scripts/render-content.mjs src/data/zebra-short.json --force",
+    "render:episode": "node scripts/render-content.mjs src/data/animal-episode.json --force",
     "render:content": "node scripts/render-content.mjs",
     "setup:voiceover": "python -m pip install -r requirements-tts.txt --target .tools/edge-tts",
     "generate:voiceover": "python scripts/generate-sarvam-voiceover.py",

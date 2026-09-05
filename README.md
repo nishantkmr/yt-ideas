@@ -55,6 +55,9 @@ The command validates the selected JSON, snapshots immutable props under
 `outputs/`, and refuses to overwrite an existing MP4 unless `--force` is explicitly
 supplied.
 
+The convenience commands `npm run render:short` and `npm run render:episode`
+use this same validated production path for the bundled sample content.
+
 Use `--check` to test one file without starting a render:
 
 ```powershell
@@ -79,7 +82,8 @@ file, then run `npm run generate:voiceover` to create Sarvam Bulbul v3 WAV cues
 with the selected Suhani voice under `public/audio/`. Each cue is placed inside
 its matching Remotion sequence, so it starts with the relevant scene. The
 generator caches a fingerprint of each cue and reuses its WAV when the text,
-voice, and synthesis settings are unchanged. Use
+voice, and synthesis settings are unchanged. After a successful run, it removes
+obsolete MP3 and WAV cues from each content-specific narration folder. Use
 `npm run generate:voiceover:force` only when every cue needs to be refreshed.
 Countdowns use a locally generated tick instead of narration;
 recreate it at any time with `npm run generate:sfx`. The former Edge generator

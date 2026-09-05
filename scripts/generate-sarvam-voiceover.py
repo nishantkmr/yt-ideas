@@ -111,6 +111,23 @@ def write_cache(cache_path: Path, cues: dict[str, str]) -> None:
     )
 
 
+def prune_stale_audio(output_root: Path, expected_filenames: set[str]) -> int:
+    removed = 0
+    for candidate in output_root.iterdir():
+        if (
+            candidate.is_file()
+            and candidate.suffix.lower() in {".mp3", ".wav"}
+            and candidate.name not in expected_filenames
+        ):
+            candidate.unlink()
+            removed += 1
+            print(
+                f"REMOVED stale {candidate.relative_to(PUBLIC_ROOT).as_posix()}",
+                flush=True,
+            )
+    return removed
+
+
 def synthesize(text: str, speaker: str, api_key: str) -> bytes:
     payload = json.dumps(
         {
@@ -169,6 +186,7 @@ def main() -> None:
     api_key = None
     reused = 0
     generated = 0
+    removed = 0
     for source in sorted(DATA_ROOT.glob("*.json")):
         content = json.loads(source.read_text(encoding="utf-8"))
         narration = content.get("narration")
@@ -186,8 +204,9 @@ def main() -> None:
 
         cache_path = output_root / CACHE_FILENAME
         old_cache, cache_existed = load_cache(cache_path)
+        cues = narration_cues(content)
         new_cache = {}
-        for cue, text in narration_cues(content).items():
+        for cue, text in cues.items():
             output = output_root / f"{cue}.{narration['format']}"
             fingerprint = cue_fingerprint(text, narration)
             new_cache[cue] = fingerprint
@@ -217,8 +236,13 @@ def main() -> None:
                 flush=True,
             )
         write_cache(cache_path, new_cache)
+        expected_filenames = {f"{cue}.{narration['format']}" for cue in cues}
+        removed += prune_stale_audio(output_root, expected_filenames)
 
-    print(f"DONE {reused} reused, {generated} generated", flush=True)
+    print(
+        f"DONE {reused} reused, {generated} generated, {removed} stale removed",
+        flush=True,
+    )
 
 
 if __name__ == "__main__":
