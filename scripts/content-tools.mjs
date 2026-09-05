@@ -113,6 +113,19 @@ const validateResearchSources = (sources, review, errors, warnings) => {
   });
 };
 
+const validateThemeMusic = async (creative, errors) => {
+  if (!visualThemes.has(creative?.visualTheme)) return;
+  const relativeAsset = `audio/music/${creative.visualTheme}.wav`;
+  const assetPath = resolve(publicRoot, relativeAsset);
+  try {
+    await access(assetPath);
+    const duration = await readAudioDurationSeconds(assetPath);
+    if (duration < 8) errors.push(`Theme music must be at least 8 seconds: ${relativeAsset}`);
+  } catch {
+    errors.push(`Theme music is missing or invalid: ${relativeAsset}`);
+  }
+};
+
 export const narrationCueNames = (content, kind) =>
   kind === 'episode'
     ? [
@@ -353,6 +366,7 @@ export const validateContent = async (content) => {
   validateReview(content?.review, kind, errors);
   validateCreative(content?.creative, errors);
   validateResearchSources(content?.researchSources, content?.review, errors, warnings);
+  await validateThemeMusic(content?.creative, errors);
   await validateAssetRights('assets/quiz-owl.png', 'mascot', errors);
 
   if (kind === 'episode') {

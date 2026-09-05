@@ -11,6 +11,7 @@ npm run dev
 npm run typecheck
 npm run generate:voiceover
 npm run generate:sfx
+npm run generate:music
 npm run sample:kokoro
 npm run validate:content
 npm run audit:catalog
@@ -83,6 +84,14 @@ voice, and synthesis settings are unchanged. Use
 Countdowns use a locally generated tick instead of narration;
 recreate it at any time with `npm run generate:sfx`. The former Edge generator
 remains available through `npm run generate:voiceover:edge`.
+
+## Theme music
+
+Each visual theme has an original, locally synthesized background loop under
+`public/audio/music/`. Music plays quietly beneath narration and fades at the
+start and end of each video. Recreate all five deterministic tracks without an
+external service by running `npm run generate:music`. Content validation checks
+that the selected theme track exists and production manifests record it.
 
 For the fully local Kokoro comparison, run `npm run setup:kokoro` once and then
 `npm run sample:kokoro`. This generates an `af_heart` WAV set and comparison

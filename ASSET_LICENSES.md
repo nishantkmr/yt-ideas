@@ -4,6 +4,22 @@ This ledger records the provenance and commercial-use basis for production
 media used by Kids Trivia Studio. Keep it with the project as evidence for
 copyright checks and YouTube Partner Program review.
 
+## Original background music
+
+The five theme beds in `public/audio/music/` are deterministic procedural
+syntheses created by `scripts/generate-music.mjs`. They contain no third-party
+recordings, samples, copied melodies, or external model output. The project may
+use and modify these original generated waveforms commercially. Regenerating a
+track from the script provides a reproducible provenance trail.
+
+| Track | Intended mood | Source |
+| --- | --- | --- |
+| `jungle.wav` | Marimba-like explorer rhythm | Local procedural synthesis |
+| `cosmic.wav` | Spacious bells and pulse | Local procedural synthesis |
+| `ocean.wav` | Flowing tones and droplets | Local procedural synthesis |
+| `atlas.wav` | Plucked travel rhythm | Local procedural synthesis |
+| `workshop.wav` | Playful toy-synth motion | Local procedural synthesis |
+
 ## Visual assets
 
 All current PNG files in `public/assets/` were generated through the OpenAI

@@ -14,6 +14,7 @@
     "generate:voiceover:force": "python scripts/generate-sarvam-voiceover.py --force",
     "generate:voiceover:edge": "python scripts/generate-neural-voiceover.py",
     "generate:sfx": "node scripts/generate-sfx.mjs",
+    "generate:music": "node scripts/generate-music.mjs",
     "setup:kokoro": "python -m pip install -r requirements-kokoro.txt --target .tools/kokoro-onnx && python scripts/download-kokoro-model.py",
     "sample:kokoro": "python scripts/generate-kokoro-sample.py",
     "sample:sarvam": "python scripts/generate-sarvam-samples.py",

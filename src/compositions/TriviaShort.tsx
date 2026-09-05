@@ -3,6 +3,7 @@ import {AnimatedScene} from '../components/AnimatedScene';
 import {shortNarrationAsset} from '../audio/narration';
 import {Voiceover} from '../audio/Voiceover';
 import {CountdownTicks} from '../audio/CountdownTicks';
+import {MusicBed} from '../audio/MusicBed';
 import {AnswerReveal} from '../components/AnswerReveal';
 import {Background} from '../components/Background';
 import {Countdown} from '../components/Countdown';
@@ -41,6 +42,7 @@ export const TriviaShort: React.FC<TriviaShortData> = ({
   return (
     <ShortLayout presentationFormat={creative.presentationFormat} visualTheme={creative.visualTheme}>
       <Background />
+      <MusicBed theme={creative.visualTheme} />
       <Sequence durationInFrames={SHORT_TIMING.intro * fps}>
         <Voiceover asset={shortNarrationAsset(narration, 'intro')} name="Short intro" />
         <AnimatedScene className="short-intro" durationInFrames={SHORT_TIMING.intro * fps}>

@@ -56,6 +56,14 @@ kids" unless the user deliberately changes the audience strategy.
 - `npm run generate:voiceover:force` intentionally regenerates every cue and
   should be used only when explicitly needed.
 - `npm run generate:sfx` recreates the local countdown tick without an API.
+- Theme-specific background music is generated locally with
+  `npm run generate:music`. The five original procedural WAV loops live under
+  `public/audio/music/`, play quietly beneath narration and require no external
+  music license.
+- Approved episode renders disable Remotion's parallel encoding because long,
+  audio-heavy Windows renders can otherwise race while cleaning a shared
+  temporary audio directory. This is handled automatically by
+  `npm run render:content -- <episode-json>`.
 - Edge and Kokoro remain comparison/fallback options; they are not the selected
   production narrator.
 
@@ -110,6 +118,7 @@ npm run validate:content
 npm run prepare:content
 npm run generate:voiceover
 npm run generate:sfx
+npm run generate:music
 npm run render:short
 npm run render:episode
 ```

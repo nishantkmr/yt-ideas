@@ -2,6 +2,7 @@ import {Sequence, useCurrentFrame, useVideoConfig} from 'remotion';
 import {episodeNarrationAsset} from '../audio/narration';
 import {CountdownTicks} from '../audio/CountdownTicks';
 import {Voiceover} from '../audio/Voiceover';
+import {MusicBed} from '../audio/MusicBed';
 import {AnimatedScene} from '../components/AnimatedScene';
 import {AnswerReveal} from '../components/AnswerReveal';
 import {Background} from '../components/Background';
@@ -34,6 +35,7 @@ export const TriviaEpisode: React.FC<Episode> = ({creative, narration, title, qu
   return (
     <LandscapeLayout presentationFormat={creative.presentationFormat} visualTheme={creative.visualTheme}>
       <Background />
+      <MusicBed theme={creative.visualTheme} />
       <Sequence durationInFrames={INTRO_SECONDS * fps}>
         <Voiceover asset={episodeNarrationAsset(narration, 'intro')} name="Episode intro" />
         <AnimatedScene className="episode-intro" durationInFrames={INTRO_SECONDS * fps}>

@@ -58,9 +58,18 @@ console.log(`Immutable props: ${relativeToProject(propsFile)}`);
 console.log(`Output: ${relativeToProject(outputFile)}`);
 
 const remotionCli = join(projectRoot, 'node_modules', '@remotion', 'cli', 'remotion-cli.js');
+const renderArgs = [remotionCli, 'render', 'src/index.ts', composition, outputFile, '--props', propsFile];
+
+// Long, audio-heavy episode renders can race while parallel chunks share and
+// clean Remotion's temporary audio-mixing directory on Windows. Shorts finish
+// in a single pass, while episodes use the safer serial encoding path.
+if (kind === 'episode') {
+  renderArgs.push('--disallow-parallel-encoding');
+}
+
 const child = spawn(
   process.execPath,
-  [remotionCli, 'render', 'src/index.ts', composition, outputFile, '--props', propsFile],
+  renderArgs,
   {cwd: projectRoot, stdio: 'inherit'},
 );
 

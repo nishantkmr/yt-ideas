@@ -3,6 +3,7 @@ import {join} from 'node:path';
 import {
   discoverContentFiles,
   narrationCueNames,
+  publicRoot,
   projectRoot,
   readJson,
   relativeToProject,
@@ -51,8 +52,22 @@ for (const file of await discoverContentFiles()) {
         (cue) => `${content.narration.audioBase}/${cue}.${content.narration.format}`,
       )
     : [];
+  const assets = [
+    ...new Set([
+      'assets/quiz-owl.png',
+      'audio/sfx/countdown-tick.wav',
+      `audio/music/${content.creative.visualTheme}.wav`,
+      ...visuals,
+      ...narrationAssets,
+    ]),
+  ].sort();
+  const assetSha256 = Object.fromEntries(
+    await Promise.all(
+      assets.map(async (asset) => [asset, sha256(await readFile(join(publicRoot, asset)))]),
+    ),
+  );
   const manifest = {
-    schemaVersion: 1,
+    schemaVersion: 2,
     contentId: content.id,
     kind: result.kind,
     source: relativeToProject(file),
@@ -64,20 +79,16 @@ for (const file of await discoverContentFiles()) {
     },
     review: content.review,
     video: {fps: timing.fps, durationInFrames},
-    assets: [
-      ...new Set([
-        'assets/quiz-owl.png',
-        'audio/sfx/countdown-tick.wav',
-        ...visuals,
-        ...narrationAssets,
-      ]),
-    ].sort(),
+    assets,
+    assetSha256,
     content,
   };
-  const output = join(outputDirectory, `${content.id}-${sourceHash.slice(0, 12)}.json`);
+  const manifestSource = `${JSON.stringify(manifest, null, 2)}\n`;
+  const manifestHash = sha256(manifestSource);
+  const output = join(outputDirectory, `${content.id}-${manifestHash.slice(0, 12)}.json`);
 
   try {
-    await writeFile(output, `${JSON.stringify(manifest, null, 2)}\n`, {flag: 'wx'});
+    await writeFile(output, manifestSource, {flag: 'wx'});
     console.log(`PREPARED ${relativeToProject(output)}`);
   } catch (error) {
     if (error?.code === 'EEXIST') {
