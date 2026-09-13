@@ -203,7 +203,14 @@ Git.
 - Inspect actual rendered frames for visual changes; a successful typecheck or
   bundle is not sufficient visual QA.
 - Preserve unrelated user changes in a dirty worktree.
-- Do not commit, push, publish or upload unless the user explicitly asks.
+- Committing to a local branch is pre-authorized: land each reviewable phase as
+  its own commit without asking. Do not push, publish or upload unless the user
+  explicitly asks.
+- Videos are catalog entries, not code versions, so they all live on `main`.
+  Use a short-lived `video/<slug>` branch while producing one, merge it on
+  publish, and tag the published commit `release/<slug>-v1` for reproducibility.
+  Never keep a long-lived per-video branch: engine fixes would stop propagating
+  and the cross-catalog originality audit could no longer see the whole catalog.
 - Prefer small, reviewable phases and explain consequential architecture
   changes before expanding the system.
 - Update this context file when a durable product, workflow, branding, voice or
