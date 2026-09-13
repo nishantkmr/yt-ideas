@@ -1,15 +1,16 @@
-import {mkdir, readFile, writeFile} from 'node:fs/promises';
+import {mkdir, readFile} from 'node:fs/promises';
 import {join} from 'node:path';
 import {
   discoverContentFiles,
   narrationCueNames,
   publicRoot,
   projectRoot,
-  readJson,
   relativeToProject,
   sha256,
   validateContent,
+  writeImmutableJson,
 } from './content-tools.mjs';
+import {episodeDurationInFrames, shortDurationInFrames} from '../src/config/durations.mjs';
 
 const timingFile = join(projectRoot, 'src', 'config', 'timing.json');
 const timingSource = await readFile(timingFile, 'utf8');
@@ -32,30 +33,21 @@ for (const file of await discoverContentFiles()) {
   }
 
   const sourceHash = sha256(source);
+  // Shared with src/config/timing.ts, which is what Remotion's calculateMetadata
+  // uses, so the manifest cannot record a duration the render disagrees with.
   const durationInFrames =
     result.kind === 'episode'
-      ? (timing.episode.intro +
-          content.questions.reduce(
-            (total, question) =>
-              total +
-              (question.readingTimeSeconds ?? timing.episode.question) +
-              timing.episode.countdown +
-              timing.episode.answer,
-            0,
-          ) +
-          timing.episode.outro) * timing.fps
-      : (timing.short.intro +
-          timing.short.clue * 2 +
-          timing.short.countdown +
-          timing.short.answer +
-          timing.short.fact +
-          timing.short.outro) * timing.fps;
+      ? episodeDurationInFrames(timing, content.questions, content.outroTimeSeconds)
+      : shortDurationInFrames(timing, content.clueTimeSeconds);
+  // Code-native visuals such as the digestive diagram carry no asset file.
   const visuals =
     result.kind === 'episode'
       ? content.questions.flatMap((question) =>
           typeof question.visual?.asset === 'string' ? [question.visual.asset] : [],
         )
-      : [content.visual.asset];
+      : typeof content.visual?.asset === 'string'
+        ? [content.visual.asset]
+        : [];
   const narrationAssets = content.narration?.enabled
     ? narrationCueNames(content, result.kind).map(
         (cue) => `${content.narration.audioBase}/${cue}.${content.narration.format}`,
@@ -76,7 +68,7 @@ for (const file of await discoverContentFiles()) {
     ),
   );
   const manifest = {
-    schemaVersion: 2,
+    schemaVersion: 3,
     contentId: content.id,
     kind: result.kind,
     source: relativeToProject(file),
@@ -92,18 +84,8 @@ for (const file of await discoverContentFiles()) {
     assetSha256,
     content,
   };
-  const manifestSource = `${JSON.stringify(manifest, null, 2)}\n`;
-  const manifestHash = sha256(manifestSource);
+  const manifestHash = sha256(`${JSON.stringify(manifest, null, 2)}\n`);
   const output = join(outputDirectory, `${content.id}-${manifestHash.slice(0, 12)}.json`);
-
-  try {
-    await writeFile(output, manifestSource, {flag: 'wx'});
-    console.log(`PREPARED ${relativeToProject(output)}`);
-  } catch (error) {
-    if (error?.code === 'EEXIST') {
-      console.log(`EXISTS ${relativeToProject(output)}`);
-    } else {
-      throw error;
-    }
-  }
+  const {created} = await writeImmutableJson(output, manifest);
+  console.log(`${created ? 'PREPARED' : 'EXISTS'} ${relativeToProject(output)}`);
 }

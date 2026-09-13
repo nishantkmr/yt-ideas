@@ -1,7 +1,11 @@
 import {createHash} from 'node:crypto';
-import {access, readFile, readdir} from 'node:fs/promises';
+import {access, link, readFile, readdir, unlink, writeFile} from 'node:fs/promises';
 import {dirname, extname, join, relative, resolve, sep} from 'node:path';
 import {fileURLToPath} from 'node:url';
+import {
+  episodeAnswerSeconds,
+  episodeQuestionSeconds,
+} from '../src/config/durations.mjs';
 
 export const projectRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 export const dataRoot = join(projectRoot, 'src', 'data');
@@ -53,6 +57,43 @@ if (assetLicenseRegistry?.schemaVersion !== 1 || !Array.isArray(assetLicenseRegi
     assetLicenseByPath.set(entry.path, entry);
   }
 }
+
+// Writes a content-addressed artifact that must never change once it exists.
+// A plain {flag:'wx'} write can leave a half-written file behind if the process
+// is killed mid-write, and that truncated file would then be treated as the
+// canonical artifact forever. Writing to a temporary sibling and renaming makes
+// the publish atomic, and an existing file is read back and compared so a
+// corrupt or diverging artifact is reported instead of silently accepted.
+export const writeImmutableJson = async (file, value) => {
+  const body = `${JSON.stringify(value, null, 2)}\n`;
+  const temporary = `${file}.tmp-${process.pid}`;
+
+  try {
+    await writeFile(temporary, body, {flag: 'wx'});
+    // link() publishes the fully written file under its final name and fails if
+    // that name is taken, so an interrupted run can never leave a partial file
+    // there and a concurrent run can never overwrite one. rename() would
+    // silently clobber the destination instead.
+    await link(temporary, file);
+    return {created: true};
+  } catch (error) {
+    if (error?.code !== 'EEXIST' || !(await access(file).then(() => true, () => false))) {
+      throw error;
+    }
+  } finally {
+    await unlink(temporary).catch(() => {});
+  }
+
+  const existing = await readFile(file, 'utf8');
+  if (existing !== body) {
+    throw new Error(
+      `${relativeToProject(file)} already exists with different content. ` +
+        'Its name is derived from a hash, so this means the file is corrupt or was written by an ' +
+        'older version of this tool. Delete it and re-run.',
+    );
+  }
+  return {created: false};
+};
 
 export const discoverContentFiles = async () =>
   (await readdir(dataRoot))
@@ -150,11 +191,11 @@ const narrationCueLimit = (content, kind, cue) => {
     if (cue.endsWith('-question')) {
       const questionId = cue.slice(0, -'-question'.length);
       const question = content.questions.find(({id}) => id === questionId);
-      return question?.readingTimeSeconds ?? timing.episode.question;
+      return episodeQuestionSeconds(timing, question ?? {});
     }
     const questionId = cue.slice(0, -'-answer'.length);
     const question = content.questions.find(({id}) => id === questionId);
-    return question?.answerTimeSeconds ?? timing.episode.answer;
+    return episodeAnswerSeconds(timing, question ?? {});
   }
   if (cue.startsWith('clue-')) return content.clueTimeSeconds ?? timing.short.clue;
   return timing.short[cue];
@@ -247,7 +288,7 @@ const validateAssetRights = async (relativeAsset, label, errors) => {
   }
 };
 
-const validateNarration = async (content, kind, errors, warnings) => {
+const validateNarration = async (content, kind, errors, warnings, {checkAssets = true} = {}) => {
   const narration = content?.narration;
   if (!narration) {
     warnings.push('Narration is not configured.');
@@ -268,14 +309,22 @@ const validateNarration = async (content, kind, errors, warnings) => {
   }
   if (!narration.enabled) return;
 
+  if (!resolve(publicRoot, narration.audioBase).startsWith(`${publicRoot}${sep}`)) {
+    errors.push('narration.audioBase must stay inside public/.');
+    return;
+  }
+
+  // The cues themselves are produced by a later pipeline step, so a structural
+  // pass checks the narration configuration but not the audio on disk.
+  if (!checkAssets) {
+    warnings.push('Narration audio has not been generated yet (structural check only).');
+    return;
+  }
+
   await Promise.all(
     narrationCueNames(content, kind).map(async (cue) => {
       const relativeAsset = `${narration.audioBase}/${cue}.${narration.format}`;
       const assetPath = resolve(publicRoot, relativeAsset);
-      if (!assetPath.startsWith(`${publicRoot}${sep}`)) {
-        errors.push('narration.audioBase must stay inside public/.');
-        return;
-      }
       try {
         await access(assetPath);
         const duration = await readAudioDurationSeconds(assetPath);
@@ -441,7 +490,20 @@ const validateQuestion = async (question, index, ids, errors) => {
   }
 };
 
-export const validateContent = async (content) => {
+// stage: 'strict' (default) also checks assets that earlier pipeline steps are
+// responsible for generating -- the theme music bed and the narration cues.
+// 'structural' checks only what a human authors, so a brand new content file can
+// be validated before its music and voiceover exist. Every existing caller gets
+// the strict behaviour unchanged; only the first step of a full build asks for
+// the structural pass, and the strict pass still runs before any production
+// render because prepare-content.mjs performs it.
+export const validateContent = async (content, options = {}) => {
+  const stage = options.stage ?? 'strict';
+  if (!['structural', 'strict'].includes(stage)) {
+    throw new Error(`Unknown validation stage: ${stage}`);
+  }
+  const checkGenerated = stage === 'strict';
+
   const errors = [...assetLicenseRegistryErrors];
   const warnings = [];
   const kind = Array.isArray(content?.questions) ? 'episode' : 'short';
@@ -450,7 +512,9 @@ export const validateContent = async (content) => {
   validateReview(content?.review, kind, errors);
   validateCreative(content?.creative, errors);
   validateResearchSources(content?.researchSources, content?.review, errors, warnings);
-  await validateThemeMusic(content?.creative, errors);
+  if (checkGenerated) {
+    await validateThemeMusic(content?.creative, errors);
+  }
   await validateAssetRights('assets/quiz-owl.png', 'mascot', errors);
 
   if (kind === 'episode') {
@@ -531,9 +595,9 @@ export const validateContent = async (content) => {
     warnings.push('Content is structurally valid but still needs human approval.');
   }
 
-  await validateNarration(content, kind, errors, warnings);
+  await validateNarration(content, kind, errors, warnings, {checkAssets: checkGenerated});
 
-  return {kind, errors, warnings};
+  return {kind, stage, errors, warnings};
 };
 
 export const relativeToProject = (file) => relative(projectRoot, file).replaceAll('\\', '/');

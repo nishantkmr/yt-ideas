@@ -1,7 +1,14 @@
 import {spawn} from 'node:child_process';
-import {access, readFile, writeFile} from 'node:fs/promises';
+import {access, readFile} from 'node:fs/promises';
 import {extname, join, resolve, sep} from 'node:path';
-import {dataRoot, projectRoot, relativeToProject, sha256, validateContent} from './content-tools.mjs';
+import {
+  dataRoot,
+  projectRoot,
+  relativeToProject,
+  sha256,
+  validateContent,
+  writeImmutableJson,
+} from './content-tools.mjs';
 
 const args = process.argv.slice(2);
 const sourceArgument = args.find((arg) => !arg.startsWith('--'));
@@ -58,11 +65,7 @@ if (!force) {
 }
 
 const propsFile = join(projectRoot, 'outputs', `${preview ? 'preview-' : ''}render-props-${content.id}-${sourceHash.slice(0, 12)}.json`);
-try {
-  await writeFile(propsFile, `${JSON.stringify(renderContent, null, 2)}\n`, {flag: 'wx'});
-} catch (error) {
-  if (error?.code !== 'EEXIST') throw error;
-}
+await writeImmutableJson(propsFile, renderContent);
 
 console.log(`${preview ? 'Rendering voiceover-free draft preview' : 'Rendering approved production video'}: ${relativeToProject(sourceFile)}`);
 console.log(`Immutable props: ${relativeToProject(propsFile)}`);
