@@ -6,7 +6,7 @@ import {episodeDurationInFrames, shortDurationInFrames} from '../src/config/dura
 
 const {
   narrationCueNames,
-  publicRoot,
+  resolveMediaSource,
   projectRoot,
   relativeToProject,
   sha256,
@@ -104,20 +104,34 @@ for (const target of targets) {
   ].sort();
   const assetSha256 = Object.fromEntries(
     await Promise.all(
-      assets.map(async (asset) => [asset, sha256(await readFile(join(publicRoot, asset)))]),
+      assets.map(async (asset) => [asset, sha256(await readFile(resolveMediaSource(asset)))]),
     ),
   );
+  // Rights live in two tiers now, so the manifest pins both: the shared brand
+  // registry and, when the video is a bundle, its own.
+  const rightsRegistries = [
+    {source: relativeToProject(assetLicenseFile), sha256: sha256(assetLicenseSource)},
+  ];
+  if (target.layout === 'bundle') {
+    const bundleRegistry = join(target.dir, 'asset-licenses.json');
+    const bundleSource = await readFile(bundleRegistry, 'utf8').catch(() => undefined);
+    if (bundleSource !== undefined) {
+      rightsRegistries.push({
+        source: relativeToProject(bundleRegistry),
+        sha256: sha256(bundleSource),
+      });
+    }
+  }
+
   const manifest = {
     schemaVersion: 3,
     contentId: content.id,
     kind: result.kind,
     source: relativeToProject(file),
+    bundle: target.layout === 'bundle' ? relativeToProject(target.dir) : null,
     sourceSha256: sourceHash,
     timingSha256: sha256(timingSource),
-    rightsRegistry: {
-      source: relativeToProject(assetLicenseFile),
-      sha256: sha256(assetLicenseSource),
-    },
+    rightsRegistries,
     review: content.review,
     video: {fps: timing.fps, durationInFrames},
     assets,

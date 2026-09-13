@@ -6,8 +6,8 @@ import {
   getEpisodeDurationInFrames,
   getShortDurationInFrames,
 } from './config/timing';
-import episodeData from './data/human-body-digestion-episode.json';
-import shortData from './data/human-body-stomach-short.json';
+import episodeData from '../content/human-body-digestion/content.json';
+import shortData from '../content/human-body-stomach-short/content.json';
 import type {Episode, TriviaShortData} from './types/content';
 
 const shortProps = shortData as TriviaShortData;

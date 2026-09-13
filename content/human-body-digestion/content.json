@@ -9,7 +9,8 @@
     "targetAge": "7-10",
     "hook": "Follow one imaginary bite through the digestive system and predict what happens at each stop.",
     "learningGoal": "Understand how digestive organs move food, break it down, absorb nutrients, and recover water.",
-    "signatureMoment": "An animated bite travels through an original digestive-system diagram while each organ lights up only after the answer reveal."
+    "signatureMoment": "An animated bite travels through an original digestive-system diagram while each organ lights up only after the answer reveal.",
+    "pack": "human-body"
   },
   "researchSources": [
     {
@@ -37,7 +38,7 @@
     "enabled": true,
     "provider": "sarvam-bulbul-v3",
     "voice": "suhani",
-    "audioBase": "audio/human_body_202609_digestion_01",
+    "audioBase": "content/human-body-digestion/audio",
     "format": "wav"
   },
   "outroCallToAction": "Ask a grown-up to subscribe and support WonderOwl Quiz!",
@@ -50,12 +51,22 @@
       "readingTimeSeconds": 7,
       "journeyStop": "Mouth",
       "question": "Which liquid moistens food and starts breaking down starch in your mouth?",
-      "options": ["Saliva", "Blood", "Tears", "Bile"],
+      "options": [
+        "Saliva",
+        "Blood",
+        "Tears",
+        "Bile"
+      ],
       "answer": "Saliva",
       "explanation": "Saliva moistens food and contains an enzyme that begins breaking down starch.",
-      "sourceRefs": ["niddk-digestion"],
+      "sourceRefs": [
+        "niddk-digestion"
+      ],
       "pronunciationNotes": [
-        {"term": "enzyme", "sayAs": "EN-zime"}
+        {
+          "term": "enzyme",
+          "sayAs": "EN-zime"
+        }
       ],
       "visual": {
         "type": "digestive-diagram",
@@ -72,14 +83,32 @@
       "answerTimeSeconds": 13,
       "journeyStop": "Route map",
       "question": "Can you put these first four stops of a bite's journey in order?",
-      "items": ["Small intestine", "Mouth", "Stomach", "Esophagus"],
-      "correctOrder": ["Mouth", "Esophagus", "Stomach", "Small intestine"],
+      "items": [
+        "Small intestine",
+        "Mouth",
+        "Stomach",
+        "Esophagus"
+      ],
+      "correctOrder": [
+        "Mouth",
+        "Esophagus",
+        "Stomach",
+        "Small intestine"
+      ],
       "answer": "Mouth, then esophagus, then stomach, then small intestine",
       "explanation": "These connected organs form the beginning of the digestive tract's route.",
-      "sourceRefs": ["niddk-digestion"],
+      "sourceRefs": [
+        "niddk-digestion"
+      ],
       "pronunciationNotes": [
-        {"term": "esophagus", "sayAs": "ih-SOF-uh-gus"},
-        {"term": "intestine", "sayAs": "in-TESS-tin"}
+        {
+          "term": "esophagus",
+          "sayAs": "ih-SOF-uh-gus"
+        },
+        {
+          "term": "intestine",
+          "sayAs": "in-TESS-tin"
+        }
       ]
     },
     {
@@ -89,13 +118,25 @@
       "readingTimeSeconds": 7,
       "journeyStop": "Esophagus",
       "question": "True or false: Food reaches your stomach only because gravity pulls it down.",
-      "options": ["True", "False"],
+      "options": [
+        "True",
+        "False"
+      ],
       "answer": "False",
       "explanation": "Waves of muscle called peristalsis squeeze food along the esophagus.",
-      "sourceRefs": ["niddk-digestion", "ncbi-peristalsis"],
+      "sourceRefs": [
+        "niddk-digestion",
+        "ncbi-peristalsis"
+      ],
       "pronunciationNotes": [
-        {"term": "peristalsis", "sayAs": "pair-ih-STALL-sis"},
-        {"term": "esophagus", "sayAs": "ih-SOF-uh-gus"}
+        {
+          "term": "peristalsis",
+          "sayAs": "pair-ih-STALL-sis"
+        },
+        {
+          "term": "esophagus",
+          "sayAs": "ih-SOF-uh-gus"
+        }
       ],
       "visual": {
         "type": "digestive-diagram",
@@ -109,10 +150,16 @@
       "difficulty": 2,
       "journeyStop": "Stomach",
       "question": "Which digestive organ am I?",
-      "clues": ["I receive food from the esophagus", "My muscles mix food", "I add acid and enzymes"],
+      "clues": [
+        "I receive food from the esophagus",
+        "My muscles mix food",
+        "I add acid and enzymes"
+      ],
       "answer": "Stomach",
       "explanation": "The stomach mixes food and liquid with digestive juices before releasing them gradually.",
-      "sourceRefs": ["niddk-digestion"],
+      "sourceRefs": [
+        "niddk-digestion"
+      ],
       "visual": {
         "type": "digestive-diagram",
         "focus": "stomach",
@@ -127,12 +174,22 @@
       "answerTimeSeconds": 9,
       "journeyStop": "Liver",
       "question": "Which organ makes bile, a digestive juice that helps with fats?",
-      "options": ["Liver", "Heart", "Lung", "Kidney"],
+      "options": [
+        "Liver",
+        "Heart",
+        "Lung",
+        "Kidney"
+      ],
       "answer": "Liver",
       "explanation": "The liver makes bile, which travels to the gallbladder for storage or to the small intestine for use.",
-      "sourceRefs": ["niddk-digestion"],
+      "sourceRefs": [
+        "niddk-digestion"
+      ],
       "pronunciationNotes": [
-        {"term": "gallbladder", "sayAs": "GAWL-blad-er"}
+        {
+          "term": "gallbladder",
+          "sayAs": "GAWL-blad-er"
+        }
       ],
       "visual": {
         "type": "digestive-diagram",
@@ -146,12 +203,21 @@
       "difficulty": 3,
       "journeyStop": "Gallbladder",
       "question": "Which small digestive organ am I?",
-      "clues": ["I am a small storage sac", "I hold bile between meals", "I squeeze bile into the small intestine"],
+      "clues": [
+        "I am a small storage sac",
+        "I hold bile between meals",
+        "I squeeze bile into the small intestine"
+      ],
       "answer": "Gallbladder",
       "explanation": "The gallbladder stores bile made by the liver and releases it into the small intestine.",
-      "sourceRefs": ["niddk-digestion"],
+      "sourceRefs": [
+        "niddk-digestion"
+      ],
       "pronunciationNotes": [
-        {"term": "gallbladder", "sayAs": "GAWL-blad-er"}
+        {
+          "term": "gallbladder",
+          "sayAs": "GAWL-blad-er"
+        }
       ],
       "visual": {
         "type": "digestive-diagram",
@@ -167,12 +233,20 @@
       "answerTimeSeconds": 9,
       "journeyStop": "Pancreas",
       "question": "True or false: The pancreas sends digestive juice to the small intestine.",
-      "options": ["True", "False"],
+      "options": [
+        "True",
+        "False"
+      ],
       "answer": "True",
       "explanation": "Pancreatic juice contains enzymes that help break down carbohydrates, fats, and proteins.",
-      "sourceRefs": ["niddk-digestion"],
+      "sourceRefs": [
+        "niddk-digestion"
+      ],
       "pronunciationNotes": [
-        {"term": "pancreas", "sayAs": "PAN-kree-us"}
+        {
+          "term": "pancreas",
+          "sayAs": "PAN-kree-us"
+        }
       ],
       "visual": {
         "type": "digestive-diagram",
@@ -187,12 +261,22 @@
       "answerTimeSeconds": 9,
       "journeyStop": "Small intestine",
       "question": "Where are most nutrients from digested food absorbed?",
-      "options": ["Small intestine", "Esophagus", "Mouth", "Large intestine"],
+      "options": [
+        "Small intestine",
+        "Esophagus",
+        "Mouth",
+        "Large intestine"
+      ],
       "answer": "Small intestine",
       "explanation": "The walls of the small intestine absorb most nutrients and pass many of them into the bloodstream.",
-      "sourceRefs": ["niddk-digestion"],
+      "sourceRefs": [
+        "niddk-digestion"
+      ],
       "pronunciationNotes": [
-        {"term": "intestine", "sayAs": "in-TESS-tin"}
+        {
+          "term": "intestine",
+          "sayAs": "in-TESS-tin"
+        }
       ],
       "visual": {
         "type": "digestive-diagram",
@@ -207,12 +291,20 @@
       "readingTimeSeconds": 8,
       "journeyStop": "Large intestine",
       "question": "True or false: The large intestine absorbs water from what remains after digestion.",
-      "options": ["True", "False"],
+      "options": [
+        "True",
+        "False"
+      ],
       "answer": "True",
       "explanation": "The large intestine absorbs water and changes the remaining waste from liquid into stool.",
-      "sourceRefs": ["niddk-digestion"],
+      "sourceRefs": [
+        "niddk-digestion"
+      ],
       "pronunciationNotes": [
-        {"term": "intestine", "sayAs": "in-TESS-tin"}
+        {
+          "term": "intestine",
+          "sayAs": "in-TESS-tin"
+        }
       ],
       "visual": {
         "type": "digestive-diagram",
@@ -228,10 +320,17 @@
       "answerTimeSeconds": 11,
       "journeyStop": "Body cells",
       "question": "Why does your body break food into much smaller parts?",
-      "options": ["To absorb and use nutrients", "To keep food stored in the stomach", "To remove all water before absorption", "To move food without muscle contractions"],
+      "options": [
+        "To absorb and use nutrients",
+        "To keep food stored in the stomach",
+        "To remove all water before absorption",
+        "To move food without muscle contractions"
+      ],
       "answer": "To absorb and use nutrients",
       "explanation": "Digestion makes nutrients small enough to support energy, growth, and cell repair.",
-      "sourceRefs": ["niddk-digestion"]
+      "sourceRefs": [
+        "niddk-digestion"
+      ]
     }
   ]
 }

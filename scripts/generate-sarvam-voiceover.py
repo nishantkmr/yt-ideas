@@ -9,7 +9,6 @@ from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
-PUBLIC_ROOT = PROJECT_ROOT / "public"
 API_URL = "https://api.sarvam.ai/text-to-speech"
 CACHE_FILENAME = ".voiceover-cache.json"
 SYNTHESIS_SETTINGS = {
@@ -98,7 +97,7 @@ def prune_stale_audio(output_root: Path, expected_filenames: set[str]) -> int:
             candidate.rename(attic / candidate.name)
             removed += 1
             print(
-                f"RETIRED {candidate.relative_to(PUBLIC_ROOT).as_posix()}"
+                f"RETIRED {candidate.relative_to(PROJECT_ROOT).as_posix()}"
                 f" -> {(attic / candidate.name).relative_to(PROJECT_ROOT).as_posix()}",
                 flush=True,
             )
@@ -221,9 +220,12 @@ def main() -> None:
             "format": sheet["format"],
         }
 
-        output_root = (PUBLIC_ROOT / sheet["audioBase"]).resolve()
-        if PUBLIC_ROOT.resolve() not in output_root.parents:
-            raise ValueError(f"audioBase must stay inside public/: {sheet['audioBase']}")
+        # audioRoot points at the tracked source tree. For a content bundle that
+        # is content/<slug>/media/audio, not the generated public/ mirror, which
+        # a later media sync would overwrite.
+        output_root = (PROJECT_ROOT / sheet["audioRoot"]).resolve()
+        if PROJECT_ROOT.resolve() not in output_root.parents:
+            raise ValueError(f"audioRoot must stay inside the project: {sheet['audioRoot']}")
         if not args.dry_run:
             output_root.mkdir(parents=True, exist_ok=True)
 
@@ -241,7 +243,7 @@ def main() -> None:
             if not args.force and output.exists():
                 if old_cache.get(name) == fingerprint:
                     reused += 1
-                    print(f"REUSED {output.relative_to(PUBLIC_ROOT).as_posix()}", flush=True)
+                    print(f"REUSED {output.relative_to(PROJECT_ROOT).as_posix()}", flush=True)
                     continue
                 # Audio with no matching cache entry is only trusted when asked
                 # for explicitly. Adopting by default would bless whatever
@@ -249,21 +251,21 @@ def main() -> None:
                 if args.adopt_existing and not cache_existed:
                     reused += 1
                     print(
-                        f"ADOPTED {output.relative_to(PUBLIC_ROOT).as_posix()} into cache",
+                        f"ADOPTED {output.relative_to(PROJECT_ROOT).as_posix()} into cache",
                         flush=True,
                     )
                     continue
 
             if args.dry_run:
                 would_generate += 1
-                print(f"WOULD GENERATE {output.relative_to(PUBLIC_ROOT).as_posix()}", flush=True)
+                print(f"WOULD GENERATE {output.relative_to(PROJECT_ROOT).as_posix()}", flush=True)
                 continue
 
             if api_key is None:
                 api_key = load_api_key()
             output.write_bytes(synthesize(text, sheet["voice"], api_key))
             generated += 1
-            print(f"GENERATED {output.relative_to(PUBLIC_ROOT).as_posix()}", flush=True)
+            print(f"GENERATED {output.relative_to(PROJECT_ROOT).as_posix()}", flush=True)
 
         if not args.dry_run:
             write_cache(cache_path, new_cache)

@@ -3,8 +3,8 @@
   "verifiedAt": "2026-09-08",
   "assets": [
     {
-      "path": "assets/quiz-owl.png",
-      "sha256": "c77fabc9fe03d81abcbff03613fcd92b66f7d30265381adce6783386d583deb8",
+      "path": "assets/zebra.png",
+      "sha256": "f2c5ef05022fbfc71a8555b2b0e2427573834e9fe335be356cfb1bee01ed9b87",
       "type": "ai-generated-image",
       "source": "OpenAI Media Service API",
       "provenance": "embedded-c2pa",

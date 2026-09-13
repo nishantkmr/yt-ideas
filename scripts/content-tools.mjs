@@ -30,37 +30,77 @@ const presentationFormats = new Set(FORMAT_IDS);
 const isText = (value) => typeof value === 'string' && value.trim().length > 0;
 const normalized = (value) => value.trim().toLocaleLowerCase('en');
 
+// Content refers to its media the way the render does, relative to public/.
+// A bundle's own media is committed under content/<slug>/media/ and mirrored
+// into public/content/<slug>/ only to be rendered, so every check that reads
+// bytes -- existence, hashes, audio duration -- resolves back to the source.
+// Validation is then correct on a fresh clone with no mirror, and a manifest can
+// never certify bytes that exist only in generated output.
+export const resolveMediaSource = (publicRelative) => {
+  const parts = String(publicRelative).split('/');
+  if (parts[0] !== 'content' || parts.length < 3) return resolve(publicRoot, publicRelative);
+  const [, slug, ...rest] = parts;
+  return join(contentRoot, slug, 'media', ...rest);
+};
+
+/** Whether a media path stays inside the tree it is allowed to address. */
+const isContainedMedia = (publicRelative) => {
+  const resolved = resolveMediaSource(publicRelative);
+  return (
+    resolved.startsWith(`${publicRoot}${sep}`) || resolved.startsWith(`${contentRoot}${sep}`)
+  );
+};
+
 export const readJson = async (file) => JSON.parse(await readFile(file, 'utf8'));
 export const sha256 = (value) => createHash('sha256').update(value).digest('hex');
 const timing = await readJson(join(projectRoot, 'src', 'config', 'timing.json'));
-const assetLicenseRegistry = await readJson(join(projectRoot, 'asset-licenses.json'));
 const assetLicenseByPath = new Map();
 const assetLicenseRegistryErrors = [];
 
-if (assetLicenseRegistry?.schemaVersion !== 1 || !Array.isArray(assetLicenseRegistry?.assets)) {
-  assetLicenseRegistryErrors.push('asset-licenses.json must use schemaVersion 1 and contain assets[].');
-} else {
-  for (const [index, entry] of assetLicenseRegistry.assets.entries()) {
-    const label = `asset-licenses.json assets[${index}]`;
+// Rights are recorded in two tiers: the root registry covers shared brand media,
+// and each bundle carries its own with bundle-relative paths, so renaming a
+// video needs no edit to the registry. They are merged here into the
+// public-relative keys the rest of the validator works in.
+const loadLicenseRegistry = async (file, label, keyOf) => {
+  const registry = await readJson(file).catch(() => undefined);
+  if (registry === undefined) return;
+  if (registry?.schemaVersion !== 1 || !Array.isArray(registry?.assets)) {
+    assetLicenseRegistryErrors.push(`${label} must use schemaVersion 1 and contain assets[].`);
+    return;
+  }
+  for (const [index, entry] of registry.assets.entries()) {
+    const entryLabel = `${label} assets[${index}]`;
     if (!isText(entry?.path)) {
-      assetLicenseRegistryErrors.push(`${label}.path is required.`);
+      assetLicenseRegistryErrors.push(`${entryLabel}.path is required.`);
       continue;
     }
-    if (assetLicenseByPath.has(entry.path)) {
-      assetLicenseRegistryErrors.push(`${label}.path is duplicated: ${entry.path}`);
+    const key = keyOf(entry.path);
+    if (assetLicenseByPath.has(key)) {
+      assetLicenseRegistryErrors.push(`${entryLabel}.path is duplicated: ${entry.path}`);
       continue;
     }
     for (const field of ['type', 'source', 'provenance', 'license', 'licenseUrl']) {
-      if (!isText(entry[field])) assetLicenseRegistryErrors.push(`${label}.${field} is required.`);
+      if (!isText(entry[field])) assetLicenseRegistryErrors.push(`${entryLabel}.${field} is required.`);
     }
     if (entry.commercialUse !== 'verified') {
-      assetLicenseRegistryErrors.push(`${label}.commercialUse must be "verified".`);
+      assetLicenseRegistryErrors.push(`${entryLabel}.commercialUse must be "verified".`);
     }
     if (typeof entry.sha256 !== 'string' || !/^[a-f0-9]{64}$/.test(entry.sha256)) {
-      assetLicenseRegistryErrors.push(`${label}.sha256 must be a lowercase SHA-256 hash.`);
+      assetLicenseRegistryErrors.push(`${entryLabel}.sha256 must be a lowercase SHA-256 hash.`);
     }
-    assetLicenseByPath.set(entry.path, entry);
+    assetLicenseByPath.set(key, entry);
   }
+};
+
+const rootRegistryFile = join(projectRoot, 'asset-licenses.json');
+await loadLicenseRegistry(rootRegistryFile, 'asset-licenses.json', (path) => path);
+for (const entry of await readdir(contentRoot, {withFileTypes: true}).catch(() => [])) {
+  if (!entry.isDirectory() || entry.name.startsWith('_')) continue;
+  await loadLicenseRegistry(
+    join(contentRoot, entry.name, 'asset-licenses.json'),
+    `content/${entry.name}/asset-licenses.json`,
+    (path) => `content/${entry.name}/${path}`,
+  );
 }
 
 // Writes a content-addressed artifact that must never change once it exists.
@@ -243,7 +283,7 @@ const validateResearchSources = (sources, review, errors, warnings) => {
 const validateThemeMusic = async (creative, errors) => {
   if (!visualThemes.has(creative?.visualTheme)) return;
   const relativeAsset = `audio/music/${creative.visualTheme}.wav`;
-  const assetPath = resolve(publicRoot, relativeAsset);
+  const assetPath = resolveMediaSource(relativeAsset);
   try {
     await access(assetPath);
     const duration = await readAudioDurationSeconds(assetPath);
@@ -356,7 +396,7 @@ const validateAssetRights = async (relativeAsset, label, errors) => {
     return;
   }
 
-  const assetPath = resolve(publicRoot, relativeAsset);
+  const assetPath = resolveMediaSource(relativeAsset);
   try {
     const actualHash = sha256(await readFile(assetPath));
     if (actualHash !== entry.sha256) {
@@ -406,8 +446,8 @@ const validateNarration = async (content, kind, errors, warnings, {checkAssets =
   }
   if (!narration.enabled) return;
 
-  if (!resolve(publicRoot, narration.audioBase).startsWith(`${publicRoot}${sep}`)) {
-    errors.push('narration.audioBase must stay inside public/.');
+  if (!isContainedMedia(narration.audioBase)) {
+    errors.push('narration.audioBase must stay inside public/ or its own content bundle.');
     return;
   }
 
@@ -421,7 +461,7 @@ const validateNarration = async (content, kind, errors, warnings, {checkAssets =
   await Promise.all(
     narrationCueNames(content, kind).map(async (cue) => {
       const relativeAsset = `${narration.audioBase}/${cue}.${narration.format}`;
-      const assetPath = resolve(publicRoot, relativeAsset);
+      const assetPath = resolveMediaSource(relativeAsset);
       try {
         await access(assetPath);
         const duration = await readAudioDurationSeconds(assetPath);
@@ -459,9 +499,9 @@ const validateVisual = async (visual, label, errors) => {
     return;
   }
 
-  const assetPath = resolve(publicRoot, visual.asset);
-  if (!assetPath.startsWith(`${publicRoot}${sep}`)) {
-    errors.push(`${label}.visual.asset must stay inside public/.`);
+  const assetPath = resolveMediaSource(visual.asset);
+  if (!isContainedMedia(visual.asset)) {
+    errors.push(`${label}.visual.asset must stay inside public/ or its own content bundle.`);
     return;
   }
 

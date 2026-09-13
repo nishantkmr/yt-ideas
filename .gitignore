@@ -17,3 +17,6 @@ __pycache__/
 .env
 .env.*
 !.env.example
+
+# Generated mirror of content/<slug>/media, rebuilt before each render.
+/public/content/

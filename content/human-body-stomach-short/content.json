@@ -12,7 +12,8 @@
     "targetAge": "6-9",
     "hook": "Two shape-and-function clues challenge children to identify one digestive organ before its animated close-up appears.",
     "learningGoal": "Recognize the stomach as a J-shaped muscular pouch that churns food with digestive juices.",
-    "signatureMoment": "A large original stomach close-up bubbles and churns when the mystery answer is revealed."
+    "signatureMoment": "A large original stomach close-up bubbles and churns when the mystery answer is revealed.",
+    "pack": "human-body"
   },
   "researchSources": [
     {
@@ -34,7 +35,7 @@
     "enabled": true,
     "provider": "sarvam-bulbul-v3",
     "voice": "suhani",
-    "audioBase": "audio/short_human_body_202609_stomach_01",
+    "audioBase": "content/human-body-stomach-short/audio",
     "format": "wav"
   },
   "clues": [

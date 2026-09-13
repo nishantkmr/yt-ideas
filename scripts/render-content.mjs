@@ -2,6 +2,7 @@ import {spawn} from 'node:child_process';
 import {access, readFile, writeFile} from 'node:fs/promises';
 import {join} from 'node:path';
 import {CONTENT_OPTIONS, parseCli} from './cli.mjs';
+import {syncContentMedia} from './content-media.mjs';
 import {
   projectRoot,
   relativeToProject,
@@ -84,6 +85,15 @@ if (!force && (await access(outputFile).then(() => true, () => false))) {
 
 const propsFile = join(projectRoot, 'outputs', `${preview ? 'preview-' : ''}render-props-${content.id}-${sourceHash.slice(0, 12)}.json`);
 await writeImmutableJson(propsFile, renderContent);
+
+// Remotion can only load media from public/, so a bundle's own assets and
+// narration are mirrored there immediately before the render.
+if (target.layout === 'bundle') {
+  const {linked, removed} = await syncContentMedia(target.slug);
+  if (linked > 0 || removed > 0) {
+    console.log(`Media: ${linked} linked, ${removed} removed in public/content/${target.slug}`);
+  }
+}
 
 console.log(`${preview ? 'Rendering voiceover-free draft preview' : 'Rendering approved production video'}: ${relativeToProject(sourceFile)}`);
 console.log(`Immutable props: ${relativeToProject(propsFile)}`);

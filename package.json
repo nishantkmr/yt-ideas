@@ -24,7 +24,10 @@
     "setup:kokoro": "python -m pip install -r requirements-kokoro.txt --target .tools/kokoro-onnx && python scripts/download-kokoro-model.py",
     "sample:kokoro": "python scripts/generate-kokoro-sample.py",
     "sample:sarvam": "python scripts/generate-sarvam-samples.py",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "sync:media": "node scripts/sync-media.mjs --all",
+    "predev": "node scripts/sync-media.mjs --all",
+    "prebuild": "node scripts/sync-media.mjs --all"
   },
   "engines": {
     "node": ">=22"

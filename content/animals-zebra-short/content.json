@@ -11,7 +11,8 @@
     "targetAge": "5-9",
     "hook": "Two visual-free clues invite children to identify a striped mystery animal.",
     "learningGoal": "Use descriptive clues to identify a zebra and learn that stripe patterns are individual.",
-    "signatureMoment": "The hidden zebra appears only after the answer is locked in."
+    "signatureMoment": "The hidden zebra appears only after the answer is locked in.",
+    "pack": "core"
   },
   "researchSources": [
     {
@@ -28,7 +29,13 @@
     "rightsChecked": true,
     "editorialChecked": true
   },
-  "narration": {"enabled":true,"provider":"sarvam-bulbul-v3","voice":"suhani","audioBase":"audio/short_animal_001","format":"wav"},
+  "narration": {
+    "enabled": true,
+    "provider": "sarvam-bulbul-v3",
+    "voice": "suhani",
+    "audioBase": "content/animals-zebra-short/audio",
+    "format": "wav"
+  },
   "clues": [
     "I have black and white stripes.",
     "I look a little like a horse."
@@ -36,7 +43,7 @@
   "funFact": "Every zebra has its own unique stripe pattern.",
   "visual": {
     "type": "silhouette",
-    "asset": "assets/zebra.png",
+    "asset": "content/animals-zebra-short/assets/zebra.png",
     "alt": "A zebra"
   }
 }

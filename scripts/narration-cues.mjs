@@ -1,5 +1,11 @@
 import {join} from 'node:path';
-import {narrationCueNames, projectRoot, sha256} from './content-tools.mjs';
+import {
+  narrationCueNames,
+  projectRoot,
+  relativeToProject,
+  resolveMediaSource,
+  sha256,
+} from './content-tools.mjs';
 
 // Narration wording used to live inside the Python synthesiser, which meant the
 // script for every video was hard-coded next to the HTTP client and branched on
@@ -86,7 +92,12 @@ export const buildCueSheet = (content, kind) => {
     provider: narration.provider,
     voice: narration.voice,
     format: narration.format,
+    // How the render addresses the cues, relative to public/.
     audioBase: narration.audioBase,
+    // Where they are written and version-controlled. For a bundle this is
+    // inside content/<slug>/media/, never the generated public/ mirror, so the
+    // synthesiser cannot fill a mirror that a later sync would wipe.
+    audioRoot: relativeToProject(resolveMediaSource(narration.audioBase)),
     cues: expected.map((name) => ({name, text: cues[name]})),
   };
 };
