@@ -195,6 +195,20 @@ npm run render:episode
 Rendered files are written to `outputs/` and MP4s are intentionally ignored by
 Git.
 
+Remotion downloads its own Chrome Headless Shell on first render. When that
+download is unavailable, point it at an installed browser instead:
+
+```bash
+npm run render:content -- <json> --browser-executable=/opt/google/chrome/chrome
+```
+
+Scripts are ES modules (`"type": "module"`). Node's type stripping lets the
+`.mjs` tooling import plain `.ts` modules directly, so shared definitions do not
+have to be duplicated between the build scripts and the Remotion sources. Such a
+shared `.ts` file must use erasable syntax only: no `enum`, no `namespace`, no
+constructor parameter properties, and type-only imports written as
+`import type`.
+
 ## Working rules for future sessions
 
 - Confirm the active working directory is the checked-out `yt-ideas` repository

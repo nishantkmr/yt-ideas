@@ -2,6 +2,7 @@
   "name": "kids-trivia-studio",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "description": "Remotion-powered production system for a kids GK and trivia channel.",
   "scripts": {
     "dev": "remotion studio src/index.ts",
