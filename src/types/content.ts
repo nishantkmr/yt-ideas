@@ -11,14 +11,21 @@ export type ContentReview = {
   editorialChecked?: boolean;
 };
 
-export type VisualTheme = 'jungle' | 'cosmic' | 'ocean' | 'atlas' | 'workshop';
+export type VisualTheme =
+  | 'jungle'
+  | 'cosmic'
+  | 'ocean'
+  | 'atlas'
+  | 'workshop'
+  | 'body-lab';
 
 export type PresentationFormat =
   | 'classic'
   | 'expedition'
   | 'mystery'
   | 'lab'
-  | 'world-tour';
+  | 'world-tour'
+  | 'body-journey';
 
 export type CreativeProfile = {
   visualTheme: VisualTheme;
@@ -30,9 +37,15 @@ export type CreativeProfile = {
 };
 
 export type ResearchSource = {
+  id?: string;
   title: string;
   url: string;
   accessedOn: string;
+};
+
+export type PronunciationNote = {
+  term: string;
+  sayAs: string;
 };
 
 export type NarrationConfig = {
@@ -51,22 +64,50 @@ export type QuestionType =
   | 'multiple-choice'
   | 'guess-picture'
   | 'who-am-i'
-  | 'true-false';
+  | 'true-false'
+  | 'ordering';
+
+export type DigestiveOrgan =
+  | 'mouth'
+  | 'esophagus'
+  | 'stomach'
+  | 'liver'
+  | 'gallbladder'
+  | 'pancreas'
+  | 'small-intestine'
+  | 'large-intestine';
+
+export type QuizVisual =
+  | {
+      type: 'picture' | 'silhouette';
+      asset: string;
+      alt: string;
+    }
+  | {
+      type: 'digestive-diagram';
+      focus: DigestiveOrgan;
+      alt: string;
+      answerLabel?: string;
+      answerHint?: string;
+    };
 
 export type QuizQuestion = {
   id: string;
   type: QuestionType;
   difficulty: Difficulty;
+  readingTimeSeconds?: number;
+  answerTimeSeconds?: number;
   question: string;
   options?: string[];
   clues?: string[];
+  items?: string[];
+  correctOrder?: string[];
+  journeyStop?: string;
+  sourceRefs?: string[];
+  pronunciationNotes?: PronunciationNote[];
   answer: string;
   explanation: string;
-  visual?: {
-    type: 'picture' | 'silhouette';
-    asset: string;
-    alt: string;
-  };
+  visual?: QuizVisual;
 };
 
 export type TriviaShortData = {
@@ -76,13 +117,10 @@ export type TriviaShortData = {
   category?: string;
   answer: string;
   difficulty: Difficulty;
+  clueTimeSeconds?: number;
   clues: string[];
   funFact: string;
-  visual: {
-    type: 'silhouette';
-    asset: string;
-    alt: string;
-  };
+  visual: QuizVisual;
   review: ContentReview;
   creative: CreativeProfile;
   researchSources: ResearchSource[];
@@ -99,4 +137,6 @@ export type Episode = {
   questions: QuizQuestion[];
   review: ContentReview;
   narration?: NarrationConfig;
+  outroCallToAction?: string;
+  outroTimeSeconds?: number;
 };

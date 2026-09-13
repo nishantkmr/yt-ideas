@@ -7,6 +7,7 @@ const MUSIC_BY_THEME: Record<VisualTheme, {asset: string; name: string}> = {
   ocean: {asset: 'audio/music/ocean.wav', name: 'Ocean music bed'},
   atlas: {asset: 'audio/music/atlas.wav', name: 'Atlas music bed'},
   workshop: {asset: 'audio/music/workshop.wav', name: 'Workshop music bed'},
+  'body-lab': {asset: 'audio/music/body-lab.wav', name: 'Body lab music bed'},
 };
 
 type MusicBedProps = {

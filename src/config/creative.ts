@@ -44,4 +44,11 @@ export const PRESENTATION_COPY: Record<PresentationFormat, PresentationCopy> = {
     countdownAction: 'Stamp your answer!',
     completionLabel: 'Journey complete',
   },
+  'body-journey': {
+    challengeLabel: 'Inside-the-body mission',
+    roundLabel: 'Journey stop',
+    countdownPrompt: 'What happens here?',
+    countdownAction: 'Choose the next discovery!',
+    completionLabel: 'Body journey complete',
+  },
 };

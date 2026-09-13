@@ -3,9 +3,14 @@ import {Mascot} from './Mascot';
 type ScoreScreenProps = {
   total: number;
   completionLabel?: string;
+  callToAction?: string;
 };
 
-export const ScoreScreen: React.FC<ScoreScreenProps> = ({completionLabel = 'Adventure complete', total}) => (
+export const ScoreScreen: React.FC<ScoreScreenProps> = ({
+  callToAction = 'Keep exploring. Another amazing discovery is waiting for you!',
+  completionLabel = 'Adventure complete',
+  total,
+}) => (
   <div className="score-screen">
     <Mascot compact message="You made Quiz Owl proud!" />
     <div className="score-card">
@@ -14,7 +19,7 @@ export const ScoreScreen: React.FC<ScoreScreenProps> = ({completionLabel = 'Adve
       <strong>High five!</strong>
       <span>{total} {total === 1 ? 'mystery' : 'questions'} conquered</span>
       <p>Thanks for playing—your curiosity is your superpower.</p>
-      <small>Keep exploring. Another amazing discovery is waiting for you!</small>
+      <small>{callToAction}</small>
     </div>
   </div>
 );

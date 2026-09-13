@@ -7,6 +7,7 @@ import {MusicBed} from '../audio/MusicBed';
 import {AnswerReveal} from '../components/AnswerReveal';
 import {Background} from '../components/Background';
 import {Countdown} from '../components/Countdown';
+import {DigestiveDiagram} from '../components/DigestiveDiagram';
 import {Mascot} from '../components/Mascot';
 import {QuestionCard} from '../components/QuestionCard';
 import {ScoreScreen} from '../components/ScoreScreen';
@@ -18,6 +19,7 @@ import type {TriviaShortData} from '../types/content';
 
 export const TriviaShort: React.FC<TriviaShortData> = ({
   answer,
+  clueTimeSeconds = SHORT_TIMING.clue,
   clues,
   creative,
   funFact,
@@ -28,8 +30,8 @@ export const TriviaShort: React.FC<TriviaShortData> = ({
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
   const clueOneStart = SHORT_TIMING.intro;
-  const clueTwoStart = clueOneStart + SHORT_TIMING.clue;
-  const countdownStart = clueTwoStart + SHORT_TIMING.clue;
+  const clueTwoStart = clueOneStart + clueTimeSeconds;
+  const countdownStart = clueTwoStart + clueTimeSeconds;
   const answerStart = countdownStart + SHORT_TIMING.countdown;
   const factStart = answerStart + SHORT_TIMING.answer;
   const outroStart = factStart + SHORT_TIMING.fact;
@@ -50,15 +52,15 @@ export const TriviaShort: React.FC<TriviaShortData> = ({
           <QuestionCard eyebrow={presentation.challengeLabel} text={title ?? 'Solve the clues!'} layout="short" />
         </AnimatedScene>
       </Sequence>
-      <Sequence from={clueOneStart * fps} durationInFrames={SHORT_TIMING.clue * fps}>
+      <Sequence from={clueOneStart * fps} durationInFrames={clueTimeSeconds * fps}>
         <Voiceover asset={shortNarrationAsset(narration, 'clue-1')} name="Clue one" />
-        <AnimatedScene className="short-clue" durationInFrames={SHORT_TIMING.clue * fps}>
+        <AnimatedScene className="short-clue" durationInFrames={clueTimeSeconds * fps}>
           <QuestionCard eyebrow="Clue 1" text={clues[0]} layout="short" />
         </AnimatedScene>
       </Sequence>
-      <Sequence from={clueTwoStart * fps} durationInFrames={SHORT_TIMING.clue * fps}>
+      <Sequence from={clueTwoStart * fps} durationInFrames={clueTimeSeconds * fps}>
         <Voiceover asset={shortNarrationAsset(narration, 'clue-2')} name="Clue two" />
-        <AnimatedScene className="short-clue" durationInFrames={SHORT_TIMING.clue * fps}>
+        <AnimatedScene className="short-clue" durationInFrames={clueTimeSeconds * fps}>
           <QuestionCard eyebrow="Clue 2" text={clues[1]} layout="short" />
         </AnimatedScene>
       </Sequence>
@@ -78,7 +80,17 @@ export const TriviaShort: React.FC<TriviaShortData> = ({
       <Sequence from={answerStart * fps} durationInFrames={SHORT_TIMING.answer * fps}>
         <Voiceover asset={shortNarrationAsset(narration, 'answer')} name="Answer" />
         <AnimatedScene className="short-answer" durationInFrames={SHORT_TIMING.answer * fps}>
-          <GuessPicture alt={visual.alt} asset={visual.asset} />
+          {visual.type === 'digestive-diagram' ? (
+            <DigestiveDiagram
+              alt={visual.alt}
+              answerHint={visual.answerHint}
+              answerLabel={visual.answerLabel}
+              focus={visual.focus}
+              revealed
+            />
+          ) : (
+            <GuessPicture alt={visual.alt} asset={visual.asset} />
+          )}
           <AnswerReveal answer={answer} explanation="You got it!" streak={1} />
         </AnimatedScene>
       </Sequence>

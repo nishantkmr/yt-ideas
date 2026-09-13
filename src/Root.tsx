@@ -6,8 +6,8 @@ import {
   getEpisodeDurationInFrames,
   getShortDurationInFrames,
 } from './config/timing';
-import episodeData from './data/animal-episode.json';
-import shortData from './data/zebra-short.json';
+import episodeData from './data/human-body-digestion-episode.json';
+import shortData from './data/human-body-stomach-short.json';
 import type {Episode, TriviaShortData} from './types/content';
 
 const shortProps = shortData as TriviaShortData;
@@ -16,25 +16,30 @@ const episodeProps = episodeData as Episode;
 export const RemotionRoot: React.FC = () => (
   <>
     <Composition
-      id="TriviaShort"
-      component={TriviaShort}
-      durationInFrames={getShortDurationInFrames()}
-      fps={FPS}
-      width={1080}
-      height={1920}
-      defaultProps={shortProps}
-      calculateMetadata={() => ({durationInFrames: getShortDurationInFrames()})}
-    />
-    <Composition
       id="TriviaEpisode"
       component={TriviaEpisode}
-      durationInFrames={getEpisodeDurationInFrames(episodeProps.questions.length)}
+      durationInFrames={getEpisodeDurationInFrames(
+        episodeProps.questions,
+        episodeProps.outroTimeSeconds,
+      )}
       fps={FPS}
       width={1920}
       height={1080}
       defaultProps={episodeProps}
       calculateMetadata={({props}) => ({
-        durationInFrames: getEpisodeDurationInFrames(props.questions.length),
+        durationInFrames: getEpisodeDurationInFrames(props.questions, props.outroTimeSeconds),
+      })}
+    />
+    <Composition
+      id="TriviaShort"
+      component={TriviaShort}
+      durationInFrames={getShortDurationInFrames(shortProps.clueTimeSeconds)}
+      fps={FPS}
+      width={1080}
+      height={1920}
+      defaultProps={shortProps}
+      calculateMetadata={({props}) => ({
+        durationInFrames: getShortDurationInFrames(props.clueTimeSeconds),
       })}
     />
   </>
