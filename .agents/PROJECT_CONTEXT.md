@@ -31,7 +31,17 @@ kids" unless the user deliberately changes the audience strategy.
 - Composition entry point: `src/index.ts`.
 - `TriviaShort`: portrait, 1080x1920 at 30 FPS.
 - `TriviaEpisode`: landscape, 1920x1080 at 30 FPS.
-- Editorial content lives in human-readable JSON under `src/data/`.
+- Each video is a self-contained bundle under `content/<slug>/`: its
+  `content.json`, its own `asset-licenses.json`, its `review.md`, and its images
+  and narration under `media/`. `public/` holds only shared brand media.
+- Remotion's `staticFile()` only reaches `public/`, so bundle media is mirrored
+  into the ignored `public/content/<slug>/` before a render. The bundle is the
+  source of truth; everything that reads bytes reads the bundle, so a fresh
+  clone validates before any mirror exists.
+- Video-family code lives in `src/packs/<pack>/`, which declares its themes,
+  presentation formats, visual types and their rules. The compositions and the
+  validator read the pack registries instead of naming a family. See
+  `src/packs/README.md` before adding one.
 - Scene durations come from `src/config/timing.json`; do not scatter hardcoded
   timings through compositions.
 - Rendering remains local for now. Do not introduce cloud infrastructure,
@@ -86,9 +96,12 @@ kids" unless the user deliberately changes the audience strategy.
   should be used only when explicitly needed.
 - `npm run generate:sfx` recreates the local countdown tick without an API.
 - Theme-specific background music is generated locally with
-  `npm run generate:music`. The five original procedural WAV loops live under
-  `public/audio/music/`, play quietly beneath narration and require no external
-  music license.
+  `npm run generate:music` from the recipe in each pack manifest. The original
+  procedural WAV loops live under `public/audio/music/`, play quietly beneath
+  narration and require no external music license. An existing bed is never
+  regenerated without `--force`, because its hash is recorded in every manifest
+  and `Math.sin` is implementation-defined, so a future Node could otherwise
+  change the music inside an already published video.
 - Approved episode renders disable Remotion's parallel encoding because long,
   audio-heavy Windows renders can otherwise race while cleaning a shared
   temporary audio directory. This is handled automatically by
@@ -108,7 +121,9 @@ kids" unless the user deliberately changes the audience strategy.
   for visual review. It forces narration off while retaining music and local
   sound effects, names the output as a preview, and does not weaken the approval
   requirement for production output.
-- `asset-licenses.json` is the machine-readable visual-rights registry.
+- Visual rights are recorded in two tiers: the root `asset-licenses.json` for
+  shared brand media, and a bundle-relative `asset-licenses.json` inside each
+  video. Manifests pin both.
 - `ASSET_LICENSES.md` explains image, narration and sound-effect provenance.
 - Approved content must not reference an image without verified commercial-use
   provenance and a matching SHA-256 hash. Add or replace the rights record when
@@ -145,7 +160,7 @@ kids" unless the user deliberately changes the audience strategy.
   and must remain unapproved until factual, rights, and editorial review are
   complete.
 - The digestion episode maps every question to a source ID and records difficult
-  pronunciation checks. Its human checklist under `reviews/` was approved by the
+  pronunciation checks. Its human checklist in its bundle was approved by the
   project owner on 2026-09-06, and Sarvam narration is enabled. The audio-enabled
   production render exists, but pronunciation and voice/music balance still need
   the project owner's post-generation listening approval before upload.
@@ -167,12 +182,24 @@ kids" unless the user deliberately changes the audience strategy.
 - Remotion Studio's default `TriviaEpisode` props point to the Human Body
   digestion draft. Content-driven renders still accept any validated episode
   JSON through `npm run render:content -- <json>`.
-- `npm run validate:content` includes a cross-catalog originality/diversity
-  audit. Use `templates/` for new drafts and `npm run render:content -- <json>`
-  for a validated, approved, immutable-props render.
-- `npm run render:short` and `npm run render:episode` are convenience aliases
-  for the same validated `render:content` production path; they must not bypass
-  content approval.
+- `npm run video -- <slug>` builds one video end to end: validate, catalog
+  audit, music, sound effects, voiceover, manifest, render. It skips steps with
+  nothing to do, and `--dry-run` reports what it would do without ever calling
+  the narration API. The human still writes and approves the content; the
+  command only removes the seven-step chain that followed.
+- Validation at step one is structural, because the music bed and narration it
+  would otherwise demand are produced by later steps. The strict pass still runs
+  at the manifest step, before any production render.
+- A video whose content changed since it was rendered fails rather than being
+  silently skipped, and an output with no render stamp is treated as an
+  interrupted render and rebuilt.
+- The catalog audit always reads the whole catalog, because duplicate ids and
+  repeated question text cannot be seen from one file. `--focus=<slug>` makes
+  only the findings involving that video blocking.
+- Start new drafts from `content/_template/`; see `content/_template/README.md`.
+- `npm run render:short` and `npm run render:episode` have been removed. They
+  pointed at the first animal video and carried `--force`, so running one would
+  have silently overwritten a published video with the wrong content.
 - The full operating plan and current policy links are in
   `SCALING_AND_MONETIZATION.md`.
 
@@ -188,8 +215,9 @@ npm run prepare:content
 npm run generate:voiceover
 npm run generate:sfx
 npm run generate:music
-npm run render:short
-npm run render:episode
+npm run video -- <slug>
+npm run video:check -- <slug>
+npm run render:content -- <slug>
 ```
 
 Rendered files are written to `outputs/` and MP4s are intentionally ignored by

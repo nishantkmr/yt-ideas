@@ -6,7 +6,7 @@ copyright checks and YouTube Partner Program review.
 
 ## Original background music
 
-The five theme beds in `public/audio/music/` are deterministic procedural
+The theme beds in `public/audio/music/` are deterministic procedural
 syntheses created by `scripts/generate-music.mjs`. They contain no third-party
 recordings, samples, copied melodies, or external model output. The project may
 use and modify these original generated waveforms commercially. Regenerating a
@@ -25,7 +25,7 @@ track from the script provides a reproducible provenance trail.
 All current PNG files in `public/assets/` were generated through the OpenAI
 Media Service API. Each original file contains an embedded C2PA claim naming
 `OpenAI Media Service API` as its claim generator. The exact verified file
-hashes and licensing fields are stored in `asset-licenses.json` and enforced by
+hashes and licensing fields are stored in a rights registry and enforced by
 `npm run validate:content`.
 
 OpenAI's applicable account terms assign Output rights to the user, subject to
@@ -57,8 +57,8 @@ License reference: [OpenAI Terms of Use](https://openai.com/policies/terms-of-us
 
 ## Narration
 
-Production narration under `public/audio/animals_001/` and
-`public/audio/short_animal_001/` was generated on the project owner's Sarvam
+Production narration lives with the video it belongs to, under
+`content/<slug>/media/audio/`. It was generated on the project owner's Sarvam
 account with the preset Suhani voice using Bulbul v3. Sarvam states that Output
 generated on an account while credits are consumed has commercial production
 rights, including Output generated with signup credits.
@@ -74,7 +74,9 @@ locally by `scripts/generate-sfx.mjs`; it contains no third-party recording.
 
 Before approving content for production:
 
-1. Add every new visual to `asset-licenses.json`.
+1. Add every new visual to a rights registry: the root `asset-licenses.json`
+   for shared brand media, or the video's own `content/<slug>/asset-licenses.json`
+   (with bundle-relative paths) for media belonging to one video.
 2. Record its source, commercial-use status, license URL, provenance and exact
    SHA-256 hash.
 3. Preserve receipts, generation records or license screenshots outside the

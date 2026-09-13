@@ -1,0 +1,90 @@
+{
+  "id": "category_yyyymm_topic_01",
+  "title": "A Specific, Honest Quiz Title",
+  "category": "science",
+  "theme": "specific editorial theme",
+  "creative": {
+    "pack": "core",
+    "visualTheme": "cosmic",
+    "presentationFormat": "lab",
+    "targetAge": "7-10",
+    "hook": "Describe why this episode is worth watching and how it differs from earlier episodes.",
+    "learningGoal": "State what a child should understand after finishing.",
+    "signatureMoment": "Describe one scene, reveal, mini-story, or interaction unique to this episode."
+  },
+  "researchSources": [
+    {
+      "id": "authoritative-source-01",
+      "title": "Authoritative source title",
+      "url": "https://example.org/source",
+      "accessedOn": "YYYY-MM-DD"
+    }
+  ],
+  "review": {
+    "status": "draft",
+    "factsChecked": false,
+    "rightsChecked": false,
+    "editorialChecked": false
+  },
+  "narration": {
+    "enabled": false,
+    "provider": "sarvam-bulbul-v3",
+    "voice": "suhani",
+    "audioBase": "content/REPLACE-ME/audio",
+    "format": "wav"
+  },
+  "outroCallToAction": "An age-appropriate closing ask, or remove this field.",
+  "outroTimeSeconds": 9,
+  "questions": [
+    {
+      "id": "topic_001",
+      "type": "multiple-choice",
+      "difficulty": 1,
+      "readingTimeSeconds": 6,
+      "answerTimeSeconds": 8,
+      "question": "Ask one clear question a child can picture.",
+      "options": ["Correct answer", "Plausible distractor", "Second distractor", "Third distractor"],
+      "answer": "Correct answer",
+      "explanation": "Explain why, in one or two warm sentences.",
+      "sourceRefs": ["authoritative-source-01"],
+      "pronunciationNotes": [{"term": "tricky word", "sayAs": "TRICK-ee wurd"}],
+      "visual": {
+        "type": "picture",
+        "asset": "content/REPLACE-ME/assets/replace-me.png",
+        "alt": "Describe the picture for the answer reveal."
+      }
+    },
+    {
+      "id": "topic_002",
+      "type": "true-false",
+      "difficulty": 2,
+      "question": "State something a child can judge as true or false.",
+      "options": ["True", "False"],
+      "answer": "True",
+      "explanation": "Say why it is true, and what the common mistake is.",
+      "sourceRefs": ["authoritative-source-01"]
+    },
+    {
+      "id": "topic_003",
+      "type": "who-am-i",
+      "difficulty": 2,
+      "question": "Who am I?",
+      "clues": ["First clue, broad.", "Second clue, narrower."],
+      "answer": "The subject",
+      "explanation": "Confirm the answer and add one memorable detail.",
+      "sourceRefs": ["authoritative-source-01"]
+    },
+    {
+      "id": "topic_004",
+      "type": "ordering",
+      "difficulty": 3,
+      "answerTimeSeconds": 12,
+      "question": "Put these in the right order.",
+      "items": ["First", "Second", "Third", "Fourth"],
+      "correctOrder": ["First", "Second", "Third", "Fourth"],
+      "answer": "First, Second, Third, Fourth",
+      "explanation": "Explain what makes the order work.",
+      "sourceRefs": ["authoritative-source-01"]
+    }
+  ]
+}

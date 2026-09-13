@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "verifiedAt": "YYYY-MM-DD",
+  "assets": [
+    {
+      "path": "assets/replace-me.png",
+      "type": "image/png",
+      "source": "Where the file came from.",
+      "provenance": "How it was produced, and any embedded provenance it carries.",
+      "license": "The licence granting commercial use.",
+      "licenseUrl": "https://example.org/licence",
+      "commercialUse": "verified",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+    }
+  ]
+}
