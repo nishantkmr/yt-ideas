@@ -11,8 +11,8 @@
     "render:episode": "node scripts/render-content.mjs src/data/animal-episode.json --force",
     "render:content": "node scripts/render-content.mjs",
     "setup:voiceover": "python -m pip install -r requirements-tts.txt --target .tools/edge-tts",
-    "generate:voiceover": "python scripts/generate-sarvam-voiceover.py",
-    "generate:voiceover:force": "python scripts/generate-sarvam-voiceover.py --force",
+    "generate:voiceover": "node scripts/generate-voiceover.mjs",
+    "generate:voiceover:force": "node scripts/generate-voiceover.mjs --force",
     "generate:voiceover:edge": "python scripts/generate-neural-voiceover.py",
     "generate:sfx": "node scripts/generate-sfx.mjs",
     "generate:music": "node scripts/generate-music.mjs",
@@ -22,7 +22,8 @@
     "validate:content": "node scripts/validate-content.mjs && node scripts/audit-catalog.mjs",
     "audit:catalog": "node scripts/audit-catalog.mjs",
     "prepare:content": "node scripts/prepare-content.mjs",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "generate:voiceover:check": "node scripts/generate-voiceover.mjs --all --dry-run --strict-cache"
   },
   "engines": {
     "node": ">=22"

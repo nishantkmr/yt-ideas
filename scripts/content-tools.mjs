@@ -384,6 +384,22 @@ const validateNarration = async (content, kind, errors, warnings, {checkAssets =
     errors.push('narration needs non-empty voice and audioBase values.');
     return;
   }
+  if (narration.script !== undefined) {
+    // A key that is not a cue name would silently override nothing, so the
+    // narration would stay wrong while looking customised.
+    if (typeof narration.script !== 'object' || narration.script === null || Array.isArray(narration.script)) {
+      errors.push('narration.script must be an object of cue name to text.');
+    } else {
+      const known = new Set(narrationCueNames(content, kind));
+      for (const [cue, text] of Object.entries(narration.script)) {
+        if (!known.has(cue)) {
+          errors.push(`narration.script has no such cue: ${cue}`);
+        } else if (!isText(text)) {
+          errors.push(`narration.script.${cue} must be non-empty text.`);
+        }
+      }
+    }
+  }
   if (!narration.enabled) return;
 
   if (!resolve(publicRoot, narration.audioBase).startsWith(`${publicRoot}${sep}`)) {

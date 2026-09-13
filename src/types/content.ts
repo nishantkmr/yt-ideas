@@ -58,6 +58,12 @@ export type NarrationConfig = {
   voice: string;
   audioBase: string;
   format: 'mp3' | 'wav';
+  /**
+   * Overrides the narration text for individual cues. Keys must be cue names
+   * for this content's scenes (`intro`, `<questionId>-answer`, ...). Changing a
+   * cue's text invalidates its cached audio and re-synthesises it.
+   */
+  script?: Record<string, string>;
 };
 
 export type QuestionType =
