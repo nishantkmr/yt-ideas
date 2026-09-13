@@ -5,6 +5,7 @@
   "category": "space",
   "answer": "Specific answer",
   "difficulty": 2,
+  "clueTimeSeconds": 4,
   "creative": {
     "visualTheme": "cosmic",
     "presentationFormat": "mystery",

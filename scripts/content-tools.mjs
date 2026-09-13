@@ -12,9 +12,11 @@ const questionTypes = new Set([
   'guess-picture',
   'who-am-i',
   'true-false',
+  'ordering',
 ]);
-const visualThemes = new Set(['jungle', 'cosmic', 'ocean', 'atlas', 'workshop']);
-const presentationFormats = new Set(['classic', 'expedition', 'mystery', 'lab', 'world-tour']);
+const visualThemes = new Set(['jungle', 'cosmic', 'ocean', 'atlas', 'workshop', 'body-lab']);
+const presentationFormats = new Set(['classic', 'expedition', 'mystery', 'lab', 'world-tour', 'body-journey']);
+const digestiveOrgans = new Set(['mouth', 'esophagus', 'stomach', 'liver', 'gallbladder', 'pancreas', 'small-intestine', 'large-intestine']);
 
 const isText = (value) => typeof value === 'string' && value.trim().length > 0;
 const normalized = (value) => value.trim().toLocaleLowerCase('en');
@@ -103,6 +105,9 @@ const validateResearchSources = (sources, review, errors, warnings) => {
   }
   sources.forEach((source, index) => {
     const label = `researchSources[${index}]`;
+    if (source?.id !== undefined && !isText(source.id)) {
+      errors.push(`${label}.id must be non-empty when provided.`);
+    }
     if (!isText(source?.title)) errors.push(`${label}.title is required.`);
     if (!isText(source?.url) || !source.url.startsWith('https://')) {
       errors.push(`${label}.url must be an HTTPS URL.`);
@@ -138,13 +143,20 @@ export const narrationCueNames = (content, kind) =>
       ]
     : ['intro', 'clue-1', 'clue-2', 'answer', 'fact', 'outro'];
 
-const narrationCueLimit = (kind, cue) => {
+const narrationCueLimit = (content, kind, cue) => {
   if (kind === 'episode') {
-    if (cue === 'intro' || cue === 'outro') return timing.episode[cue];
-    if (cue.endsWith('-question')) return timing.episode.question;
-    return timing.episode.answer;
+    if (cue === 'intro') return timing.episode.intro;
+    if (cue === 'outro') return content.outroTimeSeconds ?? timing.episode.outro;
+    if (cue.endsWith('-question')) {
+      const questionId = cue.slice(0, -'-question'.length);
+      const question = content.questions.find(({id}) => id === questionId);
+      return question?.readingTimeSeconds ?? timing.episode.question;
+    }
+    const questionId = cue.slice(0, -'-answer'.length);
+    const question = content.questions.find(({id}) => id === questionId);
+    return question?.answerTimeSeconds ?? timing.episode.answer;
   }
-  if (cue.startsWith('clue-')) return timing.short.clue;
+  if (cue.startsWith('clue-')) return content.clueTimeSeconds ?? timing.short.clue;
   return timing.short[cue];
 };
 
@@ -267,7 +279,7 @@ const validateNarration = async (content, kind, errors, warnings) => {
       try {
         await access(assetPath);
         const duration = await readAudioDurationSeconds(assetPath);
-        const limit = narrationCueLimit(kind, cue);
+        const limit = narrationCueLimit(content, kind, cue);
         if (duration > limit) {
           errors.push(
             `Narration cue ${relativeAsset} is ${duration.toFixed(2)}s but its scene is ${limit}s.`,
@@ -281,8 +293,21 @@ const validateNarration = async (content, kind, errors, warnings) => {
 };
 
 const validateVisual = async (visual, label, errors) => {
-  if (!visual || !['picture', 'silhouette'].includes(visual.type)) {
-    errors.push(`${label}.visual.type must be "picture" or "silhouette".`);
+  if (!visual || !['picture', 'silhouette', 'digestive-diagram'].includes(visual.type)) {
+    errors.push(`${label}.visual.type must be "picture", "silhouette", or "digestive-diagram".`);
+    return;
+  }
+
+  if (visual.type === 'digestive-diagram') {
+    if (!digestiveOrgans.has(visual.focus)) {
+      errors.push(`${label}.visual.focus is not a supported digestive organ.`);
+    }
+    if (!isText(visual.alt)) errors.push(`${label}.visual.alt is required.`);
+    for (const field of ['answerLabel', 'answerHint']) {
+      if (visual[field] !== undefined && !isText(visual[field])) {
+        errors.push(`${label}.visual.${field} must be non-empty when provided.`);
+      }
+    }
     return;
   }
 
@@ -321,11 +346,70 @@ const validateQuestion = async (question, index, ids, errors) => {
   if (![1, 2, 3, 4].includes(question?.difficulty)) {
     errors.push(`${label}.difficulty must be 1, 2, 3, or 4.`);
   }
+  if (
+    question?.readingTimeSeconds !== undefined &&
+    (!Number.isInteger(question.readingTimeSeconds) ||
+      question.readingTimeSeconds < timing.episode.question ||
+      question.readingTimeSeconds > 15)
+  ) {
+    errors.push(
+      `${label}.readingTimeSeconds must be a whole number from ${timing.episode.question} to 15.`,
+    );
+  }
+  if (
+    question?.answerTimeSeconds !== undefined &&
+    (!Number.isInteger(question.answerTimeSeconds) ||
+      question.answerTimeSeconds < timing.episode.answer ||
+      question.answerTimeSeconds > 15)
+  ) {
+    errors.push(
+      `${label}.answerTimeSeconds must be a whole number from ${timing.episode.answer} to 15.`,
+    );
+  }
   for (const field of ['question', 'answer', 'explanation']) {
     if (!isText(question?.[field])) errors.push(`${label}.${field} is required.`);
   }
 
-  if (question?.type === 'who-am-i') {
+  if (question?.sourceRefs !== undefined) {
+    if (!Array.isArray(question.sourceRefs) || question.sourceRefs.length === 0 || !question.sourceRefs.every(isText)) {
+      errors.push(`${label}.sourceRefs must contain at least one non-empty source ID.`);
+    } else if (new Set(question.sourceRefs).size !== question.sourceRefs.length) {
+      errors.push(`${label}.sourceRefs must be unique.`);
+    }
+  }
+  if (question?.pronunciationNotes !== undefined) {
+    if (!Array.isArray(question.pronunciationNotes)) {
+      errors.push(`${label}.pronunciationNotes must be an array.`);
+    } else {
+      question.pronunciationNotes.forEach((note, noteIndex) => {
+        if (!isText(note?.term) || !isText(note?.sayAs)) {
+          errors.push(`${label}.pronunciationNotes[${noteIndex}] needs non-empty term and sayAs values.`);
+        }
+      });
+    }
+  }
+
+  if (question?.type === 'ordering') {
+    if (!Array.isArray(question.items) || question.items.length < 3 || question.items.length > 5 || !question.items.every(isText)) {
+      errors.push(`${label}.items must contain three to five non-empty items.`);
+    }
+    if (!Array.isArray(question.correctOrder) || question.correctOrder.length < 3 || question.correctOrder.length > 5 || !question.correctOrder.every(isText)) {
+      errors.push(`${label}.correctOrder must contain three to five non-empty items.`);
+    }
+    if (Array.isArray(question.items) && Array.isArray(question.correctOrder)) {
+      const items = question.items.map(normalized);
+      const correctOrder = question.correctOrder.map(normalized);
+      if (new Set(items).size !== items.length) {
+        errors.push(`${label}.items must be unique.`);
+      }
+      if (
+        items.length !== correctOrder.length ||
+        JSON.stringify([...items].sort()) !== JSON.stringify([...correctOrder].sort())
+      ) {
+        errors.push(`${label}.correctOrder must contain exactly the same values as items.`);
+      }
+    }
+  } else if (question?.type === 'who-am-i') {
     if (!Array.isArray(question.clues) || question.clues.length < 2 || !question.clues.every(isText)) {
       errors.push(`${label}.clues must contain at least two non-empty clues.`);
     }
@@ -373,11 +457,50 @@ export const validateContent = async (content) => {
     for (const field of ['title', 'category', 'theme']) {
       if (!isText(content?.[field])) errors.push(`${field} is required.`);
     }
+    if (content?.outroCallToAction !== undefined && !isText(content.outroCallToAction)) {
+      errors.push('outroCallToAction must be non-empty when provided.');
+    }
+    if (
+      content?.outroTimeSeconds !== undefined &&
+      (!Number.isInteger(content.outroTimeSeconds) ||
+        content.outroTimeSeconds < timing.episode.outro ||
+        content.outroTimeSeconds > 15)
+    ) {
+      errors.push(
+        `outroTimeSeconds must be a whole number from ${timing.episode.outro} to 15.`,
+      );
+    }
     if (content.questions.length === 0) errors.push('questions must not be empty.');
     const ids = new Set();
     await Promise.all(
       content.questions.map((question, index) => validateQuestion(question, index, ids, errors)),
     );
+    if (content.creative?.presentationFormat === 'body-journey') {
+      const sourceIds = new Set();
+      content.researchSources?.forEach((source, index) => {
+        if (!isText(source?.id)) {
+          errors.push(`researchSources[${index}].id is required for body-journey episodes.`);
+        } else if (sourceIds.has(source.id)) {
+          errors.push(`researchSources[${index}].id is duplicated: ${source.id}`);
+        } else {
+          sourceIds.add(source.id);
+        }
+      });
+      content.questions.forEach((question, index) => {
+        if (!isText(question?.journeyStop)) {
+          errors.push(`questions[${index}].journeyStop is required for body-journey episodes.`);
+        }
+        if (!Array.isArray(question?.sourceRefs) || question.sourceRefs.length === 0) {
+          errors.push(`questions[${index}].sourceRefs is required for body-journey episodes.`);
+        } else {
+          question.sourceRefs.forEach((sourceId) => {
+            if (!sourceIds.has(sourceId)) {
+              errors.push(`questions[${index}].sourceRefs contains unknown source ID: ${sourceId}`);
+            }
+          });
+        }
+      });
+    }
   } else {
     if (!['guess-animal', 'two-clue'].includes(content?.type)) {
       errors.push('type must be "guess-animal" or "two-clue".');
@@ -387,6 +510,16 @@ export const validateContent = async (content) => {
     }
     if (![1, 2, 3, 4].includes(content?.difficulty)) {
       errors.push('difficulty must be 1, 2, 3, or 4.');
+    }
+    if (
+      content?.clueTimeSeconds !== undefined &&
+      (!Number.isInteger(content.clueTimeSeconds) ||
+        content.clueTimeSeconds < timing.short.clue ||
+        content.clueTimeSeconds > 10)
+    ) {
+      errors.push(
+        `clueTimeSeconds must be a whole number from ${timing.short.clue} to 10.`,
+      );
     }
     if (!Array.isArray(content?.clues) || content.clues.length !== 2 || !content.clues.every(isText)) {
       errors.push('clues must contain exactly two non-empty clues.');

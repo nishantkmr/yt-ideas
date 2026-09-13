@@ -32,11 +32,18 @@ for (const file of await discoverContentFiles()) {
   }
 
   const sourceHash = sha256(source);
-  const roundSeconds =
-    timing.episode.question + timing.episode.countdown + timing.episode.answer;
   const durationInFrames =
     result.kind === 'episode'
-      ? (timing.episode.intro + content.questions.length * roundSeconds + timing.episode.outro) * timing.fps
+      ? (timing.episode.intro +
+          content.questions.reduce(
+            (total, question) =>
+              total +
+              (question.readingTimeSeconds ?? timing.episode.question) +
+              timing.episode.countdown +
+              timing.episode.answer,
+            0,
+          ) +
+          timing.episode.outro) * timing.fps
       : (timing.short.intro +
           timing.short.clue * 2 +
           timing.short.countdown +
@@ -45,7 +52,9 @@ for (const file of await discoverContentFiles()) {
           timing.short.outro) * timing.fps;
   const visuals =
     result.kind === 'episode'
-      ? content.questions.flatMap((question) => question.visual ? [question.visual.asset] : [])
+      ? content.questions.flatMap((question) =>
+          typeof question.visual?.asset === 'string' ? [question.visual.asset] : [],
+        )
       : [content.visual.asset];
   const narrationAssets = content.narration?.enabled
     ? narrationCueNames(content, result.kind).map(

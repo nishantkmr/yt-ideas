@@ -13,6 +13,7 @@
   },
   "researchSources": [
     {
+      "id": "authoritative-source-01",
       "title": "Authoritative source title",
       "url": "https://example.org/source",
       "accessedOn": "YYYY-MM-DD"
@@ -31,15 +32,26 @@
     "audioBase": "audio/category_yyyymm_topic_01",
     "format": "wav"
   },
+  "outroCallToAction": "Ask a grown-up to subscribe for more adventures!",
+  "outroTimeSeconds": 9,
   "questions": [
     {
       "id": "topic_001",
       "type": "multiple-choice",
       "difficulty": 1,
+      "readingTimeSeconds": 6,
+      "answerTimeSeconds": 8,
       "question": "Write an original, age-appropriate question.",
       "options": ["Correct answer", "Plausible choice", "Plausible choice", "Plausible choice"],
       "answer": "Correct answer",
       "explanation": "Explain why in one useful, memorable sentence.",
+      "sourceRefs": ["authoritative-source-01"],
+      "pronunciationNotes": [
+        {
+          "term": "Add only when a word needs checking",
+          "sayAs": "Simple phonetic guidance for the narrator"
+        }
+      ],
       "visual": {
         "type": "picture",
         "asset": "assets/replace-me.png",

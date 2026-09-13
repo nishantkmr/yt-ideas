@@ -42,19 +42,29 @@ def load_api_key() -> str:
 
 def narration_cues(content: dict) -> dict[str, str]:
     if "questions" in content:
+        outro = content.get("outroCallToAction")
         cues = {
             "intro": f"Hello, curious explorers! Welcome to {content['title']}. Let's play!",
             "outro": (
                 f"Amazing work! You completed all {len(content['questions'])} questions. "
-                "Thanks for playing, and keep exploring!"
+                + (
+                    f"{outro} Keep exploring!"
+                    if outro
+                    else "Thanks for playing, and keep exploring!"
+                )
             ),
         }
         for index, question in enumerate(content["questions"], start=1):
             cues[f"{question['id']}-question"] = (
                 f"Question {index}. {question['question']}"
             )
+            answer_lead = (
+                f"The correct order is {question['answer']}."
+                if question.get("type") == "ordering"
+                else f"It's {question['answer']}!"
+            )
             cues[f"{question['id']}-answer"] = (
-                f"It's {question['answer']}! {question['explanation']}"
+                f"{answer_lead} {question['explanation']}"
             )
         return cues
 

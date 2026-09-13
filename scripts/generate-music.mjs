@@ -44,6 +44,13 @@ const themes = {
     timbre: 'toy-synth',
     percussion: 'woodblock',
   },
+  'body-lab': {
+    bpm: 84,
+    notes: [392, 493.88, 587.33, 523.25, 440, 523.25, 659.25, 587.33],
+    bass: [98, 110, 82.41, 123.47],
+    timbre: 'droplet',
+    percussion: 'heartbeat',
+  },
 };
 
 const clamp = (value) => Math.max(-1, Math.min(1, value));
@@ -88,6 +95,14 @@ const writeWav = async (name, config) => {
     if (config.percussion === 'bubbles' && step % 3 === 0) percussion = Math.sin(2 * Math.PI * (700 + stepPhase * 500) * time) * Math.exp(-stepPhase * 20) * 0.08;
     if (config.percussion === 'frame-drum') percussion = (Math.sin(2 * Math.PI * 105 * time) + noise * 0.15) * Math.exp(-beatPhase * 24) * 0.13;
     if (config.percussion === 'woodblock') percussion = Math.sin(2 * Math.PI * 920 * time) * Math.exp(-stepPhase * 38) * 0.11;
+    if (config.percussion === 'heartbeat') {
+      const firstPulse = Math.sin(2 * Math.PI * 72 * time) * Math.exp(-beatPhase * 30);
+      const secondPhase = Math.max(0, beatPhase - 0.18);
+      const secondPulse = beatPhase >= 0.18
+        ? Math.sin(2 * Math.PI * 86 * time) * Math.exp(-secondPhase * 42)
+        : 0;
+      percussion = (firstPulse + secondPulse * 0.72) * 0.075;
+    }
 
     const movement = Math.sin(2 * Math.PI * time / seconds);
     const edgeFade = Math.min(1, time / 0.05, (seconds - time) / 0.05);
