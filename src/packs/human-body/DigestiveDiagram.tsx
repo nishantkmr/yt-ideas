@@ -1,5 +1,5 @@
 import {interpolate, useCurrentFrame, useVideoConfig} from 'remotion';
-import type {DigestiveOrgan} from '../types/content';
+import type {DigestiveOrgan} from './manifest.ts';
 
 type DigestiveDiagramProps = {
   alt?: string;

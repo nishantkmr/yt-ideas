@@ -1,5 +1,6 @@
 import {corePack} from './core/manifest.ts';
 import {humanBodyPack} from './human-body/manifest.ts';
+import type {DigestiveDiagramVisual} from './human-body/manifest.ts';
 import type {
   FormatManifest,
   PackManifest,
@@ -51,6 +52,17 @@ export type PresentationFormat =
   | (typeof humanBodyPack.formats)[number]['id'];
 
 export type QuestionType = (typeof corePack.questionTypes)[number]['id'];
+
+/** An image file a pack points at. */
+export type PictureVisual = {
+  type: 'picture' | 'silhouette';
+  asset: string;
+  alt: string;
+};
+
+// Every visual a content file may use. A pack that adds a visual adds its shape
+// here, so this is the one place packs are named outside their own directories.
+export type QuizVisual = PictureVisual | DigestiveDiagramVisual;
 
 export const getPresentationCopy = (format: PresentationFormat): PresentationCopy =>
   findFormat(format)!.copy;

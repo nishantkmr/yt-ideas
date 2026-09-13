@@ -5,16 +5,15 @@ import {Voiceover} from '../audio/Voiceover';
 import {CountdownTicks} from '../audio/CountdownTicks';
 import {MusicBed} from '../audio/MusicBed';
 import {AnswerReveal} from '../components/AnswerReveal';
+import {AnswerVisual} from '../components/AnswerVisual';
 import {Background} from '../components/Background';
 import {Countdown} from '../components/Countdown';
-import {DigestiveDiagram} from '../components/DigestiveDiagram';
 import {Mascot} from '../components/Mascot';
 import {QuestionCard} from '../components/QuestionCard';
 import {ScoreScreen} from '../components/ScoreScreen';
 import {SHORT_TIMING} from '../config/timing';
 import {getPresentationCopy} from '../config/creative';
 import {ShortLayout} from '../layouts/ShortLayout';
-import {GuessPicture} from '../questions/GuessPicture';
 import type {TriviaShortData} from '../types/content';
 
 export const TriviaShort: React.FC<TriviaShortData> = ({
@@ -80,18 +79,8 @@ export const TriviaShort: React.FC<TriviaShortData> = ({
       <Sequence from={answerStart * fps} durationInFrames={SHORT_TIMING.answer * fps}>
         <Voiceover asset={shortNarrationAsset(narration, 'answer')} name="Answer" />
         <AnimatedScene className="short-answer" durationInFrames={SHORT_TIMING.answer * fps}>
-          {visual.type === 'digestive-diagram' ? (
-            <DigestiveDiagram
-              alt={visual.alt}
-              answerHint={visual.answerHint}
-              answerLabel={visual.answerLabel}
-              focus={visual.focus}
-              revealed
-            />
-          ) : (
-            <GuessPicture alt={visual.alt} asset={visual.asset} />
-          )}
-          <AnswerReveal answer={answer} explanation="You got it!" streak={1} />
+          <AnswerVisual visual={visual} layout="short" />
+          <AnswerReveal answer={answer} explanation="You got it!" streak={1} layout="short" />
         </AnimatedScene>
       </Sequence>
       <Sequence from={factStart * fps} durationInFrames={SHORT_TIMING.fact * fps}>

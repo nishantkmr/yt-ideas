@@ -1,7 +1,7 @@
-import type {DigestiveDiagramVisual} from '../packs/human-body/manifest';
 import type {
   PresentationFormat,
   QuestionType,
+  QuizVisual,
   VisualTheme,
 } from '../packs/manifest-registry';
 
@@ -65,15 +65,7 @@ export type NarrationConfig = {
   script?: Record<string, string>;
 };
 
-export type {DigestiveOrgan} from '../packs/human-body/manifest';
-
-export type PictureVisual = {
-  type: 'picture' | 'silhouette';
-  asset: string;
-  alt: string;
-};
-
-export type QuizVisual = PictureVisual | DigestiveDiagramVisual;
+export type {PictureVisual, QuizVisual} from '../packs/manifest-registry';
 
 export type QuizQuestion = {
   id: string;

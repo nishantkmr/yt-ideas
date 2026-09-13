@@ -7,13 +7,12 @@ import {AnimatedScene} from '../components/AnimatedScene';
 import {AnswerReveal} from '../components/AnswerReveal';
 import {Background} from '../components/Background';
 import {BossQuestion} from '../components/BossQuestion';
-import {BodyJourneyProgress} from '../components/BodyJourneyProgress';
-import {DigestiveDiagram} from '../components/DigestiveDiagram';
 import {Mascot} from '../components/Mascot';
 import {OptionGrid} from '../components/OptionGrid';
-import {ProgressBar} from '../components/ProgressBar';
 import {QuestionCard} from '../components/QuestionCard';
+import {QuestionStage} from '../components/QuestionStage';
 import {ScoreScreen} from '../components/ScoreScreen';
+import {resolveChrome, resolveVisual} from '../packs/component-registry';
 import {
   EPISODE_TIMING,
   getEpisodeAnswerSeconds,
@@ -41,6 +40,7 @@ export const TriviaEpisode: React.FC<Episode> = ({
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
   const presentation = getPresentationCopy(creative.presentationFormat);
+  const Chrome = resolveChrome(creative.presentationFormat);
   const journeyStops = questions.map((question, index) => question.journeyStop ?? `Stop ${index + 1}`);
   let nextStart = INTRO_SECONDS;
   const roundTimings = questions.map((question) => {
@@ -104,6 +104,8 @@ export const TriviaEpisode: React.FC<Episode> = ({
           )
         ) : null;
 
+        const visualModule = resolveVisual(question.visual);
+        const QuestionVisual = visualModule?.Question;
         const questionStage = (
           <div className="question-stage">
             <QuestionCard
@@ -112,20 +114,17 @@ export const TriviaEpisode: React.FC<Episode> = ({
               text={question.question}
               layout="landscape"
             />
-            {question.visual?.type === 'digestive-diagram' ? (
-              <div className="body-question-content">
-                <DigestiveDiagram alt="Unlabelled digestive-system route for the question" revealed={false} />
-                <div className="body-question-content__choices">
-                  {choices}
-                  {question.clues ? <WhoAmI clues={question.clues} /> : null}
-                </div>
-              </div>
-            ) : (
-              <>
-                {choices}
-                {question.clues ? <WhoAmI clues={question.clues} /> : null}
-              </>
-            )}
+            <QuestionStage
+              layout={visualModule?.questionStageLayout ?? 'inline'}
+              visual={
+                QuestionVisual ? (
+                  <QuestionVisual visual={question.visual!} layout="landscape" />
+                ) : null
+              }
+            >
+              {choices}
+              {question.clues ? <WhoAmI clues={question.clues} /> : null}
+            </QuestionStage>
             {question.type === 'ordering' && question.items ? (
               <OrderingChallenge items={question.items} />
             ) : null}
@@ -134,11 +133,7 @@ export const TriviaEpisode: React.FC<Episode> = ({
 
         return (
           <Sequence key={question.id} from={start} durationInFrames={roundSeconds * fps}>
-            {creative.presentationFormat === 'body-journey' ? (
-              <BodyJourneyProgress current={index + 1} stops={journeyStops} />
-            ) : (
-              <ProgressBar current={index + 1} total={questions.length} />
-            )}
+            <Chrome current={index + 1} total={questions.length} stops={journeyStops} />
             <Sequence durationInFrames={(questionSeconds + TIMER_SECONDS) * fps}>
               <Voiceover
                 asset={episodeNarrationAsset(narration, `${question.id}-question`)}

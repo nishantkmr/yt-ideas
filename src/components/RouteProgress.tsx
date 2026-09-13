@@ -1,9 +1,9 @@
-type BodyJourneyProgressProps = {
+type RouteProgressProps = {
   current: number;
   stops: string[];
 };
 
-export const BodyJourneyProgress: React.FC<BodyJourneyProgressProps> = ({current, stops}) => (
+export const RouteProgress: React.FC<RouteProgressProps> = ({current, stops}) => (
   <div
     className={`body-route ${stops.length > 8 ? 'body-route--dense' : ''}`}
     aria-label={`Body journey stop ${current} of ${stops.length}`}

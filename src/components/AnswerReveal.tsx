@@ -1,8 +1,7 @@
 import {interpolate, spring, useCurrentFrame, useVideoConfig} from 'remotion';
-import {GuessPicture} from '../questions/GuessPicture';
-import {DigestiveDiagram} from './DigestiveDiagram';
+import {AnswerVisual} from './AnswerVisual';
 import {Streak} from './Streak';
-import type {QuizVisual} from '../types/content';
+import type {Layout, QuizVisual} from '../types/content';
 
 type AnswerRevealProps = {
   answer: string;
@@ -10,6 +9,7 @@ type AnswerRevealProps = {
   streak?: number;
   visual?: QuizVisual;
   correctOrder?: string[];
+  layout?: Layout;
 };
 
 export const AnswerReveal: React.FC<AnswerRevealProps> = ({
@@ -18,6 +18,7 @@ export const AnswerReveal: React.FC<AnswerRevealProps> = ({
   streak,
   visual,
   correctOrder,
+  layout = 'landscape',
 }) => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
@@ -31,17 +32,7 @@ export const AnswerReveal: React.FC<AnswerRevealProps> = ({
       <div className="celebration-dots" aria-hidden="true">
         <i /><i /><i /><i /><i />
       </div>
-      {visual?.type === 'digestive-diagram' ? (
-        <DigestiveDiagram
-          alt={visual.alt}
-          answerHint={visual.answerHint}
-          answerLabel={visual.answerLabel}
-          focus={visual.focus}
-          revealed
-        />
-      ) : visual ? (
-        <GuessPicture alt={visual.alt} asset={visual.asset} />
-      ) : null}
+      {visual ? <AnswerVisual visual={visual} layout={layout} /> : null}
       <div className="answer-copy">
         <div className="eyebrow">Correct answer</div>
         <strong className="answer-word">{correctOrder ? 'Correct route' : answer}</strong>
