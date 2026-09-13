@@ -6,22 +6,26 @@ import {
   episodeAnswerSeconds,
   episodeQuestionSeconds,
 } from '../src/config/durations.mjs';
+import {
+  FORMAT_IDS,
+  QUESTION_TYPE_IDS,
+  THEME_IDS,
+  findFormat,
+  findVisualType,
+  VISUAL_TYPE_IDS,
+} from '../src/packs/manifest-registry.ts';
 
 export const projectRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 export const dataRoot = join(projectRoot, 'src', 'data');
 export const contentRoot = join(projectRoot, 'content');
 export const publicRoot = join(projectRoot, 'public');
 
-const questionTypes = new Set([
-  'multiple-choice',
-  'guess-picture',
-  'who-am-i',
-  'true-false',
-  'ordering',
-]);
-const visualThemes = new Set(['jungle', 'cosmic', 'ocean', 'atlas', 'workshop', 'body-lab']);
-const presentationFormats = new Set(['classic', 'expedition', 'mystery', 'lab', 'world-tour', 'body-journey']);
-const digestiveOrgans = new Set(['mouth', 'esophagus', 'stomach', 'liver', 'gallbladder', 'pancreas', 'small-intestine', 'large-intestine']);
+// The content vocabulary comes from the pack manifests, which the Remotion
+// sources compile from and Node reads directly through type stripping. There is
+// no second copy of these lists to keep in step.
+const questionTypes = new Set(QUESTION_TYPE_IDS);
+const visualThemes = new Set(THEME_IDS);
+const presentationFormats = new Set(FORMAT_IDS);
 
 const isText = (value) => typeof value === 'string' && value.trim().length > 0;
 const normalized = (value) => value.trim().toLocaleLowerCase('en');
@@ -435,23 +439,20 @@ const validateNarration = async (content, kind, errors, warnings, {checkAssets =
 };
 
 const validateVisual = async (visual, label, errors) => {
-  if (!visual || !['picture', 'silhouette', 'digestive-diagram'].includes(visual.type)) {
-    errors.push(`${label}.visual.type must be "picture", "silhouette", or "digestive-diagram".`);
+  const registered = visual ? findVisualType(visual.type) : undefined;
+  if (!registered) {
+    errors.push(
+      `${label}.visual.type must be one of: ${VISUAL_TYPE_IDS.map((id) => `"${id}"`).join(', ')}.`,
+    );
     return;
   }
 
-  if (visual.type === 'digestive-diagram') {
-    if (!digestiveOrgans.has(visual.focus)) {
-      errors.push(`${label}.visual.focus is not a supported digestive organ.`);
-    }
-    if (!isText(visual.alt)) errors.push(`${label}.visual.alt is required.`);
-    for (const field of ['answerLabel', 'answerHint']) {
-      if (visual[field] !== undefined && !isText(visual[field])) {
-        errors.push(`${label}.visual.${field} must be non-empty when provided.`);
-      }
-    }
-    return;
-  }
+  // Rules specific to a visual live with the pack that draws it.
+  errors.push(...(registered.validate?.(visual, label) ?? []));
+
+  // Code-native visuals draw themselves, so there is no file to check or
+  // license. Everything else must exist and carry verified commercial rights.
+  if (!registered.requiresAsset) return;
 
   if (!isText(visual.asset) || !isText(visual.alt)) {
     errors.push(`${label}.visual needs non-empty asset and alt text.`);
@@ -632,32 +633,9 @@ export const validateContent = async (content, options = {}) => {
     await Promise.all(
       content.questions.map((question, index) => validateQuestion(question, index, ids, errors)),
     );
-    if (content.creative?.presentationFormat === 'body-journey') {
-      const sourceIds = new Set();
-      content.researchSources?.forEach((source, index) => {
-        if (!isText(source?.id)) {
-          errors.push(`researchSources[${index}].id is required for body-journey episodes.`);
-        } else if (sourceIds.has(source.id)) {
-          errors.push(`researchSources[${index}].id is duplicated: ${source.id}`);
-        } else {
-          sourceIds.add(source.id);
-        }
-      });
-      content.questions.forEach((question, index) => {
-        if (!isText(question?.journeyStop)) {
-          errors.push(`questions[${index}].journeyStop is required for body-journey episodes.`);
-        }
-        if (!Array.isArray(question?.sourceRefs) || question.sourceRefs.length === 0) {
-          errors.push(`questions[${index}].sourceRefs is required for body-journey episodes.`);
-        } else {
-          question.sourceRefs.forEach((sourceId) => {
-            if (!sourceIds.has(sourceId)) {
-              errors.push(`questions[${index}].sourceRefs contains unknown source ID: ${sourceId}`);
-            }
-          });
-        }
-      });
-    }
+    // Extra rules a presentation format imposes on the whole episode, declared
+    // by the pack that owns the format.
+    errors.push(...(findFormat(content.creative?.presentationFormat)?.validate?.(content) ?? []));
   } else {
     if (!['guess-animal', 'two-clue'].includes(content?.type)) {
       errors.push('type must be "guess-animal" or "two-clue".');

@@ -12,7 +12,7 @@ import {Mascot} from '../components/Mascot';
 import {QuestionCard} from '../components/QuestionCard';
 import {ScoreScreen} from '../components/ScoreScreen';
 import {SHORT_TIMING} from '../config/timing';
-import {PRESENTATION_COPY} from '../config/creative';
+import {getPresentationCopy} from '../config/creative';
 import {ShortLayout} from '../layouts/ShortLayout';
 import {GuessPicture} from '../questions/GuessPicture';
 import type {TriviaShortData} from '../types/content';
@@ -39,7 +39,7 @@ export const TriviaShort: React.FC<TriviaShortData> = ({
     1,
     SHORT_TIMING.countdown - Math.floor((frame - countdownStart * fps) / fps),
   );
-  const presentation = PRESENTATION_COPY[creative.presentationFormat];
+  const presentation = getPresentationCopy(creative.presentationFormat);
 
   return (
     <ShortLayout presentationFormat={creative.presentationFormat} visualTheme={creative.visualTheme}>

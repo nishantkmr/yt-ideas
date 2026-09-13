@@ -1,54 +1,5 @@
-import type {PresentationFormat} from '../types/content';
-
-type PresentationCopy = {
-  challengeLabel: string;
-  roundLabel: string;
-  countdownPrompt: string;
-  countdownAction: string;
-  completionLabel: string;
-};
-
-export const PRESENTATION_COPY: Record<PresentationFormat, PresentationCopy> = {
-  classic: {
-    challengeLabel: 'Quiz challenge',
-    roundLabel: 'Question',
-    countdownPrompt: 'Final answer?',
-    countdownAction: 'Make your choice!',
-    completionLabel: 'Challenge complete',
-  },
-  expedition: {
-    challengeLabel: 'Explorer expedition',
-    roundLabel: 'Trail',
-    countdownPrompt: 'Choose your path',
-    countdownAction: 'Lock in your discovery!',
-    completionLabel: 'Expedition complete',
-  },
-  mystery: {
-    challengeLabel: 'Mystery mission',
-    roundLabel: 'Case file',
-    countdownPrompt: 'Have a theory?',
-    countdownAction: 'Solve the mystery!',
-    completionLabel: 'Case closed',
-  },
-  lab: {
-    challengeLabel: 'Discovery lab',
-    roundLabel: 'Experiment',
-    countdownPrompt: 'Test your theory',
-    countdownAction: 'Record your answer!',
-    completionLabel: 'Discovery logged',
-  },
-  'world-tour': {
-    challengeLabel: 'World tour',
-    roundLabel: 'Tour stop',
-    countdownPrompt: 'Ready to explore?',
-    countdownAction: 'Stamp your answer!',
-    completionLabel: 'Journey complete',
-  },
-  'body-journey': {
-    challengeLabel: 'Inside-the-body mission',
-    roundLabel: 'Journey stop',
-    countdownPrompt: 'What happens here?',
-    countdownAction: 'Choose the next discovery!',
-    completionLabel: 'Body journey complete',
-  },
-};
+// Presentation copy now lives with the format that defines it, in its pack
+// manifest, so a new format arrives with its own wording instead of needing an
+// entry added here as well.
+export {getPresentationCopy} from '../packs/manifest-registry';
+export type {PresentationCopy} from '../packs/contract';

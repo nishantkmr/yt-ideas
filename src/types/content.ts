@@ -1,3 +1,10 @@
+import type {DigestiveDiagramVisual} from '../packs/human-body/manifest';
+import type {
+  PresentationFormat,
+  QuestionType,
+  VisualTheme,
+} from '../packs/manifest-registry';
+
 export type Layout = 'short' | 'landscape';
 
 export type Difficulty = 1 | 2 | 3 | 4;
@@ -11,21 +18,13 @@ export type ContentReview = {
   editorialChecked?: boolean;
 };
 
-export type VisualTheme =
-  | 'jungle'
-  | 'cosmic'
-  | 'ocean'
-  | 'atlas'
-  | 'workshop'
-  | 'body-lab';
-
-export type PresentationFormat =
-  | 'classic'
-  | 'expedition'
-  | 'mystery'
-  | 'lab'
-  | 'world-tour'
-  | 'body-journey';
+// Derived from the pack manifests so the vocabulary has exactly one definition.
+// See src/packs/manifest-registry.ts.
+export type {
+  VisualTheme,
+  PresentationFormat,
+  QuestionType,
+} from '../packs/manifest-registry';
 
 export type CreativeProfile = {
   visualTheme: VisualTheme;
@@ -66,36 +65,15 @@ export type NarrationConfig = {
   script?: Record<string, string>;
 };
 
-export type QuestionType =
-  | 'multiple-choice'
-  | 'guess-picture'
-  | 'who-am-i'
-  | 'true-false'
-  | 'ordering';
+export type {DigestiveOrgan} from '../packs/human-body/manifest';
 
-export type DigestiveOrgan =
-  | 'mouth'
-  | 'esophagus'
-  | 'stomach'
-  | 'liver'
-  | 'gallbladder'
-  | 'pancreas'
-  | 'small-intestine'
-  | 'large-intestine';
+export type PictureVisual = {
+  type: 'picture' | 'silhouette';
+  asset: string;
+  alt: string;
+};
 
-export type QuizVisual =
-  | {
-      type: 'picture' | 'silhouette';
-      asset: string;
-      alt: string;
-    }
-  | {
-      type: 'digestive-diagram';
-      focus: DigestiveOrgan;
-      alt: string;
-      answerLabel?: string;
-      answerHint?: string;
-    };
+export type QuizVisual = PictureVisual | DigestiveDiagramVisual;
 
 export type QuizQuestion = {
   id: string;

@@ -2,6 +2,7 @@ import {access, mkdir, writeFile} from 'node:fs/promises';
 import {dirname, join, relative, resolve} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {parseArgs} from 'node:util';
+import {THEMES} from '../src/packs/manifest-registry.ts';
 
 const projectRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const outputRoot = join(projectRoot, 'public', 'audio', 'music');
@@ -9,50 +10,10 @@ const sampleRate = 48000;
 const seconds = 16;
 const frameCount = sampleRate * seconds;
 
-const themes = {
-  jungle: {
-    bpm: 120,
-    notes: [293.66, 349.23, 392, 440, 523.25, 440, 392, 349.23],
-    bass: [73.42, 98, 87.31, 110],
-    timbre: 'marimba',
-    percussion: 'shaker',
-  },
-  cosmic: {
-    bpm: 90,
-    notes: [261.63, 392, 466.16, 659.25, 587.33, 466.16, 392, 329.63],
-    bass: [65.41, 77.78, 58.27, 87.31],
-    timbre: 'bell',
-    percussion: 'pulse',
-  },
-  ocean: {
-    bpm: 75,
-    notes: [349.23, 440, 523.25, 392, 440, 587.33, 523.25, 440],
-    bass: [87.31, 65.41, 73.42, 98],
-    timbre: 'droplet',
-    percussion: 'bubbles',
-  },
-  atlas: {
-    bpm: 105,
-    notes: [392, 493.88, 587.33, 659.25, 587.33, 493.88, 440, 392],
-    bass: [98, 123.47, 110, 146.83],
-    timbre: 'pluck',
-    percussion: 'frame-drum',
-  },
-  workshop: {
-    bpm: 135,
-    notes: [523.25, 659.25, 783.99, 880, 783.99, 659.25, 587.33, 659.25],
-    bass: [130.81, 164.81, 146.83, 196],
-    timbre: 'toy-synth',
-    percussion: 'woodblock',
-  },
-  'body-lab': {
-    bpm: 84,
-    notes: [392, 493.88, 587.33, 523.25, 440, 523.25, 659.25, 587.33],
-    bass: [98, 110, 82.41, 123.47],
-    timbre: 'droplet',
-    percussion: 'heartbeat',
-  },
-};
+// Each theme's recipe is declared by the pack that owns the theme; this file
+// only knows how to turn a recipe into audio. A new theme therefore needs no
+// change here at all.
+const themes = Object.fromEntries(THEMES.map((theme) => [theme.id, theme.music]));
 
 const clamp = (value) => Math.max(-1, Math.min(1, value));
 const wave = (phase, timbre) => {

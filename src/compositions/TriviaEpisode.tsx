@@ -19,7 +19,7 @@ import {
   getEpisodeAnswerSeconds,
   getEpisodeQuestionSeconds,
 } from '../config/timing';
-import {PRESENTATION_COPY} from '../config/creative';
+import {getPresentationCopy} from '../config/creative';
 import {LandscapeLayout} from '../layouts/LandscapeLayout';
 import {TrueFalse} from '../questions/TrueFalse';
 import {WhoAmI} from '../questions/WhoAmI';
@@ -40,7 +40,7 @@ export const TriviaEpisode: React.FC<Episode> = ({
 }) => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
-  const presentation = PRESENTATION_COPY[creative.presentationFormat];
+  const presentation = getPresentationCopy(creative.presentationFormat);
   const journeyStops = questions.map((question, index) => question.journeyStop ?? `Stop ${index + 1}`);
   let nextStart = INTRO_SECONDS;
   const roundTimings = questions.map((question) => {
