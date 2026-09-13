@@ -1,0 +1,27 @@
+{
+  "cues": {
+    "digestion_001-answer": "4a0d48de6a78b46af8a625929d4189a16be08f8ae97f83fa78c5fadeba5b2058",
+    "digestion_001-question": "18d16ba23b7d7f2fb673ac9358dec8c61dbe17ef82fa2791ab5a97864f247a64",
+    "digestion_002-answer": "2f8ef7cfb2981fa80dc3b400b99ff4c429a5e569efccee46781eff6221976c4f",
+    "digestion_002-question": "c790d37e2b77b9c890c67a69d6ebc1a868e943fd97e5a2d084a47df9dfef0aa5",
+    "digestion_003-answer": "d3057b6c5cceebbe2cc790c62d37b8cdb4213caecda9e92109bdf93c9656ee47",
+    "digestion_003-question": "ee4c23405e2884d54e40ec499a24567c2b98e6f34ee1da73f1483aee7d0314f5",
+    "digestion_004-answer": "5032c5d097a1897f3a45a3cd3fa029ff1ad4899c4927b3fd7c0a90b148fc9373",
+    "digestion_004-question": "d3be743a6fd566561d294823ee2fd2bcc0a5980405c8e3ac4e66576b63d2662d",
+    "digestion_005-answer": "a631b389cdcc71e1d8a1b4b4d602320f09a599dfb8677e79e6bdbe0c690101e1",
+    "digestion_005-question": "f7b9fb5d876732f3237ff0c835a369d56fc8c40f3b2be02cddc3641d101702d5",
+    "digestion_006-answer": "0daf0c27fa90000ce6017d2bfd211a926cc123273068962f3dbfc822cbe7a738",
+    "digestion_006-question": "8081c35efff9dfab645f030c7754ec963992e9fbeabbedd9380d6c1f980031d1",
+    "digestion_007-answer": "8224cb3c7b15fb56664c7ac9314613ca21c89d696d6ece8e089674f512eabb7c",
+    "digestion_007-question": "08ccf140fc2e80c15d08800e25148394eb6e709fa53e46121c2d680583885dc8",
+    "digestion_008-answer": "739bc4f189d0c240a7ef6f4477303bcafbad2941b8b85cb0a4761ac820581137",
+    "digestion_008-question": "088505ab124949bdb78929c0c861c144879a7ff0af4ca6c5e05262461eb1af7c",
+    "digestion_009-answer": "911c56e152dd7111a5e761b218ceaa391ce5f48645d580bb1da0931fc3ecaaa4",
+    "digestion_009-question": "6c54498170a96d2ee1a7eb27592fe5a878b96735f9b9818f3839f80a4dc2b4c7",
+    "digestion_010-answer": "53fbc8e02e7182a934fe5485c758655d86f4001438215479d5de9fbbdf90dfbc",
+    "digestion_010-question": "43618c77d0b8004999eda3a2e9762083d36ff577d47faa08600ce97e65e8faa3",
+    "intro": "a6d9a8f40eb23051096afb333eaa9902b323745de73c171e7825058f38e01981",
+    "outro": "85565932a84737ba2359419c13f93f509e806e7fde010893d9500a9b7d337b7b"
+  },
+  "version": 1
+}

@@ -1,0 +1,52 @@
+{
+  "id": "short_human_body_202609_stomach_01",
+  "type": "two-clue",
+  "title": "Can You Solve This Body Mystery?",
+  "category": "human-body",
+  "answer": "Stomach",
+  "difficulty": 2,
+  "clueTimeSeconds": 5,
+  "creative": {
+    "visualTheme": "body-lab",
+    "presentationFormat": "mystery",
+    "targetAge": "6-9",
+    "hook": "Two shape-and-function clues challenge children to identify one digestive organ before its animated close-up appears.",
+    "learningGoal": "Recognize the stomach as a J-shaped muscular pouch that churns food with digestive juices.",
+    "signatureMoment": "A large original stomach close-up bubbles and churns when the mystery answer is revealed."
+  },
+  "researchSources": [
+    {
+      "id": "niddk-digestion",
+      "title": "Your Digestive System & How it Works — National Institute of Diabetes and Digestive and Kidney Diseases",
+      "url": "https://www.niddk.nih.gov/health-information/digestive-diseases/digestive-system-how-it-works",
+      "accessedOn": "2026-09-05"
+    }
+  ],
+  "review": {
+    "status": "approved",
+    "reviewedBy": "Project owner",
+    "reviewedAt": "2026-09-08",
+    "factsChecked": true,
+    "rightsChecked": true,
+    "editorialChecked": true
+  },
+  "narration": {
+    "enabled": true,
+    "provider": "sarvam-bulbul-v3",
+    "voice": "suhani",
+    "audioBase": "audio/short_human_body_202609_stomach_01",
+    "format": "wav"
+  },
+  "clues": [
+    "I am a stretchy, J-shaped pouch.",
+    "I churn food with digestive juices."
+  ],
+  "funFact": "Your stomach slowly sends mixed food into the small intestine.",
+  "visual": {
+    "type": "digestive-diagram",
+    "focus": "stomach",
+    "alt": "A playful close-up of the stomach churning food with digestive juices",
+    "answerLabel": "Stomach",
+    "answerHint": "A J-shaped pouch that churns food"
+  }
+}

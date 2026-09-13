@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "verifiedAt": "2026-09-05",
+  "verifiedAt": "2026-09-08",
   "assets": [
     {"path":"assets/bat.png","sha256":"327e5221cc8dfc887fec227b31b97d62150501a710fab400b86957c30baa83ea","type":"ai-generated-image","source":"OpenAI Media Service API","provenance":"embedded-c2pa","commercialUse":"verified","license":"OpenAI output rights under the applicable account terms","licenseUrl":"https://openai.com/policies/terms-of-use/"},
     {"path":"assets/cat.png","sha256":"b465d919d703852257c563e0a595ae0e2557c5a0931422153661487c0dc093f6","type":"ai-generated-image","source":"OpenAI Media Service API","provenance":"embedded-c2pa","commercialUse":"verified","license":"OpenAI output rights under the applicable account terms","licenseUrl":"https://openai.com/policies/terms-of-use/"},
@@ -13,6 +13,8 @@
     {"path":"assets/platypus.png","sha256":"e9eba17181502e33b31342dd5260750645781150ef7a6b80d851b6e269800f8a","type":"ai-generated-image","source":"OpenAI Media Service API","provenance":"embedded-c2pa","commercialUse":"verified","license":"OpenAI output rights under the applicable account terms","licenseUrl":"https://openai.com/policies/terms-of-use/"},
     {"path":"assets/quiz-owl.png","sha256":"c77fabc9fe03d81abcbff03613fcd92b66f7d30265381adce6783386d583deb8","type":"ai-generated-image","source":"OpenAI Media Service API","provenance":"embedded-c2pa","commercialUse":"verified","license":"OpenAI output rights under the applicable account terms","licenseUrl":"https://openai.com/policies/terms-of-use/"},
     {"path":"assets/tiger.png","sha256":"0920787a8084d768f42174179675da29477044aa465dfc290cacd4a9991854e5","type":"ai-generated-image","source":"OpenAI Media Service API","provenance":"embedded-c2pa","commercialUse":"verified","license":"OpenAI output rights under the applicable account terms","licenseUrl":"https://openai.com/policies/terms-of-use/"},
-    {"path":"assets/zebra.png","sha256":"f2c5ef05022fbfc71a8555b2b0e2427573834e9fe335be356cfb1bee01ed9b87","type":"ai-generated-image","source":"OpenAI Media Service API","provenance":"embedded-c2pa","commercialUse":"verified","license":"OpenAI output rights under the applicable account terms","licenseUrl":"https://openai.com/policies/terms-of-use/"}
+    {"path":"assets/zebra.png","sha256":"f2c5ef05022fbfc71a8555b2b0e2427573834e9fe335be356cfb1bee01ed9b87","type":"ai-generated-image","source":"OpenAI Media Service API","provenance":"embedded-c2pa","commercialUse":"verified","license":"OpenAI output rights under the applicable account terms","licenseUrl":"https://openai.com/policies/terms-of-use/"},
+    {"path":"assets/thumbnails/human-body-digestion-thumbnail.png","sha256":"64c9ea109da0335f396bccfe4f88abef5e6968ff1a2eb29c342da0511b3581ea","type":"ai-generated-image","source":"OpenAI Media Service API","provenance":"embedded-c2pa","commercialUse":"verified","license":"OpenAI output rights under the applicable account terms","licenseUrl":"https://openai.com/policies/terms-of-use/"},
+    {"path":"assets/thumbnails/human-body-stomach-short-cover.png","sha256":"cc4c969c63daf67f8cebaae2e0c0ad4466783bdac02387ca85f54c31eb7de8ba","type":"ai-generated-image","source":"OpenAI Media Service API","provenance":"embedded-c2pa","commercialUse":"verified","license":"OpenAI output rights under the applicable account terms","licenseUrl":"https://openai.com/policies/terms-of-use/"}
   ]
 }
