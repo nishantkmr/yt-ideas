@@ -58,10 +58,13 @@ const renderContent = preview
   : content;
 const validation = await validateContent(renderContent);
 if (validation.errors.length > 0) {
-  throw new Error(`${relativeToProject(sourceFile)} failed validation:\n- ${validation.errors.join('\n- ')}`);
+  console.error(`${relativeToProject(sourceFile)} failed validation:`);
+  validation.errors.forEach((error) => console.error(`  - ${error}`));
+  process.exit(1);
 }
 if (!preview && content.review.status !== 'approved') {
-  throw new Error(`${relativeToProject(sourceFile)} must be human-approved before rendering.`);
+  console.error(`${relativeToProject(sourceFile)} must be human-approved before rendering.`);
+  process.exit(1);
 }
 
 if (checkOnly) {
@@ -74,13 +77,9 @@ const sourceHash = sha256(source);
 const kind = validation.kind;
 const composition = kind === 'episode' ? 'TriviaEpisode' : 'TriviaShort';
 const outputFile = join(projectRoot, 'outputs', `${preview ? 'preview-' : ''}${content.id}.mp4`);
-if (!force) {
-  try {
-    await access(outputFile);
-    throw new Error(`${relativeToProject(outputFile)} already exists. Add --force to replace it.`);
-  } catch (error) {
-    if (error?.code !== 'ENOENT') throw error;
-  }
+if (!force && (await access(outputFile).then(() => true, () => false))) {
+  console.error(`${relativeToProject(outputFile)} already exists. Add --force to replace it.`);
+  process.exit(1);
 }
 
 const propsFile = join(projectRoot, 'outputs', `${preview ? 'preview-' : ''}render-props-${content.id}-${sourceHash.slice(0, 12)}.json`);

@@ -152,6 +152,7 @@ const {values} = parseArgs({
     theme: {type: 'string', multiple: true, default: []},
     all: {type: 'boolean', default: false},
     force: {type: 'boolean', default: false},
+    json: {type: 'boolean', default: false},
   },
   strict: true,
 });
@@ -166,11 +167,19 @@ if (unknown.length > 0) {
 }
 
 await mkdir(outputRoot, {recursive: true});
+const skipped = [];
+const written = [];
 for (const name of requested) {
   const output = join(outputRoot, `${name}.wav`);
   if (!values.force && (await access(output).then(() => true, () => false))) {
     console.log(`SKIP ${relative(projectRoot, output)} (exists)`);
+    skipped.push(name);
     continue;
   }
   await writeWav(name, themes[name]);
+  written.push(name);
+}
+
+if (values.json) {
+  console.log(`RESULT ${JSON.stringify({requested, generated: written, skipped})}`);
 }

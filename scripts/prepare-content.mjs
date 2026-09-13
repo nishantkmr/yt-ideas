@@ -15,9 +15,11 @@ const {
 } = tools;
 
 const {values, positionals} = parseCli({
-  usage: 'npm run prepare:content -- [<slug>|<path>] [--all]',
-  options: {...CONTENT_OPTIONS},
+  usage: 'npm run prepare:content -- [<slug>|<path>] [--all] [--json]',
+  options: {...CONTENT_OPTIONS, json: {type: 'boolean', default: false}},
 });
+
+const prepared = [];
 
 let targets;
 try {
@@ -46,11 +48,14 @@ for (const target of targets) {
   const content = JSON.parse(source);
   const result = await validateContent(content);
 
+  // A failure here is an expected outcome of asking for work that is not ready,
+  // not a crash, so it is reported as a message rather than an exception: a
+  // stack trace would bury the reason under this script's own internals.
   if (result.errors.length > 0) {
     if (explicit) {
-      throw new Error(
-        `${relativeToProject(file)} failed validation:\n- ${result.errors.join('\n- ')}`,
-      );
+      console.error(`${relativeToProject(file)} failed validation:`);
+      result.errors.forEach((error) => console.error(`  - ${error}`));
+      process.exit(1);
     }
     console.error(`INVALID ${relativeToProject(file)} (skipped)`);
     process.exitCode = 1;
@@ -58,7 +63,10 @@ for (const target of targets) {
   }
   if (content.review.status !== 'approved') {
     if (explicit) {
-      throw new Error(`${relativeToProject(file)} needs human approval before manifest preparation.`);
+      console.error(
+        `${relativeToProject(file)} needs human approval before manifest preparation.`,
+      );
+      process.exit(1);
     }
     console.log(`SKIPPED ${relativeToProject(file)} (draft)`);
     continue;
@@ -120,4 +128,14 @@ for (const target of targets) {
   const output = join(outputDirectory, `${content.id}-${manifestHash.slice(0, 12)}.json`);
   const {created} = await writeImmutableJson(output, manifest);
   console.log(`${created ? 'PREPARED' : 'EXISTS'} ${relativeToProject(output)}`);
+  prepared.push({
+    contentId: content.id,
+    manifest: relativeToProject(output),
+    durationInFrames,
+    created,
+  });
+}
+
+if (values.json) {
+  console.log(`RESULT ${JSON.stringify({prepared})}`);
 }

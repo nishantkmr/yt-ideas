@@ -42,7 +42,16 @@ for (const target of targets) {
 }
 
 if (values.json) {
-  console.log(JSON.stringify({stage: values.stage, results}, null, 2));
+  console.log(
+    `RESULT ${JSON.stringify({
+      stage: values.stage,
+      files: results.length,
+      errors: failureCount,
+      warnings: results.reduce((total, entry) => total + entry.warnings.length, 0),
+      kinds: [...new Set(results.map((entry) => entry.kind))],
+      statuses: results.map((entry) => ({slug: entry.slug, errors: entry.errors.length})),
+    })}`,
+  );
 }
 
 if (failureCount > 0) {

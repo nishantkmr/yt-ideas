@@ -10,12 +10,16 @@ const duration = 0.12;
 const sampleCount = Math.floor(sampleRate * duration);
 const dataSize = sampleCount * 2;
 
-const {values} = parseArgs({options: {force: {type: 'boolean', default: false}}, strict: true});
+const {values} = parseArgs({
+  options: {force: {type: 'boolean', default: false}, json: {type: 'boolean', default: false}},
+  strict: true,
+});
 
 // Like the music beds, this tick is hashed into every manifest, so an existing
 // file is left untouched unless regeneration is asked for explicitly.
 if (!values.force && (await access(output).then(() => true, () => false))) {
   console.log(`SKIP ${relative(projectRoot, output)} (exists)`);
+  if (values.json) console.log(`RESULT ${JSON.stringify({generated: false})}`);
   process.exit(0);
 }
 
@@ -50,3 +54,4 @@ for (let index = 0; index < sampleCount; index += 1) {
 await mkdir(dirname(output), {recursive: true});
 await writeFile(output, wav);
 console.log(`GENERATED ${output}`);
+if (values.json) console.log(`RESULT ${JSON.stringify({generated: true})}`);

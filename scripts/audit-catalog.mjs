@@ -178,12 +178,16 @@ console.log(
 if (reportFile) console.log(`Report: ${relativeToProject(reportFile)}`);
 
 if (values.json) {
-  console.log(JSON.stringify({
-    focus: focusLabel ?? null,
-    errors: blockingErrors,
-    warnings: focusedWarnings,
-    unrelated: [...unrelatedErrors, ...unrelatedWarnings],
-  }, null, 2));
+  console.log(
+    `RESULT ${JSON.stringify({
+      focus: focusLabel ?? null,
+      files: entries.length,
+      errors: blockingErrors.length,
+      warnings: focusedWarnings.length,
+      unrelated: unrelatedErrors.length + unrelatedWarnings.length,
+      messages: blockingErrors.map((entry) => entry.message),
+    })}`,
+  );
 }
 
 if (blockingErrors.length > 0) process.exitCode = 1;
