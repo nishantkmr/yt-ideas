@@ -1,6 +1,7 @@
-import {mkdir, writeFile} from 'node:fs/promises';
-import {dirname, join, resolve} from 'node:path';
+import {access, mkdir, writeFile} from 'node:fs/promises';
+import {dirname, join, relative, resolve} from 'node:path';
 import {fileURLToPath} from 'node:url';
+import {parseArgs} from 'node:util';
 
 const projectRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const output = join(projectRoot, 'public', 'audio', 'sfx', 'countdown-tick.wav');
@@ -8,6 +9,16 @@ const sampleRate = 48000;
 const duration = 0.12;
 const sampleCount = Math.floor(sampleRate * duration);
 const dataSize = sampleCount * 2;
+
+const {values} = parseArgs({options: {force: {type: 'boolean', default: false}}, strict: true});
+
+// Like the music beds, this tick is hashed into every manifest, so an existing
+// file is left untouched unless regeneration is asked for explicitly.
+if (!values.force && (await access(output).then(() => true, () => false))) {
+  console.log(`SKIP ${relative(projectRoot, output)} (exists)`);
+  process.exit(0);
+}
+
 const wav = Buffer.alloc(44 + dataSize);
 
 wav.write('RIFF', 0);

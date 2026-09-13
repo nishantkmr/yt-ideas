@@ -1,6 +1,7 @@
-import {mkdir, writeFile} from 'node:fs/promises';
-import {dirname, join, resolve} from 'node:path';
+import {access, mkdir, writeFile} from 'node:fs/promises';
+import {dirname, join, relative, resolve} from 'node:path';
 import {fileURLToPath} from 'node:url';
+import {parseArgs} from 'node:util';
 
 const projectRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const outputRoot = join(projectRoot, 'public', 'audio', 'music');
@@ -141,5 +142,35 @@ const writeWav = async (name, config) => {
   console.log(`GENERATED ${output}`);
 };
 
+// Regenerating a bed that already exists is not free: prepare-content.mjs
+// records its SHA-256 in every manifest, and Math.sin is implementation-defined
+// in ECMAScript, so a future Node could silently change the music inside an
+// already published video. Existing files are left alone unless --force says
+// otherwise.
+const {values} = parseArgs({
+  options: {
+    theme: {type: 'string', multiple: true, default: []},
+    all: {type: 'boolean', default: false},
+    force: {type: 'boolean', default: false},
+  },
+  strict: true,
+});
+
+const requested = values.theme.length > 0 ? values.theme : Object.keys(themes);
+const unknown = requested.filter((name) => !(name in themes));
+if (unknown.length > 0) {
+  console.error(
+    `Unknown theme(s): ${unknown.join(', ')}. Known themes: ${Object.keys(themes).join(', ')}`,
+  );
+  process.exit(2);
+}
+
 await mkdir(outputRoot, {recursive: true});
-for (const [name, config] of Object.entries(themes)) await writeWav(name, config);
+for (const name of requested) {
+  const output = join(outputRoot, `${name}.wav`);
+  if (!values.force && (await access(output).then(() => true, () => false))) {
+    console.log(`SKIP ${relative(projectRoot, output)} (exists)`);
+    continue;
+  }
+  await writeWav(name, themes[name]);
+}

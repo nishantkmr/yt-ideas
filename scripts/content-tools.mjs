@@ -9,6 +9,7 @@ import {
 
 export const projectRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 export const dataRoot = join(projectRoot, 'src', 'data');
+export const contentRoot = join(projectRoot, 'content');
 export const publicRoot = join(projectRoot, 'public');
 
 const questionTypes = new Set([
@@ -95,11 +96,87 @@ export const writeImmutableJson = async (file, value) => {
   return {created: false};
 };
 
-export const discoverContentFiles = async () =>
-  (await readdir(dataRoot))
+// A content target is a record rather than a bare path, so callers address a
+// video by slug or id and never hard-code where its JSON lives. The index scans
+// both the flat src/data/ layout and the content/<slug>/content.json bundle
+// layout, which is what lets the bundle migration happen without touching a
+// single command line.
+let targetIndex;
+
+const buildTargetIndex = async () => {
+  const found = [];
+
+  const bundles = await readdir(contentRoot, {withFileTypes: true}).catch(() => []);
+  for (const entry of bundles) {
+    if (!entry.isDirectory() || entry.name.startsWith('_')) continue;
+    const file = join(contentRoot, entry.name, 'content.json');
+    if (!(await access(file).then(() => true, () => false))) continue;
+    found.push({slug: entry.name, file, dir: join(contentRoot, entry.name), layout: 'bundle'});
+  }
+
+  const flat = (await readdir(dataRoot).catch(() => []))
     .filter((file) => extname(file) === '.json')
-    .sort()
-    .map((file) => join(dataRoot, file));
+    .sort();
+  for (const name of flat) {
+    found.push({
+      slug: name.slice(0, -'.json'.length),
+      file: join(dataRoot, name),
+      dir: dataRoot,
+      layout: 'flat',
+    });
+  }
+
+  return Promise.all(
+    found.map(async (target) => {
+      const content = await readJson(target.file);
+      return {
+        ...target,
+        id: content.id,
+        kind: Array.isArray(content?.questions) ? 'episode' : 'short',
+      };
+    }),
+  );
+};
+
+export const listContentTargets = async () => (targetIndex ??= buildTargetIndex());
+
+export const resolveContentTarget = async (argument) => {
+  if (typeof argument !== 'string' || argument.trim() === '') {
+    throw new Error('A content slug or path is required.');
+  }
+
+  const targets = await listContentTargets();
+  const looksLikePath =
+    argument.endsWith('.json') || argument.includes('/') || argument.includes(sep);
+
+  if (looksLikePath) {
+    const file = resolve(projectRoot, argument);
+    const known = targets.find((target) => target.file === file);
+    if (known) return known;
+    if (!file.startsWith(`${dataRoot}${sep}`) && !file.startsWith(`${contentRoot}${sep}`)) {
+      throw new Error('Content source must be a JSON file inside src/data/ or content/.');
+    }
+    throw new Error(`No content file at ${relativeToProject(file)}.`);
+  }
+
+  const matches = targets.filter(
+    (target) => target.slug === argument || target.id === argument,
+  );
+  if (matches.length === 1) return matches[0];
+  if (matches.length === 0) {
+    const known = targets
+      .map((target) => `  ${target.slug}${target.id === target.slug ? '' : `  (id ${target.id})`}`)
+      .join('\n');
+    throw new Error(`Unknown content "${argument}". Known content:\n${known}`);
+  }
+  throw new Error(
+    `"${argument}" matches more than one content file: ` +
+      `${matches.map((target) => relativeToProject(target.file)).join(', ')}. Pass an explicit path.`,
+  );
+};
+
+export const discoverContentFiles = async () =>
+  (await listContentTargets()).map((target) => target.file).sort();
 
 const validateReview = (review, label, errors) => {
   if (!review || !['draft', 'approved'].includes(review.status)) {

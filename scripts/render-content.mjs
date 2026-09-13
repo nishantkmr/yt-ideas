@@ -1,31 +1,50 @@
 import {spawn} from 'node:child_process';
-import {access, readFile} from 'node:fs/promises';
-import {extname, join, resolve, sep} from 'node:path';
+import {access, readFile, writeFile} from 'node:fs/promises';
+import {join} from 'node:path';
+import {CONTENT_OPTIONS, parseCli} from './cli.mjs';
 import {
-  dataRoot,
   projectRoot,
   relativeToProject,
+  resolveContentTarget,
   sha256,
   validateContent,
   writeImmutableJson,
 } from './content-tools.mjs';
+import {episodeDurationInFrames, shortDurationInFrames} from '../src/config/durations.mjs';
 
-const args = process.argv.slice(2);
-const sourceArgument = args.find((arg) => !arg.startsWith('--'));
-const force = args.includes('--force');
-const checkOnly = args.includes('--check');
-const preview = args.includes('--preview');
-const browserExecutableArgument = args.find((arg) => arg.startsWith('--browser-executable='));
+const {values, positionals} = parseCli({
+  usage:
+    'npm run render:content -- <slug>|<path> [--check] [--preview] [--force] [--browser-executable=<path>]',
+  options: {
+    ...CONTENT_OPTIONS,
+    check: {type: 'boolean', default: false},
+    preview: {type: 'boolean', default: false},
+    force: {type: 'boolean', default: false},
+    'browser-executable': {type: 'string'},
+  },
+});
 
-if (!sourceArgument) {
-  console.error('Usage: npm run render:content -- src/data/<content>.json [--check] [--preview] [--force] [--browser-executable=<path>]');
+const force = values.force;
+const checkOnly = values.check;
+const preview = values.preview;
+const browserExecutable = values['browser-executable'];
+
+const sourceArgument = values.content ?? positionals[0];
+if (sourceArgument === undefined) {
+  console.error(
+    'Usage: npm run render:content -- <slug>|<path> [--check] [--preview] [--force] [--browser-executable=<path>]',
+  );
   process.exit(1);
 }
 
-const sourceFile = resolve(projectRoot, sourceArgument);
-if (!sourceFile.startsWith(`${dataRoot}${sep}`) || extname(sourceFile) !== '.json') {
-  throw new Error('Content source must be a JSON file inside src/data/.');
+let target;
+try {
+  target = await resolveContentTarget(sourceArgument);
+} catch (error) {
+  console.error(error.message);
+  process.exit(2);
 }
+const sourceFile = target.file;
 
 const source = await readFile(sourceFile, 'utf8');
 const content = JSON.parse(source);
@@ -73,7 +92,10 @@ console.log(`Output: ${relativeToProject(outputFile)}`);
 
 const remotionCli = join(projectRoot, 'node_modules', '@remotion', 'cli', 'remotion-cli.js');
 const renderArgs = [remotionCli, 'render', 'src/index.ts', composition, outputFile, '--props', propsFile];
-if (browserExecutableArgument) renderArgs.push(browserExecutableArgument);
+// Remotion downloads its own Chrome Headless Shell unless it is pointed at an
+// installed browser, which is the only option on a machine without that fetch.
+const browser = browserExecutable ?? process.env.REMOTION_BROWSER_EXECUTABLE;
+if (browser) renderArgs.push(`--browser-executable=${browser}`);
 
 // Long, audio-heavy episode renders can race while parallel chunks share and
 // clean Remotion's temporary audio-mixing directory on Windows. Shorts finish
@@ -82,15 +104,52 @@ if (kind === 'episode') {
   renderArgs.push('--disallow-parallel-encoding');
 }
 
-const child = spawn(
-  process.execPath,
-  renderArgs,
-  {cwd: projectRoot, stdio: 'inherit'},
-);
+const exitCode = await new Promise((resolvePromise, rejectPromise) => {
+  const child = spawn(process.execPath, renderArgs, {cwd: projectRoot, stdio: 'inherit'});
+  child.on('error', rejectPromise);
+  child.on('exit', (code) => resolvePromise(code ?? 1));
+});
 
-child.on('error', (error) => {
-  throw error;
-});
-child.on('exit', (code) => {
-  process.exitCode = code ?? 1;
-});
+if (exitCode !== 0) {
+  process.exitCode = exitCode;
+} else {
+  // Written only after a successful render, so an MP4 without a stamp is the
+  // signature of an interrupted run and must be treated as suspect rather than
+  // reused. The source hash lets a later build tell "already rendered" from
+  // "rendered before the content changed".
+  const timing = JSON.parse(
+    await readFile(join(projectRoot, 'src', 'config', 'timing.json'), 'utf8'),
+  );
+  const durationInFrames =
+    kind === 'episode'
+      ? episodeDurationInFrames(timing, content.questions, content.outroTimeSeconds)
+      : shortDurationInFrames(timing, content.clueTimeSeconds);
+  const stampFile = join(
+    projectRoot,
+    'outputs',
+    `${preview ? 'preview-' : ''}${content.id}.render.json`,
+  );
+  const {version} = JSON.parse(await readFile(join(projectRoot, 'package.json'), 'utf8'));
+  await writeFile(
+    stampFile,
+    `${JSON.stringify(
+      {
+        contentId: content.id,
+        slug: target.slug,
+        kind,
+        composition,
+        preview,
+        sourceSha256: sourceHash,
+        props: relativeToProject(propsFile),
+        output: relativeToProject(outputFile),
+        durationInFrames,
+        fps: timing.fps,
+        renderedAt: new Date().toISOString(),
+        studioVersion: version,
+      },
+      null,
+      2,
+    )}\n`,
+  );
+  console.log(`Stamp: ${relativeToProject(stampFile)}`);
+}

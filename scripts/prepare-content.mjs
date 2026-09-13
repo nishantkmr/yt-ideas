@@ -1,7 +1,10 @@
 import {mkdir, readFile} from 'node:fs/promises';
 import {join} from 'node:path';
-import {
-  discoverContentFiles,
+import {CONTENT_OPTIONS, isExplicitTarget, parseCli, selectTargets} from './cli.mjs';
+import * as tools from './content-tools.mjs';
+import {episodeDurationInFrames, shortDurationInFrames} from '../src/config/durations.mjs';
+
+const {
   narrationCueNames,
   publicRoot,
   projectRoot,
@@ -9,8 +12,25 @@ import {
   sha256,
   validateContent,
   writeImmutableJson,
-} from './content-tools.mjs';
-import {episodeDurationInFrames, shortDurationInFrames} from '../src/config/durations.mjs';
+} = tools;
+
+const {values, positionals} = parseCli({
+  usage: 'npm run prepare:content -- [<slug>|<path>] [--all]',
+  options: {...CONTENT_OPTIONS},
+});
+
+let targets;
+try {
+  targets = await selectTargets(values, positionals, tools);
+} catch (error) {
+  console.error(error.message);
+  process.exit(2);
+}
+
+// Asking for one video by name and getting a draft is an error worth stopping
+// for. Meeting a draft while sweeping the whole catalog is not: it must not stop
+// the approved videos around it from being prepared.
+const explicit = isExplicitTarget(values, positionals);
 
 const timingFile = join(projectRoot, 'src', 'config', 'timing.json');
 const timingSource = await readFile(timingFile, 'utf8');
@@ -20,16 +40,28 @@ const assetLicenseSource = await readFile(assetLicenseFile, 'utf8');
 const outputDirectory = join(projectRoot, 'work', 'manifests');
 await mkdir(outputDirectory, {recursive: true});
 
-for (const file of await discoverContentFiles()) {
+for (const target of targets) {
+  const file = target.file;
   const source = await readFile(file, 'utf8');
   const content = JSON.parse(source);
   const result = await validateContent(content);
 
   if (result.errors.length > 0) {
-    throw new Error(`${relativeToProject(file)} failed validation. Run npm run validate:content.`);
+    if (explicit) {
+      throw new Error(
+        `${relativeToProject(file)} failed validation:\n- ${result.errors.join('\n- ')}`,
+      );
+    }
+    console.error(`INVALID ${relativeToProject(file)} (skipped)`);
+    process.exitCode = 1;
+    continue;
   }
   if (content.review.status !== 'approved') {
-    throw new Error(`${relativeToProject(file)} needs human approval before manifest preparation.`);
+    if (explicit) {
+      throw new Error(`${relativeToProject(file)} needs human approval before manifest preparation.`);
+    }
+    console.log(`SKIPPED ${relativeToProject(file)} (draft)`);
+    continue;
   }
 
   const sourceHash = sha256(source);
