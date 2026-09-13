@@ -13,6 +13,6 @@ export const GuessPicture: React.FC<GuessPictureProps> = ({
 }) => (
   <figure className={`picture-prompt ${silhouette ? 'picture-prompt--silhouette' : ''}`.trim()}>
     <div className="picture-burst" />
-    <Img alt={alt} className="picture-animal" src={staticFile(asset)} />
+    <Img alt={alt} className="picture-subject" src={staticFile(asset)} />
   </figure>
 );

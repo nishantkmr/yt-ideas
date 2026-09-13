@@ -1,0 +1,25 @@
+/* Design tokens shared by every theme. */
+
+:root {
+  --ink: #142b52;
+  --ink-soft: #46617d;
+  --paper: #fffdf7;
+  --paper-blue: #f2fbff;
+  --sky: #56bff0;
+  --aqua: #72dfd1;
+  --mint: #b9f3c9;
+  --sun: #ffd34e;
+  --coral: #f4517d;
+  --violet: #7357df;
+  --green: #16876c;
+  --white: #ffffff;
+  --shadow: rgba(20, 43, 82, 0.18);
+  --shadow-strong: rgba(20, 43, 82, 0.28);
+  --radius-card: 48px;
+  --radius-control: 28px;
+  --background-start: var(--aqua);
+  --background-middle: var(--mint);
+  --background-end: var(--sky);
+  --background-glow: rgba(255, 242, 148, 0.9);
+  --pattern-color: rgba(255, 255, 255, 0.22);
+}

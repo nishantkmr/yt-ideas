@@ -1,3 +1,4 @@
+import './theme.css';
 import {RouteProgress} from '../../components/RouteProgress';
 import {DigestiveDiagram} from './DigestiveDiagram';
 import {defineVisual} from '../components.ts';

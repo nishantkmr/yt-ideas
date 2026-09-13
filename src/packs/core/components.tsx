@@ -1,3 +1,4 @@
+import './theme.css';
 import {GuessPicture} from '../../questions/GuessPicture';
 import {ProgressBar} from '../../components/ProgressBar';
 import {defineVisual} from '../components.ts';

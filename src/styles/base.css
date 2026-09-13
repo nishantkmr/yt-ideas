@@ -1,118 +1,4 @@
-:root {
-  --ink: #142b52;
-  --ink-soft: #46617d;
-  --paper: #fffdf7;
-  --paper-blue: #f2fbff;
-  --sky: #56bff0;
-  --aqua: #72dfd1;
-  --mint: #b9f3c9;
-  --sun: #ffd34e;
-  --coral: #f4517d;
-  --violet: #7357df;
-  --green: #16876c;
-  --white: #ffffff;
-  --shadow: rgba(20, 43, 82, 0.18);
-  --shadow-strong: rgba(20, 43, 82, 0.28);
-  --radius-card: 48px;
-  --radius-control: 28px;
-  --background-start: var(--aqua);
-  --background-middle: var(--mint);
-  --background-end: var(--sky);
-  --background-glow: rgba(255, 242, 148, 0.9);
-  --pattern-color: rgba(255, 255, 255, 0.22);
-}
-
-.layout[data-theme="cosmic"] {
-  --ink: #16224d;
-  --ink-soft: #53608c;
-  --paper-blue: #f3f1ff;
-  --sky: #7057d9;
-  --aqua: #6249c7;
-  --mint: #9b7bea;
-  --sun: #ffe070;
-  --coral: #ff6fae;
-  --violet: #40329b;
-  --green: #1f8c83;
-  --background-start: #1c2258;
-  --background-middle: #5942a9;
-  --background-end: #a263d5;
-  --background-glow: rgba(255, 224, 112, 0.46);
-  --pattern-color: rgba(255, 255, 255, 0.48);
-}
-
-.layout[data-theme="ocean"] {
-  --ink: #073b5b;
-  --ink-soft: #356986;
-  --paper-blue: #ecfcff;
-  --sky: #28a9d2;
-  --aqua: #19b8c5;
-  --mint: #83e8d2;
-  --sun: #ffe174;
-  --coral: #ff6f74;
-  --violet: #426ac7;
-  --green: #087f70;
-  --background-start: #0d81ad;
-  --background-middle: #31c4cc;
-  --background-end: #a0ead9;
-  --background-glow: rgba(216, 255, 246, 0.68);
-  --pattern-color: rgba(255, 255, 255, 0.3);
-}
-
-.layout[data-theme="atlas"] {
-  --ink: #49311d;
-  --ink-soft: #735c44;
-  --paper: #fffaf0;
-  --paper-blue: #f8eed7;
-  --sky: #e7a55e;
-  --aqua: #e6b96f;
-  --mint: #c8d894;
-  --sun: #ffd25f;
-  --coral: #d8654a;
-  --violet: #7658a6;
-  --green: #438264;
-  --background-start: #dca967;
-  --background-middle: #efd08d;
-  --background-end: #9cc99b;
-  --background-glow: rgba(255, 248, 205, 0.74);
-  --pattern-color: rgba(73, 49, 29, 0.12);
-}
-
-.layout[data-theme="workshop"] {
-  --ink: #28364c;
-  --ink-soft: #5d6a7e;
-  --paper-blue: #f4f8ff;
-  --sky: #58acd5;
-  --aqua: #70c5d2;
-  --mint: #aed9bd;
-  --sun: #ffc849;
-  --coral: #ed6452;
-  --violet: #5870bd;
-  --green: #338164;
-  --background-start: #f4a65e;
-  --background-middle: #f3cf73;
-  --background-end: #70bdd0;
-  --background-glow: rgba(255, 246, 198, 0.72);
-  --pattern-color: rgba(40, 54, 76, 0.15);
-}
-
-.layout[data-theme="body-lab"] {
-  --ink: #263650;
-  --ink-soft: #60708b;
-  --paper: #fffdfb;
-  --paper-blue: #f5f4ff;
-  --sky: #77c9dc;
-  --aqua: #71d6ca;
-  --mint: #b9ead2;
-  --sun: #ffd76a;
-  --coral: #ec6685;
-  --violet: #7164bd;
-  --green: #21876e;
-  --background-start: #f2a6b7;
-  --background-middle: #f7d3b7;
-  --background-end: #75cbd7;
-  --background-glow: rgba(255, 250, 224, 0.78);
-  --pattern-color: rgba(74, 75, 126, 0.18);
-}
+/* Layout and components that belong to no single video family. */
 
 * {
   box-sizing: border-box;
@@ -160,51 +46,6 @@ body {
   position: absolute;
   inset: 0;
   opacity: 0.7;
-}
-
-.layout[data-theme="jungle"] .background-pattern {
-  background-image:
-    radial-gradient(ellipse at 15% 20%, transparent 0 42px, var(--pattern-color) 44px 50px, transparent 52px),
-    radial-gradient(ellipse at 82% 72%, transparent 0 62px, var(--pattern-color) 64px 71px, transparent 73px);
-  background-size: 330px 280px, 460px 390px;
-  transform: rotate(-9deg) scale(1.15);
-}
-
-.layout[data-theme="cosmic"] .background-pattern {
-  background-image:
-    radial-gradient(circle, var(--pattern-color) 0 4px, transparent 5px),
-    radial-gradient(circle, rgba(255, 224, 112, 0.55) 0 7px, transparent 8px);
-  background-position: 0 0, 90px 75px;
-  background-size: 150px 150px, 260px 240px;
-}
-
-.layout[data-theme="ocean"] .background-pattern {
-  background-image: radial-gradient(ellipse at 50% 100%, transparent 0 42px, var(--pattern-color) 44px 51px, transparent 53px);
-  background-size: 180px 90px;
-  transform: translateY(-24px);
-}
-
-.layout[data-theme="atlas"] .background-pattern {
-  background-image:
-    linear-gradient(25deg, transparent 47%, var(--pattern-color) 48% 50%, transparent 51%),
-    linear-gradient(-25deg, transparent 47%, var(--pattern-color) 48% 50%, transparent 51%);
-  background-size: 190px 150px;
-}
-
-.layout[data-theme="workshop"] .background-pattern {
-  background-image:
-    linear-gradient(var(--pattern-color) 2px, transparent 2px),
-    linear-gradient(90deg, var(--pattern-color) 2px, transparent 2px);
-  background-size: 72px 72px;
-}
-
-.layout[data-theme="body-lab"] .background-pattern {
-  background-image:
-    radial-gradient(circle, transparent 0 24px, var(--pattern-color) 26px 31px, transparent 33px),
-    radial-gradient(circle, rgba(255, 255, 255, 0.3) 0 9px, transparent 11px);
-  background-position: 0 0, 72px 64px;
-  background-size: 180px 160px, 145px 145px;
-  transform: rotate(-8deg) scale(1.12);
 }
 
 .background::before,
@@ -374,7 +215,9 @@ body {
 }
 
 .option:nth-child(2) .option-key { background: #ff9bab; }
+
 .option:nth-child(3) .option-key { background: #8de1ff; }
+
 .option:nth-child(4) .option-key { background: #bbaaff; }
 
 .clues {
@@ -437,7 +280,7 @@ body {
   background: linear-gradient(90deg, var(--coral), #ff8a65);
 }
 
-.body-route {
+.route-progress {
   position: absolute;
   z-index: 5;
   top: 35px;
@@ -447,7 +290,7 @@ body {
   align-items: start;
 }
 
-.body-route__line {
+.route-progress__line {
   position: absolute;
   top: 25px;
   right: 5%;
@@ -458,7 +301,7 @@ body {
   box-shadow: 0 5px 0 rgba(38, 54, 80, 0.1);
 }
 
-.body-route__stop {
+.route-progress__stop {
   position: relative;
   display: grid;
   justify-items: center;
@@ -467,7 +310,7 @@ body {
   text-align: center;
 }
 
-.body-route__stop span {
+.route-progress__stop span {
   z-index: 1;
   display: grid;
   width: 56px;
@@ -481,39 +324,39 @@ body {
   font-weight: 900;
 }
 
-.body-route__stop strong {
+.route-progress__stop strong {
   max-width: 170px;
   font-size: 20px;
   line-height: 1.05;
 }
 
-.body-route__stop--complete span,
-.body-route__stop--current span {
+.route-progress__stop--complete span,
+.route-progress__stop--current span {
   color: white;
   background: var(--coral);
 }
 
-.body-route--dense .body-route__stop strong {
+.route-progress--dense .route-progress__stop strong {
   max-width: 145px;
   font-size: 17px;
 }
 
-.body-route--dense .body-route__stop span {
+.route-progress--dense .route-progress__stop span {
   width: 50px;
   height: 50px;
   font-size: 21px;
 }
 
-.body-route--dense .body-route__line {
+.route-progress--dense .route-progress__line {
   top: 22px;
 }
 
-.body-route__stop--current {
+.route-progress__stop--current {
   color: var(--ink);
   transform: scale(1.08);
 }
 
-.body-route__stop--current span {
+.route-progress__stop--current span {
   box-shadow: 0 7px 0 rgba(140, 42, 73, 0.22), 0 0 0 8px rgba(255, 255, 255, 0.25);
 }
 
@@ -636,186 +479,6 @@ body {
 .question-stage__choices .true-false-choice {
   min-height: 132px;
   font-size: 46px;
-}
-
-.digestive-diagram {
-  position: relative;
-  width: 320px;
-  height: 382px;
-  overflow: hidden;
-  border: 7px solid rgba(255, 255, 255, 0.94);
-  border-radius: 40px;
-  background: linear-gradient(155deg, rgba(255, 253, 251, 0.98), rgba(236, 248, 249, 0.96));
-  box-shadow: 0 15px 0 var(--shadow), 0 24px 45px rgba(38, 54, 80, 0.13);
-}
-
-.digestive-diagram svg {
-  display: block;
-  width: 100%;
-  height: 100%;
-}
-
-.body-silhouette {
-  fill: #e8edf2;
-  stroke: #fff;
-  stroke-width: 6;
-}
-
-.organ,
-.organ-line {
-  transition: none;
-}
-
-.organ {
-  fill: #ef9bad;
-  stroke: #cc647f;
-  stroke-width: 5;
-}
-
-.organ-line {
-  fill: none;
-  stroke: #9b77bd;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke-width: 15;
-}
-
-.organ--mouth { fill: #f07891; }
-.organ--liver { fill: #d58a70; stroke: #ac6654; }
-.organ--gallbladder { fill: #72bd6a; stroke: #438b43; }
-.organ--pancreas { fill: #f1cf68; stroke: #c39a35; }
-.organ--stomach { fill: #f3aa3f; stroke: #bb6e24; }
-.organ--small-intestine { stroke: #ef668f; stroke-width: 12; }
-.organ--large-intestine { stroke: #62aaa0; stroke-width: 19; }
-
-.digestive-diagram--revealed .organ:not(.organ--selected),
-.digestive-diagram--revealed .organ-line:not(.organ--selected) {
-  opacity: 0.24;
-}
-
-.organ--selected {
-  filter: drop-shadow(0 0 10px rgba(236, 102, 133, 0.9));
-  stroke: #fff;
-  stroke-width: 8;
-}
-
-.organ-line.organ--selected {
-  stroke: #ec6685;
-  stroke-width: 22;
-}
-
-.food-bite {
-  fill: #ffd76a;
-  stroke: #fff;
-  stroke-width: 4;
-  filter: drop-shadow(0 3px 3px rgba(38, 54, 80, 0.22));
-}
-
-.organ-activity {
-  filter: drop-shadow(0 3px 3px rgba(38, 54, 80, 0.18));
-}
-
-.organ-activity--saliva path,
-.organ-activity--water path {
-  fill: #60d5ef;
-  stroke: #fff;
-  stroke-width: 3;
-}
-
-.organ-activity--saliva .food-crumb {
-  fill: #f2b74b;
-  stroke: #fff4c9;
-  stroke-width: 3;
-}
-
-.organ-activity--saliva .food-crumb--small {
-  stroke-width: 2;
-}
-
-.organ-activity--motion path {
-  fill: none;
-  stroke: #ffd76a;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke-width: 7;
-}
-
-.organ-activity--bubbles circle {
-  fill: rgba(255, 238, 145, 0.82);
-  stroke: #fff;
-  stroke-width: 3;
-}
-
-.organ-activity--bile path {
-  fill: #73c96c;
-  stroke: #fff;
-  stroke-width: 3;
-}
-
-.organ-activity--enzymes path {
-  fill: #fff1a8;
-  stroke: #fff;
-  stroke-width: 2;
-}
-
-.organ-activity--enzymes circle,
-.organ-activity--nutrients circle {
-  fill: #70d9e6;
-  stroke: #fff;
-  stroke-width: 3;
-}
-
-.organ-activity--nutrients circle:nth-child(2) { fill: #ffd76a; }
-.organ-activity--nutrients circle:nth-child(3) { fill: #89d27d; }
-
-.organ-activity--nutrients path {
-  fill: #a991f0;
-  stroke: #fff;
-  stroke-width: 2;
-}
-
-.organ-label {
-  position: absolute;
-  right: 18px;
-  bottom: 16px;
-  left: 18px;
-  display: grid;
-  min-height: 82px;
-  align-content: center;
-  padding: 11px 16px 12px;
-  border: 4px solid rgba(255, 255, 255, 0.92);
-  border-radius: 24px;
-  color: #fff;
-  background: #21876e;
-  box-shadow: 0 8px 0 rgba(20, 43, 82, 0.15);
-  text-align: center;
-}
-
-.organ-label strong {
-  font-size: 28px;
-  line-height: 1;
-}
-
-.organ-label span {
-  margin-top: 6px;
-  font-size: 17px;
-  font-weight: 800;
-  letter-spacing: 0.01em;
-}
-
-.mystery-label circle {
-  fill: #7164bd;
-}
-
-.mystery-label text {
-  fill: #fff;
-  font-size: 28px;
-  font-weight: 900;
-}
-
-.answer-reveal--with-visual .digestive-diagram {
-  width: 460px;
-  height: 470px;
 }
 
 .countdown-scene { gap: 82px !important; }
@@ -1100,27 +763,6 @@ body {
   width: 88%;
 }
 
-.layout--short[data-theme="body-lab"] .short-intro .question-card {
-  border-color: rgba(255, 255, 255, 0.96);
-  background: linear-gradient(155deg, #263650 0%, #5648a8 56%, #21876e 100%);
-  box-shadow: 0 24px 0 rgba(38, 54, 80, 0.3), 0 34px 65px rgba(20, 43, 82, 0.2);
-}
-
-.layout--short[data-theme="body-lab"] .short-intro .question-card::before {
-  background: linear-gradient(90deg, var(--coral), var(--sun), #fff);
-}
-
-.layout--short[data-theme="body-lab"] .short-intro .question-text {
-  color: #fff;
-  text-shadow: 0 5px 0 rgba(20, 43, 82, 0.2);
-}
-
-.layout--short[data-theme="body-lab"] .short-intro .eyebrow {
-  color: var(--ink);
-  background: var(--sun);
-  box-shadow: 0 7px 0 rgba(97, 67, 17, 0.25);
-}
-
 .short-clue {
   gap: 42px !important;
 }
@@ -1148,23 +790,6 @@ body {
   height: 420px;
 }
 
-.short-answer > .digestive-diagram {
-  width: 520px;
-  height: 610px;
-}
-
-.short-answer > .digestive-diagram .organ-label {
-  min-height: 104px;
-}
-
-.short-answer > .digestive-diagram .organ-label strong {
-  font-size: 40px;
-}
-
-.short-answer > .digestive-diagram .organ-label span {
-  font-size: 25px;
-}
-
 .picture-prompt {
   position: relative;
   display: grid;
@@ -1188,7 +813,7 @@ body {
   background: radial-gradient(circle, rgba(255, 211, 78, 0.32), transparent 68%);
 }
 
-.picture-animal {
+.picture-subject {
   position: relative;
   z-index: 1;
   display: block;
@@ -1202,7 +827,7 @@ body {
   background: linear-gradient(155deg, var(--violet), #253d70);
 }
 
-.picture-prompt--silhouette .picture-animal {
+.picture-prompt--silhouette .picture-subject {
   filter: brightness(0) opacity(0.88) drop-shadow(0 16px 12px rgba(0, 0, 0, 0.22));
 }
 
@@ -1407,9 +1032,13 @@ body {
 }
 
 .celebration-dots i:nth-child(1) { top: 30px; left: 18%; }
+
 .celebration-dots i:nth-child(2) { top: 72px; right: 16%; background: var(--violet); }
+
 .celebration-dots i:nth-child(3) { bottom: 40px; left: 12%; background: var(--coral); }
+
 .celebration-dots i:nth-child(4) { top: 31%; left: 6%; background: var(--aqua); }
+
 .celebration-dots i:nth-child(5) { bottom: 34%; right: 7%; background: var(--sun); }
 
 .score-screen {
