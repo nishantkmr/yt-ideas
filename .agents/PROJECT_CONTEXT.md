@@ -21,6 +21,9 @@ kids" unless the user deliberately changes the audience strategy.
   system are intentional brand elements.
 - Maintain a warm, playful, comforting tone. Never talk down to children.
 - Preserve human review before production or publishing.
+- The initial animal video has been published. The next production pillar is
+  the human body, and its videos should introduce topic-specific storytelling
+  or interactions rather than reuse the animal quiz structure with new nouns.
 
 ## Current technology
 
@@ -43,8 +46,33 @@ kids" unless the user deliberately changes the audience strategy.
   tick, not repeated narration.
 - Answer reveals and fun facts need enough time for children to absorb them.
 - Every video ends with a positive conclusion and thank-you celebration.
+- Future thumbnails should match the approved Human Body thumbnail direction:
+  premium colorful 3D artwork, a recognizable WonderOwl mascot, bold high-
+  contrast typography that remains readable on a phone, one clear visual story,
+  and uncluttered composition. Mystery thumbnails must not reveal the answer.
+- The video itself must deliver the thumbnail's energy and promise. Open with a
+  strong topic-specific visual hook, use expressive mascot moments and clear
+  motion or transformation, and keep the educational payoff visually engaging.
+  Do not use misleading clickbait or turn the thumbnail style into an identical
+  mass-produced template; vary the world, composition and signature moment by
+  topic.
 - Current timing is defined centrally; episode question stages are 6 seconds,
   short clue stages are 4 seconds and countdowns are 4 seconds.
+- A Short may use `clueTimeSeconds` (4–10 seconds) when its narrated clues need
+  more breathing room; the stomach mystery uses five seconds per clue.
+- Episode questions and choices remain continuously mounted while the timer
+  appears as a compact pill inside the question card; do not replay the question
+  entrance animation or use a detached countdown element at countdown time. A
+  question may set `readingTimeSeconds` (6–15 seconds) when sentence-length
+  choices need more reading time; the digestion finale uses 10 seconds. An
+  `answerTimeSeconds` override (8–15 seconds) keeps longer narrated explanations
+  from being clipped without slowing every answer in the episode.
+- Mascot speech or celebration text must never cover the owl's face. On the
+  episode outro, the proud-message bubble sits below the owl.
+- Episode outros may use an age-appropriate call to action. The digestion episode
+  asks viewers to involve a grown-up before subscribing to support WonderOwl Quiz.
+  An episode may use `outroTimeSeconds` (9–15 seconds) when its narrated closing
+  message needs longer than the default 9 seconds.
 
 ## Narration
 
@@ -65,8 +93,9 @@ kids" unless the user deliberately changes the audience strategy.
   audio-heavy Windows renders can otherwise race while cleaning a shared
   temporary audio directory. This is handled automatically by
   `npm run render:content -- <episode-json>`.
-- Edge and Kokoro remain comparison/fallback options; they are not the selected
-  production narrator.
+- Sarvam AI is the only supported voice-over path. Edge TTS and Kokoro are not
+  needed for the production workflow and their dependencies should not be
+  installed unless the user explicitly revisits that decision.
 
 ## Content and production safeguards
 
@@ -75,6 +104,10 @@ kids" unless the user deliberately changes the audience strategy.
 - Run `npm run validate:content` before preparing or rendering production work.
 - `npm run prepare:content` creates an immutable, hashed manifest under the
   ignored `work/manifests/` directory after approval.
+- `npm run render:content -- <json> --preview` may render a voiceover-free draft
+  for visual review. It forces narration off while retaining music and local
+  sound effects, names the output as a preview, and does not weaken the approval
+  requirement for production output.
 - `asset-licenses.json` is the machine-readable visual-rights registry.
 - `ASSET_LICENSES.md` explains image, narration and sound-effect provenance.
 - Approved content must not reference an image without verified commercial-use
@@ -100,8 +133,40 @@ kids" unless the user deliberately changes the audience strategy.
   a creative brief (`visualTheme`, `presentationFormat`, target age, hook,
   learning goal and signature moment) plus research sources and three approval
   gates.
-- Five visual themes and five presentation formats are available. Choose them
+- Six visual themes and six presentation formats are available. Choose them
   to fit the story instead of rotating them mechanically.
+- The Human Body implementation adds a `body-lab` visual theme, a
+  `body-journey` presentation format, route progress, and ordering questions.
+  Its original code-native digestive diagram hides labels during questions and
+  uses a larger organ-specific close-up during answer reveals. Reveal diagrams
+  include simple animated action cues—such as saliva droplets, enzyme sparkles,
+  nutrient particles, and water droplets—so they teach a process rather than
+  showing a static organ alone. The first draft follows a bite through digestion
+  and must remain unapproved until factual, rights, and editorial review are
+  complete.
+- The digestion episode maps every question to a source ID and records difficult
+  pronunciation checks. Its human checklist under `reviews/` was approved by the
+  project owner on 2026-09-06, and Sarvam narration is enabled. The audio-enabled
+  production render exists, but pronunciation and voice/music balance still need
+  the project owner's post-generation listening approval before upload.
+- The digestion episode title is `Where Does Your Food Go?`; its final question
+  uses digestion-related misconceptions as distractors instead of implausible
+  consequences involving the heart or lungs.
+- The first Human Body companion Short is a stomach-focused two-clue mystery.
+  It reuses the original code-native stomach close-up and churning animation in
+  portrait format. The project owner approved its voiceover-free preview on
+  2026-09-08, and Sarvam narration is enabled for final production. Its final
+  narrated render exists, but pronunciation and mix balance still need the
+  project owner's listening approval before upload.
+- The stomach Short uses a dark body-lab gradient on its opening title card so
+  the white “Can You Solve This Body Mystery?” text remains clearly legible.
+- The approved Human Body upload artwork consists of a 16:9 digestion-journey
+  thumbnail and a spoiler-free 9:16 organ-mystery cover. Their C2PA-bearing
+  originals live under `public/assets/thumbnails/`; upload-ready JPEG copies
+  live under the ignored `outputs/thumbnails/` directory.
+- Remotion Studio's default `TriviaEpisode` props point to the Human Body
+  digestion draft. Content-driven renders still accept any validated episode
+  JSON through `npm run render:content -- <json>`.
 - `npm run validate:content` includes a cross-catalog originality/diversity
   audit. Use `templates/` for new drafts and `npm run render:content -- <json>`
   for a validated, approved, immutable-props render.
@@ -132,8 +197,9 @@ Git.
 
 ## Working rules for future sessions
 
-- Confirm the active working directory is
-  `D:\Nishant\projects\kids-trivia-studio` before editing.
+- Confirm the active working directory is the checked-out `yt-ideas` repository
+  before editing. The current Ubuntu checkout is
+  `/home/nku100/MySpace/projects/yt-ideas`.
 - Inspect actual rendered frames for visual changes; a successful typecheck or
   bundle is not sufficient visual QA.
 - Preserve unrelated user changes in a dirty worktree.

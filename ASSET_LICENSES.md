@@ -46,6 +46,12 @@ connects this record to the exact files reviewed here.
 | `quiz-owl.png` | Original channel mascot | Verified | Embedded C2PA |
 | `tiger.png` | Answer illustration | Verified | Embedded C2PA |
 | `zebra.png` | Answer illustration | Verified | Embedded C2PA |
+| `thumbnails/human-body-digestion-thumbnail.png` | Human Body episode thumbnail master | Verified | Embedded C2PA |
+| `thumbnails/human-body-stomach-short-cover.png` | Stomach mystery Short cover master | Verified | Embedded C2PA |
+
+Upload-ready JPEG derivatives are stored under the ignored
+`outputs/thumbnails/` directory. The C2PA-bearing PNG masters remain unchanged
+under `public/assets/thumbnails/` as the provenance record.
 
 License reference: [OpenAI Terms of Use](https://openai.com/policies/terms-of-use/)
 

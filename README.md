@@ -64,6 +64,17 @@ Use `--check` to test one file without starting a render:
 npm run render:content -- src/data/<content-file>.json --check
 ```
 
+Render a voiceover-free draft preview for visual review without weakening the
+production approval gate or requesting narration:
+
+```bash
+npm run render:content -- src/data/<content-file>.json --preview
+```
+
+Preview mode forces narration off while retaining background music and local
+sound effects, and writes `outputs/preview-<content-id>.mp4`. Production
+rendering still requires an approved review object.
+
 ## Phase 3 content gate
 
 Every JSON content file now carries a `review` status. `npm run validate:content`
