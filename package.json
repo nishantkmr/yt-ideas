@@ -18,6 +18,7 @@
     "generate:voiceover": "node scripts/generate-voiceover.mjs",
     "generate:voiceover:force": "node scripts/generate-voiceover.mjs --force",
     "generate:voiceover:check": "node scripts/generate-voiceover.mjs --all --dry-run --strict-cache",
+    "narration:check": "node scripts/check-narration-audio.mjs",
     "generate:sfx": "node scripts/generate-sfx.mjs",
     "generate:music": "node scripts/generate-music.mjs",
     "setup:voiceover": "python -m pip install -r requirements-tts.txt --target .tools/edge-tts",

@@ -43,7 +43,8 @@
     "format": "wav",
     "script": {
       "fact": "Here you go. A single pencil can write forty-five thousand words!",
-      "intro": "Hello, superstar! Solve this pencil mystery!"
+      "intro": "Hello, superstar. Can you solve this pencil mystery?",
+      "answer": "The answer is graphite, and that was great thinking."
     }
   },
   "clues": [
