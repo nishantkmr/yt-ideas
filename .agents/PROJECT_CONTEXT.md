@@ -241,8 +241,16 @@ kids" unless the user deliberately changes the audience strategy.
   original wording, so the digestion episode is unchanged.
 - The pencil episode is `What's Inside a Pencil?`, ten layers from the point to
   the line it draws. Its companion Short is a two-clue graphite mystery. Both
-  are drafts: the human review gates, the Sarvam narration and the upload
-  artwork are all still outstanding.
+  have passed the content review gates and have Sarvam narration. Their final
+  renders still need the project owner's listening approval before upload.
+- The Everyday Objects upload artwork consists of a 16:9 pencil-cutaway
+  thumbnail and a spoiler-free 9:16 pencil-mystery cover, generated on
+  2026-09-15 in the approved premium 3D WonderOwl direction. Their untouched
+  C2PA-bearing masters live at
+  `content/everyday-objects-pencil/media/assets/thumbnail.png` and
+  `content/everyday-objects-graphite-short/media/assets/cover.png`; upload-ready
+  JPEG copies live under the ignored `outputs/thumbnails/` directory. The
+  project owner still needs to visually approve them before publishing.
 - Two widely repeated pencil facts did not survive checking, and the episode
   says so. "A pencil draws a line 35 miles long" traces to a 2007 Discover item
   and is an order of magnitude out by Plus magazine's arithmetic, so the finale

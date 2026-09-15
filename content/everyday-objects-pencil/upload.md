@@ -7,10 +7,10 @@ graphite mystery Short.
 > pronunciation, narration clarity, music balance and the final visuals before
 > publishing.
 >
-> Artwork gate: neither video has upload artwork yet. The episode needs a 16:9
-> thumbnail and the Short a spoiler-free 9:16 cover, both matching the approved
-> Human Body direction, with their C2PA-bearing masters committed to each
-> bundle's `media/assets/` and a rights record in its `asset-licenses.json`.
+> Artwork gate: the episode's 16:9 thumbnail and the Short's spoiler-free 9:16
+> cover were generated on 2026-09-15 in the approved Human Body direction.
+> Their C2PA-bearing masters and rights records live in each bundle; visually
+> approve the final artwork before publishing.
 
 ## Full episode
 

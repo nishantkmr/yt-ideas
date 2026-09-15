@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "verifiedAt": "2026-09-15",
+  "assets": [
+    {
+      "path": "assets/thumbnail.png",
+      "sha256": "9c04a7637f2b6857c2431b0e3a60923a9b117d2bf98f01a6e2941dda7d6574c7",
+      "type": "ai-generated-image",
+      "source": "OpenAI Media Service API",
+      "provenance": "embedded-c2pa",
+      "commercialUse": "verified",
+      "license": "OpenAI output rights under the applicable account terms",
+      "licenseUrl": "https://openai.com/policies/terms-of-use/"
+    }
+  ]
+}
