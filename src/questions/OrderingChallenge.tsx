@@ -11,7 +11,10 @@ export const OrderingChallenge: React.FC<OrderingChallengeProps> = ({items}) => 
   return (
     <div
       className="ordering-challenge"
-      style={{gridTemplateColumns: `repeat(${items.length}, minmax(0, 1fr))`}}
+      // The count is a custom property rather than an inline grid, so a layout
+      // with less room -- the choices column beside a visual -- can restyle the
+      // grid without fighting an inline style.
+      style={{'--ordering-columns': items.length} as React.CSSProperties}
     >
       {items.map((item, index) => {
         const entrance = spring({

@@ -364,6 +364,7 @@ body {
   display: grid;
   width: min(88%, 1600px);
   gap: 24px;
+  grid-template-columns: repeat(var(--ordering-columns, 4), minmax(0, 1fr));
 }
 
 .ordering-item {
@@ -457,8 +458,21 @@ body {
 
 .question-stage__choices .option-grid,
 .question-stage__choices .true-false-grid,
-.question-stage__choices .clues {
+.question-stage__choices .clues,
+.question-stage__choices .ordering-challenge {
   width: 100%;
+}
+
+/* Beside a visual there is no room for four steps across, and a stack reads in
+   the order it is asking about. */
+.question-stage__choices .ordering-challenge {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.question-stage__choices .ordering-item {
+  min-height: 104px;
+  padding: 16px 20px;
 }
 
 .question-stage__choices .option {

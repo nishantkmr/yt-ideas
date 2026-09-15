@@ -16,16 +16,40 @@ const frameCount = sampleRate * seconds;
 const themes = Object.fromEntries(THEMES.map((theme) => [theme.id, theme.music]));
 
 const clamp = (value) => Math.max(-1, Math.min(1, value));
+
+// A recipe that names a timbre or percussion this file does not implement used
+// to render anyway -- the timbre fell through to a generic wave and the
+// percussion simply went silent -- so a pack could ship a bed that sounded
+// nothing like what it asked for, with no error anywhere. The workshop bed
+// asked for `toy-synth` for months. Unknown names now fail at generation.
+const TIMBRES = ['marimba', 'bell', 'droplet', 'pluck'];
+const PERCUSSION = ['shaker', 'pulse', 'bubbles', 'frame-drum', 'woodblock', 'heartbeat'];
+
+const checkRecipe = (name, config) => {
+  const problems = [];
+  if (!TIMBRES.includes(config.timbre)) {
+    problems.push(`timbre "${config.timbre}" is not implemented (known: ${TIMBRES.join(', ')})`);
+  }
+  if (!PERCUSSION.includes(config.percussion)) {
+    problems.push(
+      `percussion "${config.percussion}" is not implemented (known: ${PERCUSSION.join(', ')})`,
+    );
+  }
+  if (problems.length > 0) {
+    throw new Error(`Theme "${name}" cannot be synthesised: ${problems.join('; ')}.`);
+  }
+};
+
 const wave = (phase, timbre) => {
   const fundamental = Math.sin(phase);
   if (timbre === 'marimba') return fundamental * 0.72 + Math.sin(phase * 3) * 0.2 + Math.sin(phase * 5) * 0.08;
   if (timbre === 'bell') return fundamental * 0.62 + Math.sin(phase * 2.01) * 0.22 + Math.sin(phase * 3.98) * 0.16;
   if (timbre === 'droplet') return fundamental * 0.82 + Math.sin(phase * 2) * 0.18;
-  if (timbre === 'pluck') return fundamental * 0.68 + Math.sin(phase * 2) * 0.22 + Math.sin(phase * 4) * 0.1;
-  return fundamental * 0.7 + Math.sin(phase * 2) * 0.2 + Math.sin(phase * 3) * 0.1;
+  return fundamental * 0.68 + Math.sin(phase * 2) * 0.22 + Math.sin(phase * 4) * 0.1;
 };
 
 const writeWav = async (name, config) => {
+  checkRecipe(name, config);
   const samples = new Float64Array(frameCount * 2);
   const beatLength = 60 / config.bpm;
   let noiseState = 0x9e3779b9 ^ name.length;

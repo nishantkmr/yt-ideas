@@ -124,10 +124,10 @@ export const TriviaEpisode: React.FC<Episode> = ({
             >
               {choices}
               {question.clues ? <WhoAmI clues={question.clues} /> : null}
+              {question.type === 'ordering' && question.items ? (
+                <OrderingChallenge items={question.items} />
+              ) : null}
             </QuestionStage>
-            {question.type === 'ordering' && question.items ? (
-              <OrderingChallenge items={question.items} />
-            ) : null}
           </div>
         );
 
