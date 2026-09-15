@@ -14,7 +14,7 @@ graphite mystery Short.
 
 ## Full episode
 
-**File:** `outputs/everyday_objects_202609_pencil_01.mp4` (4:29)
+**File:** `outputs/everyday_objects_202609_pencil_01.mp4` (4:30)
 
 **Title**
 
@@ -62,14 +62,14 @@ Chapters:
 00:08 Layer 1 — The point
 00:32 Layer 2 — The core
 00:57 Layer 3 — The wood sandwich
-01:24 Layer 4 — The wood
-01:47 Layer 5 — The shape
-02:10 Layer 6 — The paint
-02:34 Layer 7 — The ferrule
-02:57 Layer 8 — The eraser
-03:22 Layer 9 — How it writes
-03:49 Layer 10 — One very long line
-04:16 Your final score
+01:25 Layer 4 — The wood
+01:48 Layer 5 — The shape
+02:11 Layer 6 — The paint
+02:35 Layer 7 — The ferrule
+02:58 Layer 8 — The eraser
+03:23 Layer 9 — How it writes
+03:50 Layer 10 — One very long line
+04:17 Your final score
 
 #KidsQuiz #ScienceForKids #HowThingsAreMade
 ```

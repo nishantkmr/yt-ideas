@@ -18,11 +18,14 @@ Content file: `content/everyday-objects-graphite-short/content.json`
 
 ## Decision
 
-- Reviewer:
-- Review date (YYYY-MM-DD):
-- [ ] Editorial presentation approved
-- [ ] Sarvam narration approved for generation
-- Notes:
+- Reviewer: Project owner
+- Review date (YYYY-MM-DD): 2026-09-15
+- [x] Editorial presentation approved
+- [x] Sarvam narration approved for generation
+- Notes: Reviewed in Studio on 2026-09-15 — "video looks fine now .. proceed
+  further and generate audio". That covers the visuals and authorises narration
+  generation. The fact and rights checklists above are still open, so
+  `review.status` stays `draft` and no production render can run yet.
 
 ## Post-generation audio QA
 
