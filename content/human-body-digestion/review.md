@@ -1,6 +1,6 @@
 # Where Does Your Food Go? — Human Review
 
-Content file: `src/data/human-body-digestion-episode.json`
+Content file: `content/human-body-digestion/content.json`
 
 This draft must not be marked approved until a person has completed all three
 sections. Source IDs in the table map directly to `researchSources` in the JSON.

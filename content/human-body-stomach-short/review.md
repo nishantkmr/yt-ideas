@@ -1,6 +1,6 @@
 # Human Body Stomach Short — Review
 
-Content file: `src/data/human-body-stomach-short.json`
+Content file: `content/human-body-stomach-short/content.json`
 
 ## Review checklist
 

@@ -14,7 +14,7 @@ mystery Short.
 **Upload thumbnail:** `outputs/thumbnails/human-body-digestion-thumbnail.jpg`
 
 **C2PA-bearing master:**
-`public/assets/thumbnails/human-body-digestion-thumbnail.png`
+`content/human-body-digestion/media/assets/thumbnail.png`
 
 **Title**
 
@@ -87,7 +87,7 @@ kids quiz, human body quiz, digestion quiz, digestive system for kids, science q
 **Upload cover:** `outputs/thumbnails/human-body-stomach-short-cover.jpg`
 
 **C2PA-bearing master:**
-`public/assets/thumbnails/human-body-stomach-short-cover.png`
+`content/human-body-stomach-short/media/assets/cover.png`
 
 **Title**
 

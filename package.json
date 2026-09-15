@@ -11,7 +11,7 @@
     "video:preview": "node scripts/make-video.mjs --preview",
     "video:check": "node scripts/make-video.mjs --dry-run",
     "render:content": "node scripts/render-content.mjs",
-    "validate:content": "node scripts/validate-content.mjs && node scripts/audit-catalog.mjs",
+    "validate:content": "node scripts/validate.mjs",
     "audit:catalog": "node scripts/audit-catalog.mjs",
     "prepare:content": "node scripts/prepare-content.mjs",
     "generate:voiceover": "node scripts/generate-voiceover.mjs",

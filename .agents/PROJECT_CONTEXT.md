@@ -177,8 +177,11 @@ kids" unless the user deliberately changes the audience strategy.
   the white “Can You Solve This Body Mystery?” text remains clearly legible.
 - The approved Human Body upload artwork consists of a 16:9 digestion-journey
   thumbnail and a spoiler-free 9:16 organ-mystery cover. Their C2PA-bearing
-  originals live under `public/assets/thumbnails/`; upload-ready JPEG copies
-  live under the ignored `outputs/thumbnails/` directory.
+  originals live in each bundle's own `media/assets/` directory
+  (`content/human-body-digestion/media/assets/thumbnail.png` and
+  `content/human-body-stomach-short/media/assets/cover.png`); upload-ready JPEG
+  copies live under the ignored `outputs/thumbnails/` directory and are still
+  produced by hand — no pipeline step generates them.
 - Remotion Studio's default `TriviaEpisode` props point to the Human Body
   digestion draft. Content-driven renders still accept any validated episode
   JSON through `npm run render:content -- <json>`.
