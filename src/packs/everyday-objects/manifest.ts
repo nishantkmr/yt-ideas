@@ -7,6 +7,7 @@ import {isText} from '../contract.ts';
 // knows what a pencil is made of.
 
 export const PENCIL_PARTS = [
+  'inside',
   'point',
   'core',
   'slats',

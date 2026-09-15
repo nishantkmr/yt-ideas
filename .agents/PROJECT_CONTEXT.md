@@ -226,6 +226,31 @@ kids" unless the user deliberately changes the audience strategy.
 - `npm run render:short` and `npm run render:episode` have been removed. They
   pointed at the first animal video and carried `--force`, so running one would
   have silently overwritten a published video with the wrong content.
+- The third pillar is everyday objects: take one ordinary thing apart and look
+  at every layer. Its `everyday-objects` pack owns the `teardown` format and a
+  code-drawn pencil cutaway, and adds no theme of its own — a teardown happens
+  on a workbench, and the core pack's `workshop` bed was already there. A pack
+  borrowing another's theme is allowed and documented in `src/packs/README.md`.
+- `teardown` demands a named layer (`journeyStop`) and a source ID on every
+  question, the same bar as `body-journey`, because a teardown's whole promise
+  is that each surprise is a real property of a real object.
+- Two things left the human body pack when a second family needed them: the
+  `route-progress` chrome is registered by the core pack now, and the "Correct
+  route" headline over an ordering answer became `orderedAnswerLabel` in a
+  format's own copy, defaulting to "Correct order". body-journey keeps its
+  original wording, so the digestion episode is unchanged.
+- The pencil episode is `What's Inside a Pencil?`, ten layers from the point to
+  the line it draws. Its companion Short is a two-clue graphite mystery. Both
+  are drafts: the human review gates, the Sarvam narration and the upload
+  artwork are all still outstanding.
+- Two widely repeated pencil facts did not survive checking, and the episode
+  says so. "A pencil draws a line 35 miles long" traces to a 2007 Discover item
+  and is an order of magnitude out by Plus magazine's arithmetic, so the finale
+  asks for the word count instead and names the mileage claim as too good to be
+  true. The 1889 yellow-paint origin is popular history with no primary source,
+  so it is told as "the story goes" on screen and in the narration. Claims
+  dropped for want of a source: hexagons being cheaper to cut, and the ferrule
+  existing because glue alone failed.
 - The full operating plan and current policy links are in
   `SCALING_AND_MONETIZATION.md`.
 
@@ -259,8 +284,12 @@ absent mirror.
 Rendered files are written to `outputs/` and MP4s are intentionally ignored by
 Git.
 
-Remotion downloads its own Chrome Headless Shell on first render. When that
-download is unavailable, point it at an installed browser instead:
+Remotion downloads its own Chrome Headless Shell on first render. That download
+does not complete on this machine: it leaves a lone `download.lock` under
+`node_modules/.remotion/chrome-headless-shell/`, and the render then sits at low
+CPU with no output and no error until it is killed. So pass the installed
+browser every time (or export `REMOTION_BROWSER_EXECUTABLE`), and delete a stale
+lock if one was left behind:
 
 ```bash
 npm run render:content -- <slug> --browser-executable=/opt/google/chrome/chrome

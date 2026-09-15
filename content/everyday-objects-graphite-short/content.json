@@ -12,7 +12,7 @@
     "targetAge": "6-9",
     "hook": "Two clues about a four-hundred-year-old case of mistaken identity hiding inside every pencil.",
     "learningGoal": "Know that pencil lead is graphite, a soft form of carbon, and never was lead.",
-    "signatureMoment": "The wooden barrel turns see-through so the mystery core can be named at last.",
+    "signatureMoment": "The wooden barrel turns see-through so the hidden core can be seen running the whole length of the pencil.",
     "pack": "everyday-objects"
   },
   "researchSources": [
@@ -52,9 +52,9 @@
   "funFact": "One pencil can write about 45,000 words.",
   "visual": {
     "type": "pencil-diagram",
-    "focus": "core",
-    "alt": "A cutaway of a pencil showing the graphite core hidden inside the wood",
+    "focus": "inside",
+    "alt": "A whole pencil with the wood turned see-through, showing the graphite core running its full length",
     "answerLabel": "Graphite",
-    "answerHint": "Soft carbon, mixed with clay"
+    "answerHint": "Soft carbon, never lead"
   }
 }

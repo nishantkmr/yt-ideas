@@ -10,6 +10,7 @@ type PencilDiagramProps = {
 };
 
 const PART_LABELS: Record<PencilPart, string> = {
+  inside: 'Inside the pencil',
   point: 'The point',
   core: 'The core',
   slats: 'The wood sandwich',
@@ -23,6 +24,7 @@ const PART_LABELS: Record<PencilPart, string> = {
 };
 
 const PART_HINTS: Record<PencilPart, string> = {
+  inside: 'The core runs the whole length',
   point: 'Graphite and clay, never lead',
   core: 'More clay is harder, more graphite is darker',
   slats: 'Laid in a groove and glued shut',
@@ -38,21 +40,36 @@ const PART_HINTS: Record<PencilPart, string> = {
 // Close-ups are viewBox windows onto the same drawing, so a part is never
 // redrawn at a second scale. Each window keeps the panel's 320x382 ratio.
 const FOCUS_VIEWS: Record<PencilPart, string> = {
+  // The whole pencil, wood turned see-through. A Short's reveal has to be
+  // recognisable on a phone in one second, which a tight crop of the barrel is
+  // not.
+  inside: '0 0 360 430',
   point: '132 325 96 115',
   core: '108 120 140 167',
   slats: '0 0 360 430',
-  wood: '120 268 120 143',
+  wood: '120 252 120 143',
   barrel: '0 0 360 430',
-  paint: '120 128 120 143',
+  paint: '0 0 360 430',
   ferrule: '120 15 120 143',
-  eraser: '120 0 120 143',
+  eraser: '0 0 360 430',
   layers: '0 0 360 430',
   line: '0 0 360 430',
 };
 
 // Four stops are not a place on the pencil but a thing the pencil does, so they
 // replace the drawing with a scene of their own instead of zooming into it.
-const SCENE_PARTS = new Set<PencilPart>(['slats', 'barrel', 'eraser', 'layers', 'line']);
+const SCENE_PARTS = new Set<PencilPart>([
+  'slats',
+  'barrel',
+  'paint',
+  'eraser',
+  'layers',
+  'line',
+]);
+
+// The answer label sits over the bottom of the panel, so every scene below keeps
+// its drawing above y=330. Getting that wrong hides the payoff behind the
+// caption, which is invisible in Studio until the label has text in it.
 
 // Where the travelling spotlight rests while a question is on screen: up the
 // pencil from the point to the eraser, so the whole object is surveyed before
@@ -108,13 +125,23 @@ const PartActivity: React.FC<{focus: PencilPart; phase: number}> = ({focus, phas
     );
   }
 
-  if (focus === 'core') {
+  if (focus === 'core' || focus === 'inside') {
+    const depths = focus === 'inside' ? [140, 196, 252, 308] : [150, 186, 224, 258];
     return (
-      <g className="part-activity part-activity--core" transform={`scale(${pulse})`} style={{transformOrigin: '180px 200px'}}>
-        <circle className="clay-speck" cx="180" cy={150 + bob} r="4" />
-        <circle className="graphite-speck" cx="180" cy={186 - bob} r="5" />
-        <circle className="clay-speck" cx="180" cy={224 + bob} r="4" />
-        <circle className="graphite-speck" cx="180" cy={258 - bob} r="5" />
+      <g
+        className="part-activity part-activity--core"
+        transform={`scale(${pulse})`}
+        style={{transformOrigin: '180px 200px'}}
+      >
+        {depths.map((y, index) => (
+          <circle
+            className={index % 2 === 0 ? 'clay-speck' : 'graphite-speck'}
+            cx="180"
+            cy={index % 2 === 0 ? y + bob : y - bob}
+            key={y}
+            r={index % 2 === 0 ? 4 : 5}
+          />
+        ))}
       </g>
     );
   }
@@ -124,17 +151,6 @@ const PartActivity: React.FC<{focus: PencilPart; phase: number}> = ({focus, phas
       <g className="part-activity part-activity--wood">
         <path className="shaving" d="M136 322c-14 4-18 16-8 22 9 5 20-3 18-12" transform={`rotate(${bob} 130 332)`} />
         <path className="shaving" d="M224 344c14 4 18 16 8 22-9 5-20-3-18-12" transform={`rotate(${-bob} 230 354)`} />
-        <path className="scent" d="M150 292c6-8 0-14 6-22M210 292c6-8 0-14 6-22" transform={`translate(0 ${bob * 0.6})`} />
-      </g>
-    );
-  }
-
-  if (focus === 'paint') {
-    return (
-      <g className="part-activity part-activity--paint">
-        <path className="coat" d="M146 132v138M152 132v138M158 132v138" />
-        <path className="coat coat--right" d="M202 132v138M208 132v138M214 132v138" />
-        <path className="brush" d="M128 160h24v16h-24Z" transform={`translate(0 ${interpolate(phase, [0, 1], [0, 90])})`} />
       </g>
     );
   }
@@ -160,18 +176,18 @@ const PartScene: React.FC<{focus: PencilPart; phase: number; progress: number}> 
   if (focus === 'slats') {
     return (
       <g className="part-scene part-scene--slats">
-        <rect className="slat" x="38" y={128 - bob} width="284" height="62" rx="10" />
-        <path className="slat-groove" d={`M38 ${182 - bob}h284`} />
-        <path className="drop-arrow" d={`M180 ${208 - bob}v26m0 0-13-13m13 13 13-13`} />
-        <rect className="slat" x="38" y="256" width="284" height="62" rx="10" />
-        <path className="slat-groove" d="M38 264h284" />
-        <rect className="laid-core" x="38" y="258" width="284" height="12" rx="6" />
+        <rect className="slat" x="38" y={96 - bob} width="284" height="58" rx="10" />
+        <path className="slat-groove" d={`M38 ${146 - bob}h284`} />
+        <path className="drop-arrow" d={`M180 ${172 - bob}v24m0 0-13-13m13 13 13-13`} />
+        <rect className="slat" x="38" y="222" width="284" height="58" rx="10" />
+        <path className="slat-groove" d="M38 230h284" />
+        <rect className="laid-core" x="38" y="224" width="284" height="12" rx="6" />
         <g className="glue">
-          <circle cx="82" cy="292" r="7" />
-          <circle cx="180" cy="300" r="7" />
-          <circle cx="278" cy="292" r="7" />
+          <circle cx="82" cy="256" r="7" />
+          <circle cx="180" cy="264" r="7" />
+          <circle cx="278" cy="256" r="7" />
         </g>
-        <path className="cut-line" d="M110 246v82M250 246v82" />
+        <path className="cut-line" d="M110 212v78M250 212v78" />
       </g>
     );
   }
@@ -180,22 +196,50 @@ const PartScene: React.FC<{focus: PencilPart; phase: number; progress: number}> 
     const fall = Math.max(0, progress - 0.35) / 0.65;
     return (
       <g className="part-scene part-scene--barrel">
-        <path className="desk" d="M20 320h230v18H20Z" />
-        <path className="desk-edge" d="M250 320v92" />
-        <path className="stay-tick" d="m92 186 14 15 28-34" />
-        <path className="hex-end" d="M162 275 136 320H84L58 275 84 230h52Z" />
-        <circle className="hex-core" cx="110" cy="275" r="12" />
+        <path className="desk" d="M20 258h230v18H20Z" />
+        <path className="desk-edge" d="M250 258v64" />
+        <path className="stay-tick" d="m92 128 14 15 28-34" />
+        <path className="hex-end" d="M162 213 136 258H84L58 213 84 168h52Z" />
+        <circle className="hex-core" cx="110" cy="213" r="12" />
         <g
           transform={`translate(${interpolate(progress, [0, 1], [0, 116])} ${interpolate(
             fall,
             [0, 1],
-            [0, 96],
+            [0, 78],
           )})`}
         >
-          <circle className="round-end" cx="208" cy="282" r="38" />
-          <circle className="round-core" cx="208" cy="282" r="12" />
+          <circle className="round-end" cx="208" cy="220" r="38" />
+          <circle className="round-core" cx="208" cy="220" r="12" />
         </g>
-        <path className="roll-arc" d="M212 228c32-8 58 6 62 28" />
+        <path className="roll-arc" d="M212 166c32-8 58 6 62 28" />
+      </g>
+    );
+  }
+
+  if (focus === 'paint') {
+    // Bare wood on the left, then one band per coat: the point is that the
+    // colour is not one layer but many.
+    const COATS = ['#f7e9bd', '#fbdf9a', '#ffd776', '#ffcb5e', '#ffc849', '#f0b12c'];
+    return (
+      <g className="part-scene part-scene--paint">
+        <rect className="bare-wood" x="44" y="118" width="96" height="196" rx="10" />
+        {COATS.map((colour, index) => (
+          <rect
+            className="coat-band"
+            key={colour}
+            x={140 + index * 21}
+            y="118"
+            width="21"
+            height="196"
+            fill={colour}
+          />
+        ))}
+        <path
+          className="brush"
+          d="M-16-34h32v44l-16 14-16-14Z"
+          transform={`translate(288 ${interpolate(phase, [0, 1], [150, 286])})`}
+        />
+        <path className="drip" d={`M276 ${112 + bob}v-16M300 ${108 - bob}v-14`} />
       </g>
     );
   }
@@ -211,7 +255,7 @@ const PartScene: React.FC<{focus: PencilPart; phase: number; progress: number}> 
           className="written-mark"
           d="M62 288c26-16 44 10 68-4s44 10 68-4 44 10 62-2"
           pathLength={1}
-          style={{strokeDasharray: 1, strokeDashoffset: interpolate(phase, [0, 0.55, 1], [0, 0.7, 0])}}
+          style={{strokeDasharray: 1, strokeDashoffset: interpolate(phase, [0, 0.55, 1], [0, -0.7, 0])}}
         />
         <g transform={`translate(${sweep} 0)`}>
           <rect className="eraser-block" x="-38" y="196" width="76" height="80" rx="16" />
@@ -231,19 +275,19 @@ const PartScene: React.FC<{focus: PencilPart; phase: number; progress: number}> 
           <path
             className="sheet"
             key={index}
-            d="M92 200l88-34 88 34-88 34Z"
-            transform={`translate(0 ${index * 26})`}
+            d="M92 168l88-30 88 30-88 30Z"
+            transform={`translate(0 ${index * 22})`}
           />
         ))}
         <path
           className="sheet sheet--free"
-          d="M92 200l88-34 88 34-88 34Z"
-          transform={`translate(${interpolate(phase, [0, 1], [0, 54])} ${interpolate(phase, [0, 1], [-26, 118])}) rotate(-8 180 200)`}
+          d="M92 168l88-30 88 30-88 30Z"
+          transform={`translate(${interpolate(phase, [0, 1], [0, 46])} ${interpolate(phase, [0, 1], [-22, 108])}) rotate(-8 180 168)`}
         />
-        <path className="paper-line" d="M56 386h248" />
+        <path className="paper-line" d="M56 310h248" />
         <g className="sparkle">
-          <path d={`m292 ${188 + bob} 5 11 11 5-11 5-5 11-5-11-11-5 11-5Z`} />
-          <path d={`m64 ${248 - bob} 4 9 9 4-9 4-4 9-4-9-9-4 9-4Z`} />
+          <path d={`m292 ${156 + bob} 5 11 11 5-11 5-5 11-5-11-11-5 11-5Z`} />
+          <path d={`m64 ${206 - bob} 4 9 9 4-9 4-4 9-4-9-9-4 9-4Z`} />
         </g>
       </g>
     );
@@ -251,19 +295,41 @@ const PartScene: React.FC<{focus: PencilPart; phase: number; progress: number}> 
 
   // The long line: a single switchback path that keeps unspooling, with the
   // point of the pencil riding its leading edge.
-  const LINE =
-    'M48 78h264M48 116h264M48 154h264M48 192h264M48 230h264M48 268h264M48 306h264M48 344h264';
-  const row = Math.min(7, Math.floor(progress * 8));
-  const withinRow = progress * 8 - row;
+  const LEFT = 48;
+  const RIGHT = 312;
+  const TOP = 68;
+  const GAP = 34;
+  const ROWS = 8;
+  // One path, not eight: the switchbacks are part of the stroke, so the dash
+  // animation unspools a single continuous line rather than ruling a page.
+  let line = `M${LEFT} ${TOP}`;
+  for (let index = 0; index < ROWS; index += 1) {
+    const y = TOP + index * GAP;
+    const rightward = index % 2 === 0;
+    line += ` H${rightward ? RIGHT : LEFT}`;
+    if (index < ROWS - 1) {
+      const turn = rightward ? RIGHT + 22 : LEFT - 22;
+      line += ` C${turn} ${y} ${turn} ${y + GAP} ${rightward ? RIGHT : LEFT} ${y + GAP}`;
+    }
+  }
+  const row = Math.min(ROWS - 1, Math.floor(progress * ROWS));
+  const withinRow = progress * ROWS - row;
+  const rightward = row % 2 === 0;
   return (
     <g className="part-scene part-scene--line">
       <path
         className="drawn-line"
-        d={LINE}
+        d={line}
         pathLength={1}
         style={{strokeDasharray: 1, strokeDashoffset: 1 - progress}}
       />
-      <g transform={`translate(${interpolate(withinRow, [0, 1], [48, 312])} ${78 + row * 38})`}>
+      <g
+        transform={`translate(${interpolate(
+          withinRow,
+          [0, 1],
+          rightward ? [LEFT, RIGHT] : [RIGHT, LEFT],
+        )} ${TOP + row * GAP}) scale(${rightward ? 1 : -1} 1)`}
+      >
         <path className="line-pencil" d="M0 0l-16-26h-14l16 26-16 26h14Z" />
       </g>
     </g>
@@ -301,7 +367,11 @@ export const PencilDiagram: React.FC<PencilDiagramProps> = ({
       }
     >
       <svg viewBox={viewBox} role="img">
-        {scene ? null : <PencilBody cutaway={showPart === 'core' || showPart === 'point'} />}
+        {scene ? null : (
+          <PencilBody
+            cutaway={showPart === 'core' || showPart === 'point' || showPart === 'inside'}
+          />
+        )}
         {showPart && !scene ? <PartActivity focus={showPart} phase={activityPhase} /> : null}
         {showPart && scene ? (
           <PartScene focus={showPart} phase={activityPhase} progress={sceneProgress} />

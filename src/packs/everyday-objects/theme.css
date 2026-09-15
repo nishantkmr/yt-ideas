@@ -384,3 +384,23 @@
   stroke: #8e9cab;
   stroke-width: 4;
 }
+
+/* The paint scene: bare wood, then one band per coat. */
+
+.bare-wood {
+  fill: #f2d4a6;
+  stroke: #c1935d;
+  stroke-width: 4;
+}
+
+.coat-band {
+  stroke: rgba(193, 147, 93, 0.35);
+  stroke-width: 2;
+}
+
+.drip {
+  fill: none;
+  stroke: #ffc849;
+  stroke-linecap: round;
+  stroke-width: 7;
+}

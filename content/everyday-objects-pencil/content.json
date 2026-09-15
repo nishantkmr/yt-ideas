@@ -231,12 +231,12 @@
       "journeyStop": "The paint",
       "question": "Why were the fanciest old pencils painted bright yellow?",
       "options": [
-        "To show off where its graphite came from",
-        "To make them easier to find at night",
-        "Because yellow paint was the cheapest",
+        "To boast about Chinese graphite",
+        "To be easy to find at night",
+        "Because yellow paint was cheapest",
         "To stop them rolling away"
       ],
-      "answer": "To show off where its graphite came from",
+      "answer": "To boast about Chinese graphite",
       "explanation": "The story goes that an 1889 show pencil wore royal yellow to boast that its graphite came from China. Other makers copied it.",
       "sourceRefs": [
         "mentalfloss-yellow"
@@ -278,7 +278,7 @@
         "focus": "ferrule",
         "alt": "A close-up of the crimped metal band that clamps the eraser to the wood",
         "answerLabel": "The ferrule",
-        "answerHint": "Crimped metal, not glue, holds the eraser"
+        "answerHint": "Crimped tight around the eraser"
       }
     },
     {
@@ -315,12 +315,12 @@
       "journeyStop": "How it writes",
       "question": "When you write, what leaves the pencil and stays on the paper?",
       "options": [
-        "Flakes of graphite, some one atom thick",
+        "Tiny flakes of graphite",
         "Ink soaked into the paper",
         "Melted wax",
         "Tiny drops of water"
       ],
-      "answer": "Flakes of graphite, some one atom thick",
+      "answer": "Tiny flakes of graphite",
       "explanation": "Graphite is stacked sheets that slide apart. A pencil can leave one just an atom thick: that is graphene, which won a Nobel Prize.",
       "sourceRefs": [
         "nobel-graphene"
