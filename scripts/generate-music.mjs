@@ -38,6 +38,20 @@ const checkRecipe = (name, config) => {
   if (problems.length > 0) {
     throw new Error(`Theme "${name}" cannot be synthesised: ${problems.join('; ')}.`);
   }
+
+  // The bed is looped end to end under the whole video, so it has to contain a
+  // whole number of chord cycles or every repeat restarts mid-phrase. This is a
+  // warning rather than an error because beds already rendered into published
+  // videos have the fault and must not be silently re-cut.
+  const beats = (seconds * config.bpm) / 60;
+  const cycle = config.bass.length * 4;
+  if (Math.abs(beats / cycle - Math.round(beats / cycle)) > 1e-9) {
+    console.warn(
+      `WARN ${name}: ${seconds}s at ${config.bpm}bpm is ${beats.toFixed(2)} beats, ` +
+        `not a whole number of ${cycle}-beat chord cycles, so the loop seam falls mid-phrase. ` +
+        `Tempos that divide evenly here: ${[60, 120, 180].join(', ')}.`,
+    );
+  }
 };
 
 const wave = (phase, timbre) => {
@@ -66,11 +80,18 @@ const writeWav = async (name, config) => {
     const pitchDrift = config.timbre === 'droplet' ? 1 + 0.018 * Math.exp(-stepPhase * 8) : 1;
     const melody = wave(2 * Math.PI * note * pitchDrift * time, config.timbre) * noteEnvelope;
 
-    const bassNote = config.bass[Math.floor(beat / 4) % config.bass.length];
+    // The pad is a bare sine that changes frequency every four beats. Without an
+    // envelope it jumped mid-cycle at every chord change, which is a click four
+    // times a bar -- the bed sounded broken at regular intervals. Fading each
+    // chord in and out means the frequency only ever changes at silence.
+    const chord = beat / 4;
+    const chordPhase = chord - Math.floor(chord);
+    const chordEnvelope = Math.min(1, chordPhase * 9) * Math.min(1, (1 - chordPhase) * 9);
+    const bassNote = config.bass[Math.floor(chord) % config.bass.length];
     const pad = (
       Math.sin(2 * Math.PI * bassNote * time) +
       Math.sin(2 * Math.PI * bassNote * 1.5 * time) * 0.45
-    ) * 0.14;
+    ) * 0.14 * chordEnvelope;
 
     const beatPhase = beat - Math.floor(beat);
     noiseState = (1664525 * noiseState + 1013904223) >>> 0;
@@ -89,6 +110,12 @@ const writeWav = async (name, config) => {
         : 0;
       percussion = (firstPulse + secondPulse * 0.72) * 0.075;
     }
+
+    // Every percussion voice starts from full amplitude on its first sample, so
+    // the waveform steps instead of rising: at a shaker's four hits a second
+    // that is heard as a tick, not a shake. A few milliseconds of attack keeps
+    // the rhythm and loses the edge.
+    percussion *= Math.min(1, stepPhase * 46);
 
     const movement = Math.sin(2 * Math.PI * time / seconds);
     const edgeFade = Math.min(1, time / 0.05, (seconds - time) / 0.05);
