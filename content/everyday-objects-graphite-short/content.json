@@ -36,7 +36,7 @@
     "editorialChecked": false
   },
   "narration": {
-    "enabled": true,
+    "enabled": false,
     "provider": "sarvam-bulbul-v3",
     "voice": "suhani",
     "audioBase": "content/everyday-objects-graphite-short/audio",
