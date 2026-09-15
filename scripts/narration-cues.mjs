@@ -16,6 +16,9 @@ import {
 // The synthesiser fingerprints each cue by its text, so any drift here -- even a
 // changed space -- invalidates the cache and re-spends API credits on narration
 // that was already approved. Treat these strings as the audio they produced.
+//
+// Cue text is not display text: it is the input to a speech engine, and it goes
+// through `speakable()` below before it is fingerprinted or sent.
 
 const coreEpisodeCues = (content) => {
   const cues = {
@@ -58,6 +61,33 @@ const coreShortCues = (content) => {
 export const buildCues = (content, kind) =>
   kind === 'episode' ? coreEpisodeCues(content) : coreShortCues(content);
 
+/**
+ * Narration text as the speech engine should receive it.
+ *
+ * Sarvam Bulbul v3 reads "!" aloud as the word "factorial", so "Hello,
+ * superstar! Solve this pencil mystery!" is spoken as "Hello superstar
+ * factorial, solve this pencil mystery factorial". Measured against the cues
+ * that had none, each "!" added about half a second of audio -- the length of
+ * the word -- which is how it was found.
+ *
+ * This runs over the finished cue rather than over the strings above, because a
+ * cue is assembled from places those strings do not control: an episode title, a
+ * question's explanation, a call to action, a video's own narration.script
+ * override. Any one of them can carry an exclamation mark, and the screen should
+ * keep it even though the microphone must not.
+ *
+ * Em dashes become commas for the same reason -- a pause is wanted, a spoken
+ * word is not. Question marks and full stops are safe and are left alone.
+ */
+export const speakable = (text) =>
+  text
+    .replace(/\s*—\s*/g, ', ')
+    .replace(/!/g, '.')
+    .replace(/\.{2,}/g, '.')
+    .replace(/,\s*\./g, '.')
+    .replace(/\s{2,}/g, ' ')
+    .trim();
+
 export const buildCueSheet = (content, kind) => {
   const narration = content.narration;
   if (!narration) throw new Error(`${content.id} has no narration configuration.`);
@@ -98,7 +128,9 @@ export const buildCueSheet = (content, kind) => {
     // inside content/<slug>/media/, never the generated public/ mirror, so the
     // synthesiser cannot fill a mirror that a later sync would wipe.
     audioRoot: relativeToProject(resolveMediaSource(narration.audioBase)),
-    cues: expected.map((name) => ({name, text: cues[name]})),
+    // Sanitised here, so the text that is fingerprinted is exactly the text the
+    // engine is sent: the cache can never be keyed on words that are not spoken.
+    cues: expected.map((name) => ({name, text: speakable(cues[name])})),
   };
 };
 
