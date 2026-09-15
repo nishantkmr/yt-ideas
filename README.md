@@ -22,7 +22,7 @@ voiceover, the manifest and the render, skipping whatever is already done:
 [4/7] sfx           SKIP  countdown-tick.wav exists
 [5/7] voiceover     OK    22 cues: 22 cached, 0 new
 [6/7] manifest      OK    work/manifests/human_body_...-3c3c.json
-[7/7] render        OK    outputs/human_body_202609_digestion_01.mp4  5m48s
+[7/7] render        OK    outputs/human_body_202609_digestion_01.mp4  26m36s
 ```
 
 A video is addressed by its directory slug or its content id. Useful flags:
@@ -56,9 +56,30 @@ npm run render:content -- <slug>
 npm run generate:music              # --theme=<name>, --force
 npm run generate:sfx
 npm run sync:media                  # rebuild public/content from the bundles
-npm run dev                         # Remotion Studio
+npm run still -- <slug> <frame>     # one frame in ~10s, for visual iteration
+npm run dev                         # Remotion Studio; lists every bundle
 npm run typecheck
 ```
+
+## Designing a video
+
+The render is the slow part: about 0.24 seconds per frame, so 20-30 minutes for
+an episode and 4-5 for a Short. That is the measured rate on current hardware,
+not a regression, and tuning concurrency, `--gl` or JPEG quality does not move
+it. So build the video without rendering it, and render once at the end.
+
+```bash
+npm run dev                          # Studio, real time, every bundle listed
+npm run still -- <slug> 900 1500     # two frames, about ten seconds each
+```
+
+Studio plays audio, so narration timing and mix balance are checkable there too.
+Stills run on an unapproved draft and force narration off, because a scene's WAV
+files do not exist yet while its visuals are still being designed; they write no
+render stamp, so a still can never be confused for a shippable render.
+
+Only when the content is finished is `npm run video -- <slug>` worth the wait,
+and it skips the render entirely if nothing has changed since last time.
 
 ## How a video is stored
 

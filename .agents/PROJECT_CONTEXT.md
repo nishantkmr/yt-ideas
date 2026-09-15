@@ -245,6 +245,7 @@ npm run generate:voiceover         # generate:voiceover:check spends nothing
 npm run generate:sfx
 npm run generate:music
 npm run sync:media                 # rebuild public/content/ by hand
+npm run still -- <slug> <frame>     # one frame, about ten seconds
 npm run video -- <slug>            # the whole pipeline
 npm run video:check -- <slug>      # plan it without generating anything
 npm run render:content -- <slug>
@@ -283,10 +284,23 @@ them help materially; about half the cost is per-frame work that does not scale
 with resolution, and the GPU never engages under headless Chrome here.
 
 So do not render a video to check a visual change. Use `npm run dev` for
-real-time playback, or `remotion still` for one frame at about ten seconds —
-that is what the whole design phase of the Human Body episode was done with.
-Reserve the full render for content that is finished, which the pipeline
-already skips when nothing changed.
+real-time playback, or `npm run still -- <slug> <frame> [<frame> ...]` for
+single frames at about ten seconds each — that is what the whole design phase of
+the Human Body episode was done with. Reserve the full render for content that
+is finished, which the pipeline already skips when nothing changed.
+
+Stills are deliberately ungated: they run on an unapproved draft and force
+narration off, because a scene's WAV files do not exist yet while its visuals
+are still being designed. They write no render stamp and no manifest, so a still
+can never be mistaken for a shippable render. Output lands in `outputs/qa-<slug>-
+<frame>.png`, which Git ignores.
+
+Studio lists every bundle under a `Videos` folder, one composition per video, so
+previewing a new draft needs no source edit. The two compositions under
+`Pipeline` are what `render-content.mjs` and `render-still.mjs` render through,
+chosen from the content's kind; renaming them breaks both scripts. A new video is
+registered by adding it to the `episodes` or `shorts` array in `src/Root.tsx` —
+the same two-line cost as registering a pack.
 
 ## Working rules for future sessions
 
