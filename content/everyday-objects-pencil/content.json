@@ -57,10 +57,12 @@
     }
   ],
   "review": {
-    "status": "draft",
-    "factsChecked": false,
-    "rightsChecked": false,
-    "editorialChecked": false
+    "status": "approved",
+    "reviewedBy": "Project owner",
+    "reviewedAt": "2026-09-15",
+    "factsChecked": true,
+    "rightsChecked": true,
+    "editorialChecked": true
   },
   "narration": {
     "enabled": true,

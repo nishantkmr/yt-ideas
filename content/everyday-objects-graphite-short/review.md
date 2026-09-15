@@ -27,6 +27,29 @@ Content file: `content/everyday-objects-graphite-short/content.json`
   generation. The fact and rights checklists above are still open, so
   `review.status` stays `draft` and no production render can run yet.
 
+## Approval basis (recorded 2026-09-15)
+
+`review.status` was set to `approved` on the project owner's instruction to
+render both videos for publishing, given after reviewing the visuals in Studio
+and listening to the generated narration.
+
+What each gate rests on:
+
+- **Rights** — objectively clear. Neither video uses a third-party image. The
+  cutaway is drawn in code, the music bed is synthesised locally from a recipe
+  in this repo, the narration is generated, and the only image in either render
+  is the shared WonderOwl mascot, whose provenance and SHA-256 are recorded in
+  the root `asset-licenses.json`.
+- **Editorial** — the project owner reviewed both videos in Remotion Studio and
+  approved the presentation, then approved the narration after listening.
+- **Facts** — every question carries a source ID that the `teardown` validator
+  matches against `researchSources`, and the two contested claims are documented
+  in the fact-check section above: the 35-mile line, which the episode itself
+  says does not hold up, and the 1889 yellow-paint story, which is hedged as
+  "the story goes" on screen and in narration. The owner did not work through
+  the per-question checklist item by item; approval was given as an instruction
+  to publish.
+
 ## Post-generation audio QA
 
 - [ ] Listen to `outputs/short_everyday_objects_202609_graphite_01.mp4` end to end.
