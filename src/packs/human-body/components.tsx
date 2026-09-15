@@ -1,5 +1,4 @@
 import './theme.css';
-import {RouteProgress} from '../../components/RouteProgress';
 import {DigestiveDiagram} from './DigestiveDiagram';
 import {defineVisual} from '../components.ts';
 import type {PackComponents} from '../components.ts';
@@ -31,7 +30,4 @@ export const humanBodyComponents: PackComponents = {
       ),
     }),
   ],
-  // Registered by name so the body-journey format can select it without the
-  // compositions naming this pack.
-  chrome: {'route-progress': RouteProgress},
 };

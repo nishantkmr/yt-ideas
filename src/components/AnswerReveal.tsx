@@ -9,6 +9,7 @@ type AnswerRevealProps = {
   streak?: number;
   visual?: QuizVisual;
   correctOrder?: string[];
+  orderedAnswerLabel?: string;
   layout?: Layout;
 };
 
@@ -18,6 +19,7 @@ export const AnswerReveal: React.FC<AnswerRevealProps> = ({
   streak,
   visual,
   correctOrder,
+  orderedAnswerLabel = 'Correct order',
   layout = 'landscape',
 }) => {
   const frame = useCurrentFrame();
@@ -35,7 +37,7 @@ export const AnswerReveal: React.FC<AnswerRevealProps> = ({
       {visual ? <AnswerVisual visual={visual} layout={layout} /> : null}
       <div className="answer-copy">
         <div className="eyebrow">Correct answer</div>
-        <strong className="answer-word">{correctOrder ? 'Correct route' : answer}</strong>
+        <strong className="answer-word">{correctOrder ? orderedAnswerLabel : answer}</strong>
         <p className="answer-explanation">{explanation}</p>
         {correctOrder ? (
           <div

@@ -6,7 +6,7 @@ type RouteProgressProps = {
 export const RouteProgress: React.FC<RouteProgressProps> = ({current, stops}) => (
   <div
     className={`route-progress ${stops.length > 8 ? 'route-progress--dense' : ''}`}
-    aria-label={`Body journey stop ${current} of ${stops.length}`}
+    aria-label={`Journey stop ${current} of ${stops.length}`}
     style={{gridTemplateColumns: `repeat(${stops.length}, minmax(0, 1fr))`}}
   >
     <div className="route-progress__line" />

@@ -21,6 +21,12 @@ export type PresentationCopy = {
   countdownPrompt: string;
   countdownAction: string;
   completionLabel: string;
+  /**
+   * Headline over a revealed ordering answer. A journey orders places, a
+   * teardown orders steps, so the default 'Correct order' is only overridden
+   * by a format that means something more specific.
+   */
+  orderedAnswerLabel?: string;
 };
 
 /** Inputs to the procedural synthesiser in scripts/generate-music.mjs. */

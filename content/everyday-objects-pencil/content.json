@@ -1,0 +1,370 @@
+{
+  "id": "everyday_objects_202609_pencil_01",
+  "title": "What's Inside a Pencil?",
+  "category": "everyday-objects",
+  "theme": "pencil teardown",
+  "creative": {
+    "visualTheme": "workshop",
+    "presentationFormat": "teardown",
+    "targetAge": "7-10",
+    "hook": "Take apart the most ordinary object a child owns, one layer at a time, and find eight surprises hiding inside it.",
+    "learningGoal": "Know what a pencil is really made of, how it is built from flat wood, and what happens when you write and erase.",
+    "signatureMoment": "The final answer unspools one pencil line back and forth across the screen until the whole panel is filled.",
+    "pack": "everyday-objects"
+  },
+  "researchSources": [
+    {
+      "id": "mcgill-graphite",
+      "title": "Pencils never contained lead — McGill University Office for Science and Society",
+      "url": "https://www.mcgill.ca/oss/article/did-you-know/pencils-never-contained-lead",
+      "accessedOn": "2026-09-15"
+    },
+    {
+      "id": "faber-castell-faq",
+      "title": "Frequently asked questions: pens and pencils — Faber-Castell",
+      "url": "https://www.faber-castell.com/service/frequently-asked-questions/faq-pens-and-pencils",
+      "accessedOn": "2026-09-15"
+    },
+    {
+      "id": "madehow-pencil",
+      "title": "How pencil is made — How Products Are Made, Volume 1",
+      "url": "https://www.madehow.com/Volume-1/Pencil.html",
+      "accessedOn": "2026-09-15"
+    },
+    {
+      "id": "mentalfloss-yellow",
+      "title": "Why Pencils Are Yellow — Mental Floss",
+      "url": "https://www.mentalfloss.com/history/why-pencils-are-yellow",
+      "accessedOn": "2026-09-15"
+    },
+    {
+      "id": "popsci-erasers",
+      "title": "How do erasers actually work? It's surprisingly complicated — Popular Science",
+      "url": "https://www.popsci.com/science/how-do-erasers-work/",
+      "accessedOn": "2026-09-15"
+    },
+    {
+      "id": "nobel-graphene",
+      "title": "The Nobel Prize in Physics 2010: popular information — NobelPrize.org",
+      "url": "https://www.nobelprize.org/prizes/physics/2010/popular-information/",
+      "accessedOn": "2026-09-15"
+    },
+    {
+      "id": "plus-maths-line",
+      "title": "How long a line can a pencil draw? — Plus Magazine, University of Cambridge",
+      "url": "https://plus.maths.org/content/how-long-line-can-pencil-draw",
+      "accessedOn": "2026-09-15"
+    }
+  ],
+  "review": {
+    "status": "draft",
+    "factsChecked": false,
+    "rightsChecked": false,
+    "editorialChecked": false
+  },
+  "narration": {
+    "enabled": true,
+    "provider": "sarvam-bulbul-v3",
+    "voice": "suhani",
+    "audioBase": "content/everyday-objects-pencil/audio",
+    "format": "wav",
+    "script": {
+      "pencil_005-answer": "Six flat sides stop a pencil rolling off your desk. And one wooden sandwich makes six to nine pencils.",
+      "pencil_006-answer": "To boast about their graphite. The story goes that in eighteen eighty-nine, yellow showed that a pencil's graphite came from China.",
+      "pencil_009-answer": "Flakes of graphite! It is stacked sheets that slide apart, and a pencil can leave one just an atom thick. That is graphene.",
+      "pencil_010-answer": "About forty-five thousand words — a whole book from one little stick! And the famous thirty-five mile line? Too good to be true."
+    }
+  },
+  "outroCallToAction": "Ask a grown-up to subscribe so WonderOwl can take apart something new!",
+  "outroTimeSeconds": 13,
+  "questions": [
+    {
+      "id": "pencil_001",
+      "type": "multiple-choice",
+      "difficulty": 1,
+      "readingTimeSeconds": 9,
+      "answerTimeSeconds": 11,
+      "journeyStop": "The point",
+      "question": "A pencil's lead is not lead at all. So what is it?",
+      "options": [
+        "Graphite and clay",
+        "Real lead metal",
+        "Coal and glue",
+        "Burnt wood"
+      ],
+      "answer": "Graphite and clay",
+      "explanation": "Pencils have never held lead. The dark core is graphite mixed with clay.",
+      "sourceRefs": [
+        "mcgill-graphite",
+        "faber-castell-faq"
+      ],
+      "pronunciationNotes": [
+        {
+          "term": "graphite",
+          "sayAs": "GRAF-ite"
+        }
+      ],
+      "visual": {
+        "type": "pencil-diagram",
+        "focus": "point",
+        "alt": "A close-up of a sharpened pencil point, showing the dark graphite core writing on paper",
+        "answerLabel": "Graphite and clay",
+        "answerHint": "Never lead, not once in four hundred years"
+      }
+    },
+    {
+      "id": "pencil_002",
+      "type": "true-false",
+      "difficulty": 2,
+      "readingTimeSeconds": 8,
+      "answerTimeSeconds": 13,
+      "journeyStop": "The core",
+      "question": "True or false: more clay makes a pencil draw darker.",
+      "options": [
+        "True",
+        "False"
+      ],
+      "answer": "False",
+      "explanation": "More clay makes it harder and lighter — that is H. More graphite makes it darker — that is B.",
+      "sourceRefs": [
+        "faber-castell-faq",
+        "mcgill-graphite"
+      ],
+      "visual": {
+        "type": "pencil-diagram",
+        "focus": "core",
+        "alt": "A cutaway of the pencil showing the graphite and clay core running inside the wood",
+        "answerLabel": "Graphite and clay",
+        "answerHint": "More clay is harder, more graphite is darker"
+      }
+    },
+    {
+      "id": "pencil_003",
+      "type": "ordering",
+      "difficulty": 2,
+      "readingTimeSeconds": 10,
+      "answerTimeSeconds": 13,
+      "journeyStop": "The sandwich",
+      "question": "The core is not drilled in. Put the real steps in order.",
+      "items": [
+        "Lay in the core",
+        "Slice into pencils",
+        "Groove the wood",
+        "Glue the top on"
+      ],
+      "correctOrder": [
+        "Groove the wood",
+        "Lay in the core",
+        "Glue the top on",
+        "Slice into pencils"
+      ],
+      "answer": "groove the wood, lay in the core, glue, then slice",
+      "explanation": "A pencil is built like a sandwich, and one sandwich is cut into six to nine pencils.",
+      "sourceRefs": [
+        "madehow-pencil"
+      ],
+      "visual": {
+        "type": "pencil-diagram",
+        "focus": "slats",
+        "alt": "Two flat pieces of wood with a groove, the core laid inside, glued together and cut into pencils"
+      }
+    },
+    {
+      "id": "pencil_004",
+      "type": "multiple-choice",
+      "difficulty": 2,
+      "readingTimeSeconds": 9,
+      "answerTimeSeconds": 10,
+      "journeyStop": "The wood",
+      "question": "Which wood sharpens without splintering, so most pencils are made of it?",
+      "options": [
+        "Cedar",
+        "Oak",
+        "Bamboo",
+        "Maple"
+      ],
+      "answer": "Cedar",
+      "explanation": "Cedar is soft enough to sharpen cleanly, and it does not warp.",
+      "sourceRefs": [
+        "madehow-pencil"
+      ],
+      "visual": {
+        "type": "pencil-diagram",
+        "focus": "wood",
+        "alt": "A close-up of the sharpened cedar cone with wood shavings curling away",
+        "answerLabel": "Cedar",
+        "answerHint": "Sharpens cleanly and never warps"
+      }
+    },
+    {
+      "id": "pencil_005",
+      "type": "multiple-choice",
+      "difficulty": 2,
+      "readingTimeSeconds": 7,
+      "answerTimeSeconds": 12,
+      "journeyStop": "The shape",
+      "question": "Why do most pencils have six flat sides?",
+      "options": [
+        "So they cannot roll away",
+        "So they weigh less",
+        "So they float",
+        "So they fit a sharpener"
+      ],
+      "answer": "So they cannot roll away",
+      "explanation": "Six flat sides stop a pencil rolling off your desk, and one wooden sandwich makes six to nine of them.",
+      "sourceRefs": [
+        "faber-castell-faq",
+        "madehow-pencil"
+      ],
+      "visual": {
+        "type": "pencil-diagram",
+        "focus": "barrel",
+        "alt": "A six-sided pencil end resting still on a desk while a round one rolls over the edge"
+      }
+    },
+    {
+      "id": "pencil_006",
+      "type": "multiple-choice",
+      "difficulty": 3,
+      "readingTimeSeconds": 7,
+      "answerTimeSeconds": 13,
+      "journeyStop": "The paint",
+      "question": "Why were the fanciest old pencils painted bright yellow?",
+      "options": [
+        "To show off where its graphite came from",
+        "To make them easier to find at night",
+        "Because yellow paint was the cheapest",
+        "To stop them rolling away"
+      ],
+      "answer": "To show off where its graphite came from",
+      "explanation": "The story goes that an 1889 show pencil wore royal yellow to boast that its graphite came from China. Other makers copied it.",
+      "sourceRefs": [
+        "mentalfloss-yellow"
+      ],
+      "visual": {
+        "type": "pencil-diagram",
+        "focus": "paint",
+        "alt": "A close-up of the painted barrel, showing coat after coat of yellow paint",
+        "answerLabel": "Coat after coat",
+        "answerHint": "Yellow was a boast about Chinese graphite"
+      }
+    },
+    {
+      "id": "pencil_007",
+      "type": "who-am-i",
+      "difficulty": 3,
+      "readingTimeSeconds": 9,
+      "answerTimeSeconds": 10,
+      "journeyStop": "The ferrule",
+      "question": "Which part of a pencil am I?",
+      "clues": [
+        "I am a little metal band",
+        "I am crimped tight at one end",
+        "Without me the eraser would fall off"
+      ],
+      "answer": "The ferrule",
+      "explanation": "The little metal band is clamped around the eraser to hold it on.",
+      "sourceRefs": [
+        "madehow-pencil"
+      ],
+      "pronunciationNotes": [
+        {
+          "term": "ferrule",
+          "sayAs": "FERR-ool"
+        }
+      ],
+      "visual": {
+        "type": "pencil-diagram",
+        "focus": "ferrule",
+        "alt": "A close-up of the crimped metal band that clamps the eraser to the wood",
+        "answerLabel": "The ferrule",
+        "answerHint": "Crimped metal, not glue, holds the eraser"
+      }
+    },
+    {
+      "id": "pencil_008",
+      "type": "true-false",
+      "difficulty": 3,
+      "readingTimeSeconds": 8,
+      "answerTimeSeconds": 13,
+      "journeyStop": "The eraser",
+      "question": "True or false: an eraser scrubs your mark into dust.",
+      "options": [
+        "True",
+        "False"
+      ],
+      "answer": "False",
+      "explanation": "It mostly lifts. Graphite sticks to rubber better than to paper, so the mark leaves with the crumbs.",
+      "sourceRefs": [
+        "popsci-erasers"
+      ],
+      "visual": {
+        "type": "pencil-diagram",
+        "focus": "eraser",
+        "alt": "A close-up of the eraser rubbing a pencil mark away and lifting it into the crumbs",
+        "answerLabel": "The eraser",
+        "answerHint": "Graphite prefers rubber to paper"
+      }
+    },
+    {
+      "id": "pencil_009",
+      "type": "multiple-choice",
+      "difficulty": 4,
+      "readingTimeSeconds": 9,
+      "answerTimeSeconds": 14,
+      "journeyStop": "How it writes",
+      "question": "When you write, what leaves the pencil and stays on the paper?",
+      "options": [
+        "Flakes of graphite, some one atom thick",
+        "Ink soaked into the paper",
+        "Melted wax",
+        "Tiny drops of water"
+      ],
+      "answer": "Flakes of graphite, some one atom thick",
+      "explanation": "Graphite is stacked sheets that slide apart. A pencil can leave one just an atom thick: that is graphene, which won a Nobel Prize.",
+      "sourceRefs": [
+        "nobel-graphene"
+      ],
+      "pronunciationNotes": [
+        {
+          "term": "graphene",
+          "sayAs": "GRAF-een"
+        }
+      ],
+      "visual": {
+        "type": "pencil-diagram",
+        "focus": "layers",
+        "alt": "Stacked sheets of graphite with the top sheet sliding off onto the paper below",
+        "answerLabel": "Sheets of carbon",
+        "answerHint": "One loose sheet is graphene"
+      }
+    },
+    {
+      "id": "pencil_010",
+      "type": "multiple-choice",
+      "difficulty": 4,
+      "readingTimeSeconds": 8,
+      "answerTimeSeconds": 15,
+      "journeyStop": "The line",
+      "question": "Roughly how many words can one pencil write?",
+      "options": [
+        "About 45,000",
+        "About 4,500",
+        "About 450",
+        "About 45"
+      ],
+      "answer": "About 45,000",
+      "explanation": "About 45,000 words: a whole book from one little stick. People also say a pencil draws a line 35 miles long, but when a mathematician checked the sums, it came out far shorter.",
+      "sourceRefs": [
+        "plus-maths-line"
+      ],
+      "visual": {
+        "type": "pencil-diagram",
+        "focus": "line",
+        "alt": "A single pencil line unspooling back and forth across the panel",
+        "answerLabel": "A very long line",
+        "answerHint": "Enough words to fill a book"
+      }
+    }
+  ]
+}

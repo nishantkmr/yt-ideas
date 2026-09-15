@@ -161,6 +161,7 @@ export const TriviaEpisode: React.FC<Episode> = ({
                   streak={index + 1}
                   visual={question.visual}
                   correctOrder={question.correctOrder}
+                  orderedAnswerLabel={presentation.orderedAnswerLabel}
                 />
               </AnimatedScene>
             </Sequence>

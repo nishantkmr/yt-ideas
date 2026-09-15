@@ -55,6 +55,7 @@ export const humanBodyPack = {
         countdownPrompt: 'What happens here?',
         countdownAction: 'Choose the next discovery!',
         completionLabel: 'Body journey complete',
+        orderedAnswerLabel: 'Correct route',
       },
       // A body journey is only a journey if every question is a stop on it and
       // every claim is traceable, so this format demands more than the base

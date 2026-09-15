@@ -1,8 +1,13 @@
 # Content packs
 
 A pack is one video family. The human body pack owns the `body-lab` theme, the
-`body-journey` format and the digestive diagram; the core pack owns the shared
-WonderOwl themes, formats and picture visuals.
+`body-journey` format and the digestive diagram; the everyday objects pack owns
+the `teardown` format and the pencil cutaway; the core pack owns the shared
+WonderOwl themes, formats, picture visuals and both progress indicators.
+
+A pack does not have to own everything it uses. The everyday objects pack adds
+no theme at all: a teardown happens on a workbench, and the core pack's
+`workshop` bed was already there.
 
 Before packs existed, a new family meant editing four enum lists, a music table,
 a copy table, three dispatch branches and one 1513-line stylesheet, and one

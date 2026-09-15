@@ -1,0 +1,60 @@
+{
+  "id": "short_everyday_objects_202609_graphite_01",
+  "type": "two-clue",
+  "title": "Can You Solve This Pencil Mystery?",
+  "category": "everyday-objects",
+  "answer": "Graphite",
+  "difficulty": 2,
+  "clueTimeSeconds": 8,
+  "creative": {
+    "visualTheme": "workshop",
+    "presentationFormat": "mystery",
+    "targetAge": "6-9",
+    "hook": "Two clues about a four-hundred-year-old case of mistaken identity hiding inside every pencil.",
+    "learningGoal": "Know that pencil lead is graphite, a soft form of carbon, and never was lead.",
+    "signatureMoment": "The wooden barrel turns see-through so the mystery core can be named at last.",
+    "pack": "everyday-objects"
+  },
+  "researchSources": [
+    {
+      "id": "mcgill-graphite",
+      "title": "Pencils never contained lead — McGill University Office for Science and Society",
+      "url": "https://www.mcgill.ca/oss/article/did-you-know/pencils-never-contained-lead",
+      "accessedOn": "2026-09-15"
+    },
+    {
+      "id": "plus-maths-line",
+      "title": "How long a line can a pencil draw? — Plus Magazine, University of Cambridge",
+      "url": "https://plus.maths.org/content/how-long-line-can-pencil-draw",
+      "accessedOn": "2026-09-15"
+    }
+  ],
+  "review": {
+    "status": "draft",
+    "factsChecked": false,
+    "rightsChecked": false,
+    "editorialChecked": false
+  },
+  "narration": {
+    "enabled": true,
+    "provider": "sarvam-bulbul-v3",
+    "voice": "suhani",
+    "audioBase": "content/everyday-objects-graphite-short/audio",
+    "format": "wav",
+    "script": {
+      "fact": "Here's a fun fact. One pencil can write forty-five thousand words."
+    }
+  },
+  "clues": [
+    "People have called me lead for four hundred years.",
+    "I am carbon, and I hide inside your pencil."
+  ],
+  "funFact": "One pencil can write about 45,000 words.",
+  "visual": {
+    "type": "pencil-diagram",
+    "focus": "core",
+    "alt": "A cutaway of a pencil showing the graphite core hidden inside the wood",
+    "answerLabel": "Graphite",
+    "answerHint": "Soft carbon, mixed with clay"
+  }
+}

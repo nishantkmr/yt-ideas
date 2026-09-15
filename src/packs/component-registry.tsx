@@ -1,4 +1,5 @@
 import {coreComponents} from './core/components';
+import {everydayObjectsComponents} from './everyday-objects/components';
 import {humanBodyComponents} from './human-body/components';
 import {findFormat} from './manifest-registry.ts';
 import type {ChromeProps, PackComponents, VisualModule} from './components.ts';
@@ -8,7 +9,11 @@ import type {PresentationFormat, QuizVisual} from '../types/content';
 // instead of testing `visual.type === '...'` themselves, which is what stopped
 // the same dispatch from being written out three times and let the topic
 // specific components leave src/components/ entirely.
-const PACK_COMPONENTS: readonly PackComponents[] = [coreComponents, humanBodyComponents];
+const PACK_COMPONENTS: readonly PackComponents[] = [
+  coreComponents,
+  humanBodyComponents,
+  everydayObjectsComponents,
+];
 
 const VISUALS = new Map<string, VisualModule>(
   PACK_COMPONENTS.flatMap((pack) => pack.visuals.map((visual) => [visual.id, visual] as const)),

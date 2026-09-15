@@ -8,8 +8,10 @@ import {
 } from './config/timing';
 import animalsEpisodeData from '../content/animals-ultimate-challenge/content.json';
 import digestionEpisodeData from '../content/human-body-digestion/content.json';
+import pencilEpisodeData from '../content/everyday-objects-pencil/content.json';
 import zebraShortData from '../content/animals-zebra-short/content.json';
 import stomachShortData from '../content/human-body-stomach-short/content.json';
+import graphiteShortData from '../content/everyday-objects-graphite-short/content.json';
 import type {Episode, TriviaShortData} from './types/content';
 
 // Every bundle gets its own composition so Studio lists the whole catalog and
@@ -18,11 +20,13 @@ import type {Episode, TriviaShortData} from './types/content';
 const episodes: {slug: string; data: Episode}[] = [
   {slug: 'animals-ultimate-challenge', data: animalsEpisodeData as Episode},
   {slug: 'human-body-digestion', data: digestionEpisodeData as Episode},
+  {slug: 'everyday-objects-pencil', data: pencilEpisodeData as Episode},
 ];
 
 const shorts: {slug: string; data: TriviaShortData}[] = [
   {slug: 'animals-zebra-short', data: zebraShortData as TriviaShortData},
   {slug: 'human-body-stomach-short', data: stomachShortData as TriviaShortData},
+  {slug: 'everyday-objects-graphite-short', data: graphiteShortData as TriviaShortData},
 ];
 
 // The pipeline renders through these two ids and always supplies --props, so

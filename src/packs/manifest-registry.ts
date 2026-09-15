@@ -1,5 +1,7 @@
 import {corePack} from './core/manifest.ts';
+import {everydayObjectsPack} from './everyday-objects/manifest.ts';
 import {humanBodyPack} from './human-body/manifest.ts';
+import type {PencilDiagramVisual} from './everyday-objects/manifest.ts';
 import type {DigestiveDiagramVisual} from './human-body/manifest.ts';
 import type {
   FormatManifest,
@@ -16,7 +18,7 @@ import type {
 // plus its own directory.
 // Annotated as the general type so the aggregate lists below widen to the
 // contract rather than to the literal shape of whichever pack comes first.
-export const PACKS: readonly PackManifest[] = [corePack, humanBodyPack];
+export const PACKS: readonly PackManifest[] = [corePack, humanBodyPack, everydayObjectsPack];
 
 export const THEMES: readonly ThemeManifest[] = PACKS.flatMap((pack) => pack.themes);
 export const FORMATS: readonly FormatManifest[] = PACKS.flatMap((pack) => pack.formats);
@@ -45,7 +47,8 @@ export type VisualTheme =
 
 export type PresentationFormat =
   | (typeof corePack.formats)[number]['id']
-  | (typeof humanBodyPack.formats)[number]['id'];
+  | (typeof humanBodyPack.formats)[number]['id']
+  | (typeof everydayObjectsPack.formats)[number]['id'];
 
 export type QuestionType = (typeof corePack.questionTypes)[number]['id'];
 
@@ -58,7 +61,7 @@ export type PictureVisual = {
 
 // Every visual a content file may use. A pack that adds a visual adds its shape
 // here, so this is the one place packs are named outside their own directories.
-export type QuizVisual = PictureVisual | DigestiveDiagramVisual;
+export type QuizVisual = PictureVisual | DigestiveDiagramVisual | PencilDiagramVisual;
 
 export const getPresentationCopy = (format: PresentationFormat): PresentationCopy =>
   findFormat(format)!.copy;

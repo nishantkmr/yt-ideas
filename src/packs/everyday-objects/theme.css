@@ -1,0 +1,386 @@
+/* Everyday objects pack: the pencil cutaway. The workshop theme it is shown on
+   belongs to the core pack, so nothing here keys off a theme. */
+
+.pencil-diagram {
+  position: relative;
+  width: 320px;
+  height: 382px;
+  overflow: hidden;
+  border: 7px solid rgba(255, 255, 255, 0.94);
+  border-radius: 40px;
+  background: linear-gradient(155deg, rgba(255, 253, 248, 0.98), rgba(238, 244, 252, 0.96));
+  box-shadow: 0 15px 0 var(--shadow), 0 24px 45px rgba(40, 54, 76, 0.13);
+}
+
+.pencil-diagram svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* The pencil itself */
+
+.pencil-eraser {
+  fill: #f2849a;
+  stroke: #c15a74;
+  stroke-width: 4;
+}
+
+.pencil-ferrule {
+  fill: #cdd5de;
+  stroke: #8e9cab;
+  stroke-width: 4;
+}
+
+.pencil-crimp {
+  fill: none;
+  stroke: #8e9cab;
+  stroke-width: 3;
+}
+
+.pencil-barrel {
+  fill: #ffc849;
+  stroke: #d1911f;
+  stroke-width: 4;
+}
+
+.pencil-facet {
+  fill: none;
+  stroke: rgba(160, 108, 18, 0.4);
+  stroke-width: 3;
+}
+
+.pencil-wood {
+  fill: #f2d4a6;
+  stroke: #c1935d;
+  stroke-width: 4;
+}
+
+.pencil-grain {
+  fill: none;
+  stroke: rgba(160, 118, 66, 0.5);
+  stroke-linecap: round;
+  stroke-width: 3;
+}
+
+.pencil-tip {
+  fill: #3b4350;
+  stroke: #232b37;
+  stroke-width: 3;
+}
+
+/* Only a cutaway may look through the wood, so the core is hidden until one
+   is asked for. */
+.pencil-core {
+  fill: #3b4350;
+  stroke: #232b37;
+  stroke-width: 2;
+  opacity: 0;
+}
+
+.pencil-body--cutaway .pencil-core {
+  opacity: 1;
+}
+
+.pencil-body--cutaway .pencil-barrel,
+.pencil-body--cutaway .pencil-wood {
+  opacity: 0.5;
+}
+
+/* Close-up action cues */
+
+.part-activity {
+  filter: drop-shadow(0 3px 3px rgba(40, 54, 76, 0.18));
+}
+
+.paper-line {
+  fill: none;
+  stroke: #b9c4d2;
+  stroke-linecap: round;
+  stroke-width: 4;
+}
+
+.written-mark {
+  fill: none;
+  stroke: #3b4350;
+  stroke-linecap: round;
+  stroke-width: 5;
+}
+
+.shine {
+  fill: none;
+  stroke: #fff6c9;
+  stroke-linecap: round;
+  stroke-width: 5;
+}
+
+.clay-speck {
+  fill: #fbf0dc;
+  stroke: #d9c49b;
+  stroke-width: 2;
+}
+
+.graphite-speck {
+  fill: #5c6675;
+  stroke: #eef2f7;
+  stroke-width: 2;
+}
+
+.shaving {
+  fill: #f7e3c2;
+  stroke: #c1935d;
+  stroke-width: 3;
+}
+
+.scent {
+  fill: none;
+  stroke: #9ed3c0;
+  stroke-linecap: round;
+  stroke-width: 4;
+}
+
+.coat {
+  fill: none;
+  stroke: rgba(255, 216, 118, 0.95);
+  stroke-linecap: round;
+  stroke-width: 4;
+}
+
+.coat--right {
+  stroke: rgba(214, 152, 32, 0.6);
+}
+
+.brush {
+  fill: #ed6452;
+  stroke: #fff;
+  stroke-width: 3;
+}
+
+.squeeze {
+  fill: none;
+  stroke: #ed6452;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 6;
+}
+
+.prong {
+  fill: #8e9cab;
+  stroke: #fff;
+  stroke-width: 2;
+}
+
+.crumb {
+  fill: #6d7787;
+  stroke: #fff;
+  stroke-width: 2;
+}
+
+/* Scenes that replace the pencil */
+
+.part-scene {
+  filter: drop-shadow(0 3px 3px rgba(40, 54, 76, 0.16));
+}
+
+.slat {
+  fill: #f2d4a6;
+  stroke: #c1935d;
+  stroke-width: 4;
+}
+
+.slat-groove {
+  fill: none;
+  stroke: #c1935d;
+  stroke-dasharray: 10 8;
+  stroke-width: 3;
+}
+
+.laid-core {
+  fill: #3b4350;
+  stroke: #232b37;
+  stroke-width: 3;
+}
+
+.drop-arrow {
+  fill: none;
+  stroke: #338164;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 7;
+}
+
+.glue circle {
+  fill: rgba(255, 255, 255, 0.92);
+  stroke: #9ed3c0;
+  stroke-width: 3;
+}
+
+.cut-line {
+  fill: none;
+  stroke: #ed6452;
+  stroke-dasharray: 9 9;
+  stroke-width: 4;
+}
+
+.desk {
+  fill: #c9a06a;
+  stroke: #9c7442;
+  stroke-width: 4;
+}
+
+.desk-edge {
+  fill: none;
+  stroke: #9c7442;
+  stroke-width: 4;
+}
+
+.hex-end {
+  fill: #ffc849;
+  stroke: #d1911f;
+  stroke-width: 5;
+}
+
+.hex-core,
+.round-core {
+  fill: #3b4350;
+  stroke: #232b37;
+  stroke-width: 3;
+}
+
+.round-end {
+  fill: #ffc849;
+  stroke: #d1911f;
+  stroke-width: 5;
+  opacity: 0.75;
+}
+
+.stay-tick {
+  fill: none;
+  stroke: #338164;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 8;
+}
+
+.roll-arc {
+  fill: none;
+  stroke: #ed6452;
+  stroke-dasharray: 8 10;
+  stroke-linecap: round;
+  stroke-width: 5;
+}
+
+.sheet {
+  fill: rgba(112, 197, 210, 0.42);
+  stroke: #4f8fa8;
+  stroke-width: 3;
+}
+
+.sheet--free {
+  fill: rgba(255, 200, 73, 0.75);
+  stroke: #d1911f;
+}
+
+.sparkle path {
+  fill: #fff1a8;
+  stroke: #fff;
+  stroke-width: 2;
+}
+
+.drawn-line {
+  fill: none;
+  stroke: #3b4350;
+  stroke-linecap: round;
+  stroke-width: 6;
+}
+
+.line-pencil {
+  fill: #ffc849;
+  stroke: #d1911f;
+  stroke-width: 3;
+}
+
+/* Chrome shared with every close-up */
+
+.survey-spot {
+  fill: rgba(255, 200, 73, 0.3);
+  stroke: #ffc849;
+  stroke-width: 5;
+}
+
+.mystery-badge circle {
+  fill: #5870bd;
+}
+
+.mystery-badge text {
+  fill: #fff;
+  font-size: 28px;
+  font-weight: 900;
+}
+
+.part-label {
+  position: absolute;
+  right: 18px;
+  bottom: 16px;
+  left: 18px;
+  display: grid;
+  min-height: 82px;
+  align-content: center;
+  padding: 11px 16px 12px;
+  border: 4px solid rgba(255, 255, 255, 0.92);
+  border-radius: 24px;
+  color: #fff;
+  background: #338164;
+  box-shadow: 0 8px 0 rgba(20, 43, 82, 0.15);
+  text-align: center;
+}
+
+.part-label strong {
+  font-size: 28px;
+  line-height: 1;
+}
+
+.part-label span {
+  margin-top: 6px;
+  font-size: 17px;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+}
+
+/* The reveal gets a bigger panel in both orientations. */
+
+.answer-reveal--with-visual .pencil-diagram {
+  width: 460px;
+  height: 470px;
+}
+
+.short-answer > .pencil-diagram {
+  width: 520px;
+  height: 610px;
+}
+
+.short-answer > .pencil-diagram .part-label {
+  min-height: 104px;
+}
+
+.short-answer > .pencil-diagram .part-label strong {
+  font-size: 40px;
+}
+
+.short-answer > .pencil-diagram .part-label span {
+  font-size: 25px;
+}
+
+/* The eraser scene draws the eraser end sideways, on top of a page. */
+
+.eraser-block {
+  fill: #f2849a;
+  stroke: #c15a74;
+  stroke-width: 4;
+}
+
+.eraser-ferrule {
+  fill: #cdd5de;
+  stroke: #8e9cab;
+  stroke-width: 4;
+}

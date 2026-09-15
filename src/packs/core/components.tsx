@@ -1,6 +1,7 @@
 import './theme.css';
 import {GuessPicture} from '../../questions/GuessPicture';
 import {ProgressBar} from '../../components/ProgressBar';
+import {RouteProgress} from '../../components/RouteProgress';
 import {defineVisual} from '../components.ts';
 import type {ChromeProps, PackComponents} from '../components.ts';
 import type {PictureVisual} from '../../types/content';
@@ -24,5 +25,8 @@ export const coreComponents: PackComponents = {
     pictureVisual,
     {...pictureVisual, id: 'silhouette'},
   ],
-  chrome: {'progress-bar': ProgressBarChrome},
+  // Both chrome styles are shared brand furniture: the human body journey and
+  // the everyday-objects teardown are different families that walk the same
+  // kind of route, so the route indicator cannot belong to either one.
+  chrome: {'progress-bar': ProgressBarChrome, 'route-progress': RouteProgress},
 };
