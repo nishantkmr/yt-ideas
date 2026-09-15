@@ -94,6 +94,20 @@ kids" unless the user deliberately changes the audience strategy.
   MP3/WAV cues from content-specific narration folders after a successful run.
 - `npm run generate:voiceover:force` intentionally regenerates every cue and
   should be used only when explicitly needed.
+- Narration wording lives in `scripts/narration-cues.mjs`, not in the Python
+  synthesiser. Python is a plain text-to-speech renderer driven by the cue sheet
+  that module builds; it holds no script text and branches on no video's
+  subject. A single video may override individual lines with
+  `narration.script: {<cue>: "text"}` in its `content.json`, which is validated
+  against the known cue names so a typo'd key fails instead of doing nothing.
+- Every cue is fingerprinted by its text, so editing a string in either place
+  re-spends Sarvam credits on narration that may already be approved. Change
+  wording deliberately, and run `npm run generate:voiceover:check` first: it
+  reports what would be billed and generates nothing.
+- The cue set is a contract between the cue builder, the `<Voiceover>` asset
+  paths and the validator's per-scene budgets. Adding or renaming a cue in one
+  place without the others fails at sheet-build time rather than orphaning
+  approved audio.
 - `npm run generate:sfx` recreates the local countdown tick without an API.
 - Theme-specific background music is generated locally with
   `npm run generate:music` from the recipe in each pack manifest. The original
@@ -103,9 +117,9 @@ kids" unless the user deliberately changes the audience strategy.
   and `Math.sin` is implementation-defined, so a future Node could otherwise
   change the music inside an already published video.
 - Approved episode renders disable Remotion's parallel encoding because long,
-  audio-heavy Windows renders can otherwise race while cleaning a shared
-  temporary audio directory. This is handled automatically by
-  `npm run render:content -- <episode-json>`.
+  audio-heavy renders can otherwise race while cleaning a shared temporary
+  audio directory on Windows. This is handled automatically by
+  `npm run render:content -- <slug>`.
 - Sarvam AI is the only supported voice-over path. Edge TTS and Kokoro are not
   needed for the production workflow and their dependencies should not be
   installed unless the user explicitly revisits that decision.
@@ -117,7 +131,7 @@ kids" unless the user deliberately changes the audience strategy.
 - Run `npm run validate:content` before preparing or rendering production work.
 - `npm run prepare:content` creates an immutable, hashed manifest under the
   ignored `work/manifests/` directory after approval.
-- `npm run render:content -- <json> --preview` may render a voiceover-free draft
+- `npm run render:content -- <slug> --preview` may render a voiceover-free draft
   for visual review. It forces narration off while retaining music and local
   sound effects, names the output as a preview, and does not weaken the approval
   requirement for production output.
@@ -183,8 +197,8 @@ kids" unless the user deliberately changes the audience strategy.
   copies live under the ignored `outputs/thumbnails/` directory and are still
   produced by hand — no pipeline step generates them.
 - Remotion Studio's default `TriviaEpisode` props point to the Human Body
-  digestion draft. Content-driven renders still accept any validated episode
-  JSON through `npm run render:content -- <json>`.
+  digestion draft. Renders resolve any bundle by slug or content id through
+  `npm run render:content -- <slug>`; a path to a `content.json` also works.
 - `npm run video -- <slug>` builds one video end to end: validate, catalog
   audit, music, sound effects, voiceover, manifest, render. It skips steps with
   nothing to do, and `--dry-run` reports what it would do without ever calling
@@ -196,6 +210,15 @@ kids" unless the user deliberately changes the audience strategy.
 - A video whose content changed since it was rendered fails rather than being
   silently skipped, and an output with no render stamp is treated as an
   interrupted render and rebuilt.
+- The props snapshots under `outputs/render-props-*.json` are a record of what
+  was rendered, not a way to re-render it. Three of them predate the bundle
+  migration and still name `audio/<contentId>`, a layout that no longer exists,
+  so feeding an old snapshot back to Remotion fails on missing media. All three
+  belong to the two Human Body videos, and both are tagged, so reproduce an old
+  render from its `release/<slug>-v1` tag instead — the tagged tree has the
+  matching paths and media together. The two animal videos shipped before that
+  convention and have no tag, so their only reproducible form is the current
+  bundle.
 - The catalog audit always reads the whole catalog, because duplicate ids and
   repeated question text cannot be seen from one file. `--focus=<slug>` makes
   only the findings involving that video blocking.
@@ -208,20 +231,29 @@ kids" unless the user deliberately changes the audience strategy.
 
 ## Common commands
 
-On this Windows machine, use `npm.cmd` if PowerShell blocks `npm.ps1`.
+The current checkout is Ubuntu, so these are bash. The project has also been
+worked on from Windows, where PowerShell may block `npm.ps1` and `npm.cmd` is
+the way in; nothing in the repo is platform-specific either way.
 
-```powershell
-npm run dev
+```bash
+npm run dev                        # Studio; syncs the media mirror first
 npm run typecheck
-npm run validate:content
+npm run validate:content           # whole catalog, or -- <slug>
+npm run audit:catalog              # or -- --focus=<slug>
 npm run prepare:content
-npm run generate:voiceover
+npm run generate:voiceover         # generate:voiceover:check spends nothing
 npm run generate:sfx
 npm run generate:music
-npm run video -- <slug>
-npm run video:check -- <slug>
+npm run sync:media                 # rebuild public/content/ by hand
+npm run video -- <slug>            # the whole pipeline
+npm run video:check -- <slug>      # plan it without generating anything
 npm run render:content -- <slug>
 ```
+
+`npm run dev` and `npm run build` rebuild the media mirror through `predev` and
+`prebuild` hooks. Invoking `remotion studio` or `remotion render` directly skips
+those hooks, so run `npm run sync:media` first or the render reads a stale or
+absent mirror.
 
 Rendered files are written to `outputs/` and MP4s are intentionally ignored by
 Git.
@@ -230,7 +262,7 @@ Remotion downloads its own Chrome Headless Shell on first render. When that
 download is unavailable, point it at an installed browser instead:
 
 ```bash
-npm run render:content -- <json> --browser-executable=/opt/google/chrome/chrome
+npm run render:content -- <slug> --browser-executable=/opt/google/chrome/chrome
 ```
 
 Scripts are ES modules (`"type": "module"`). Node's type stripping lets the
@@ -240,13 +272,30 @@ shared `.ts` file must use erasable syntax only: no `enum`, no `namespace`, no
 constructor parameter properties, and type-only imports written as
 `import type`.
 
+## Render cost
+
+A full render costs roughly 0.24 seconds per frame on this machine, so an
+episode takes 20-30 minutes and a Short takes 4-5. That is the measured steady
+rate, not a regression: a 300-frame render measured 100.58s before the pack and
+bundle restructure and 100.79s after, and the first commit in the repo was no
+faster. Concurrency, `--gl`, and `--jpeg-quality` were all measured and none of
+them help materially; about half the cost is per-frame work that does not scale
+with resolution, and the GPU never engages under headless Chrome here.
+
+So do not render a video to check a visual change. Use `npm run dev` for
+real-time playback, or `remotion still` for one frame at about ten seconds —
+that is what the whole design phase of the Human Body episode was done with.
+Reserve the full render for content that is finished, which the pipeline
+already skips when nothing changed.
+
 ## Working rules for future sessions
 
 - Confirm the active working directory is the checked-out `yt-ideas` repository
   before editing. The current Ubuntu checkout is
   `/home/nku100/MySpace/projects/yt-ideas`.
 - Inspect actual rendered frames for visual changes; a successful typecheck or
-  bundle is not sufficient visual QA.
+  bundle is not sufficient visual QA. Single frames, not a full render — see
+  Render cost above.
 - Preserve unrelated user changes in a dirty worktree.
 - Committing to a local branch is pre-authorized: land each reviewable phase as
   its own commit without asking. Do not push, publish or upload unless the user

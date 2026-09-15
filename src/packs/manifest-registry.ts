@@ -36,10 +36,6 @@ export const findTheme = (id: string) => THEMES.find((theme) => theme.id === id)
 export const findFormat = (id: string) => FORMATS.find((format) => format.id === id);
 export const findVisualType = (id: string) => VISUAL_TYPES.find((visual) => visual.id === id);
 
-/** Which pack owns a presentation format, used to scope that pack's styling. */
-export const packOwning = (formatId: string): string =>
-  PACKS.find((pack) => pack.formats.some((format) => format.id === formatId))?.id ?? 'core';
-
 // The vocabulary types are derived from the manifests rather than declared
 // beside them, so a theme cannot exist in TypeScript without also existing for
 // the validator and the music synthesiser.
