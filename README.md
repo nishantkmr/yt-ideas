@@ -153,3 +153,62 @@ Every visual theme has an original, locally synthesised loop under
 `public/audio/music/`, generated from the recipe in its pack manifest with no
 external service. Existing beds are never regenerated without `--force`, so a
 published video's music cannot change underneath it.
+
+## Branching and commits
+
+Videos are catalog entries, not versions of the code, so everything lands on
+`main`. There is no develop branch and no long-lived per-video branch: the
+originality audit has to see the whole catalog at once, and an engine fix on
+`main` has to reach every video that ships after it.
+
+Work on a short-lived branch, then fast-forward it into `main` and delete it.
+Four prefixes are in use:
+
+| Prefix | For |
+| --- | --- |
+| `video/<slug>` | Producing one video, from first draft to publish. |
+| `feat/<topic>` | New capability in the engine, packs or tooling. |
+| `fix/<topic>` | A defect in something that already shipped. |
+| `chore/<topic>`, `docs/<topic>` | Housekeeping and documentation. |
+
+**History is linear — there are no merge commits in this repository.** Merge
+with `--ff-only` so it stays that way, and rebase your branch if `main` moved
+underneath you:
+
+```bash
+git checkout main
+git merge --ff-only <branch>
+git branch -d <branch>
+```
+
+Commit subjects follow Conventional Commits with an optional scope naming the
+area — `feat(packs):`, `fix(audio):`, `fix(narration):`, `docs:`, `chore:`.
+Write the subject as the effect on the product rather than the mechanism
+(`fix(narration): stop the speech engine reading "!" aloud as "factorial"`,
+not `update regex`), and use the body to record why the change was needed,
+because that reasoning is what a future reader cannot reconstruct from the
+diff. Land each reviewable phase as its own commit instead of one large one.
+
+### Tagging a published video
+
+When a video goes live, tag the commit it was published from with an annotated
+tag per upload, naming the video and its content id:
+
+```bash
+git tag -a release/<slug>-v1 -m "<Title> - <what it is> (<content id>)"
+```
+
+An episode and its companion Short each get their own tag, both on the same
+commit. This is not ceremony: the props snapshots under
+`outputs/render-props-*.json` record what was rendered but cannot re-render it,
+and some predate the bundle migration entirely. **A release tag is the only
+reproducible form of an old render**, because the tagged tree holds the content,
+the media and the matching paths together. The two animal videos shipped before
+this convention and have no tag, which is why their only reproducible form is
+the current bundle.
+
+Tags are not pushed by a plain `git push`; send them explicitly with
+`git push origin --tags`.
+
+Agent-facing rules — what may be committed without asking, and what may never
+be pushed — live in `.agents/PROJECT_CONTEXT.md`.
