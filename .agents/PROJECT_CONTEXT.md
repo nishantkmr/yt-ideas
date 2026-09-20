@@ -108,6 +108,20 @@ kids" unless the user deliberately changes the audience strategy.
   paths and the validator's per-scene budgets. Adding or renaming a cue in one
   place without the others fails at sheet-build time rather than orphaning
   approved audio.
+- The `speakable()` sanitiser in `scripts/narration-cues.mjs` landed on
+  2026-09-15, after the animals and human body videos were narrated. Their
+  audio predates it and still carries the engine's "factorial" reading of `!`
+  in the intro and outro cues. The project owner decided on 2026-09-20 to leave
+  that audio alone: those videos are published on YouTube, and re-recording
+  them would spend credits and cost the uploads their view history for a fault
+  nobody has reported. The fix applies forward only.
+- Because of that decision, `npm run generate:voiceover:check` permanently
+  reports 29 pending cues across `animals-ultimate-challenge` (12),
+  `human-body-digestion` (11), `animals-zebra-short` (3) and
+  `human-body-stomach-short` (3), and `npm run narration:check` warns on eight
+  of them. That output is expected, not a regression. Read a new warning
+  against this baseline, and never run `generate:voiceover` on those four packs
+  without meaning to re-record published narration.
 - `npm run generate:sfx` recreates the local countdown tick without an API.
 - Theme-specific background music is generated locally with
   `npm run generate:music` from the recipe in each pack manifest. The original
