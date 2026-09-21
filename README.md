@@ -1,8 +1,41 @@
 # Kids Trivia Studio
 
 Local production system for original, human-reviewed YouTube Kids GK/trivia
-videos, covering vertical shorts and landscape episodes. The scaling and
-monetization workflow is documented in `SCALING_AND_MONETIZATION.md`.
+videos, covering vertical shorts and landscape episodes. It renders the
+WonderOwl Quiz channel.
+
+A video here is compiled, not edited. Each one is a JSON file describing its
+questions, sources and review sign-off; one command turns that into a finished
+MP4 with narration, an original music bed and code-drawn visuals. Nothing is
+licensed from a stock library: the music is synthesised locally from a recipe,
+the diagrams are SVG drawn in React, and the narration is generated per cue and
+cached by text fingerprint. Nothing renders until a human has signed three
+review gates.
+
+Built with [Remotion](https://www.remotion.dev/), React and TypeScript.
+
+## Requirements
+
+- Node 22 or newer.
+- A browser for rendering. Remotion downloads a headless Chrome on first use;
+  pass `--browser-executable=<path>` to `npm run video` to use an installed one
+  instead.
+- `ffmpeg` is bundled by Remotion; no separate install is needed.
+- Optional: a [Sarvam AI](https://www.sarvam.ai/) API key for narration. Without
+  one you can still design, preview and render silent drafts.
+
+```bash
+git clone https://github.com/nishantkmr/yt-ideas.git
+cd yt-ideas
+npm install
+cp .env.example .env        # then add SARVAM_API_KEY=... if you have one
+npm run typecheck           # verify the checkout
+npm run validate:content    # validate every video in the catalog
+npm run dev                 # open Remotion Studio and watch one play
+```
+
+`npm run dev` needs no API key and no render, so it is the quickest way to see
+what this produces.
 
 ## Building a video
 
@@ -212,3 +245,16 @@ Tags are not pushed by a plain `git push`; send them explicitly with
 
 Agent-facing rules — what may be committed without asking, and what may never
 be pushed — live in `.agents/PROJECT_CONTEXT.md`.
+
+## License
+
+MIT, see [LICENSE](LICENSE). That covers the code in `src/`, `scripts/` and the
+configuration around them.
+
+The video content is a separate matter. The material under `content/` — the
+scripts, the narration audio, the artwork and the finished videos — is the
+work of the WonderOwl Quiz channel and is published here so the pipeline is
+reproducible and auditable, not as a library to re-upload. The provenance and
+commercial-use basis of every asset is recorded in
+[ASSET_LICENSES.md](ASSET_LICENSES.md); the theme music is original procedural
+synthesis and carries no third-party rights.

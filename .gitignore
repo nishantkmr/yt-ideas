@@ -21,3 +21,6 @@ __pycache__/
 
 # Generated mirror of content/<slug>/media, rebuilt before each render.
 /public/content/
+
+# Operating plan: kept locally, never published with the public repo.
+SCALING_AND_MONETIZATION.md

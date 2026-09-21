@@ -274,7 +274,9 @@ kids" unless the user deliberately changes the audience strategy.
   dropped for want of a source: hexagons being cheaper to cut, and the ferrule
   existing because glue alone failed.
 - The full operating plan and current policy links are in
-  `SCALING_AND_MONETIZATION.md`.
+  `SCALING_AND_MONETIZATION.md`, which is kept locally and deliberately not
+  published: the repository is public, and the operating plan is not. It is
+  listed in `.gitignore` so it cannot be committed back by accident.
 
 ## Common commands
 
@@ -356,8 +358,7 @@ the same two-line cost as registering a pack.
 ## Working rules for future sessions
 
 - Confirm the active working directory is the checked-out `yt-ideas` repository
-  before editing. The current Ubuntu checkout is
-  `/home/nku100/MySpace/projects/yt-ideas`.
+  before editing.
 - Inspect actual rendered frames for visual changes; a successful typecheck or
   bundle is not sufficient visual QA. Single frames, not a full render — see
   Render cost above.
